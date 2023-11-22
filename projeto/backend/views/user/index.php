@@ -13,13 +13,7 @@ use yii\grid\GridView;
 
 $this->title = 'Users';
 $this->params['breadcrumbs'][] = $this->title;
-if (Yii::$app->session->hasFlash('error')): ?>
-    <div class="alert alert-danger alert-dismissable">
-        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-        <h4><i class="fas fa-times"></i> ERRO!</h4>
-        <?= Yii::$app->session->getFlash('error') ?>
-    </div>
-<?php endif; ?>
+?>
 <div class="user-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
@@ -37,22 +31,16 @@ if (Yii::$app->session->hasFlash('error')): ?>
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             'id',
-            [
-                'attribute' => 'user.username',
-                'label' => 'Username',
-            ],
-            [
-                'attribute' => 'user.email',
-                'label' => 'Email',
-            ],
-            'n_utente',
-            'nif',
-            'morada',
-            'telefone',
+            'username',
+            'email',
+            'profiles.n_utente',
+            'profiles.nif',
+            'profiles.morada',
+            'profiles.telefone',
             [
                 'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Profile $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->user_id]);
+                'urlCreator' => function ($action, $model, $key, $index, $column) {
+                    return Url::toRoute([$action, 'id' => $model->id]);
                 }
             ],
         ],

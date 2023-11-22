@@ -37,6 +37,7 @@ class Profile extends \yii\db\ActiveRecord
             [['n_utente', 'nif', 'telefone', 'user_id'], 'integer'],
             [['nif', 'morada', 'telefone', 'user_id'], 'required'],
             [['morada'], 'string', 'max' => 30],
+            [['nif', 'telefone', 'n_utente'], 'double', 'max' => 1000000000],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }

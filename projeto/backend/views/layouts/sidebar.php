@@ -37,6 +37,7 @@
                     ['label' => 'Gii',  'icon' => 'file-code', 'url' => ['/gii'], 'target' => '_blank'],
                     ['label' => 'Debug', 'icon' => 'bug', 'url' => ['/debug'], 'target' => '_blank'],
                     ['label' => 'Registo de utilizadores',  'icon' => 'fa fa-user-plus', 'url' => ['user/index']],
+                    ['label' => 'Criar perfil', 'url' => ['user/createuser', 'id' => Yii::$app->user->id], 'icon' => 'fa fa-user-plus',],
                     [
                         'label' => 'Gestão de dados',
                         'icon' => 'nav-icon fas fa-edit',
