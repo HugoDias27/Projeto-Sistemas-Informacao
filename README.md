@@ -1,2 +1,2 @@
 # Projeto-Sistemas-Informacao
-Projeto de 2º ano do curso Tesp de Psi
+Projeto de 2º ano do CTESP de Programação de Sistemas de Informação
