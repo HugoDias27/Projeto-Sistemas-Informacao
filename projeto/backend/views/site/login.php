@@ -1,18 +1,20 @@
 <?php
+
 use yii\helpers\Html;
 use yii\helpers\Url;
+
 $this->title = 'Login';
 
 ?>
 <title><?= Html::encode($this->title) ?></title>
-<link href="logo.ico" rel="icon">
+<link href="..\logo.ico" rel="icon">
 
 <div class="card">
     <div class="card-body login-card-body">
         <p class="login-box-msg">Sign in to start your session</p>
         <?php $form = \yii\bootstrap4\ActiveForm::begin(['id' => 'login-form']) ?>
 
-        <?= $form->field($model,'username', [
+        <?= $form->field($model, 'username', [
             'options' => ['class' => 'form-group has-feedback'],
             'inputTemplate' => '{input}<div class="input-group-append"><div class="input-group-text"><span class="fas fa-envelope"></span></div></div>',
             'template' => '{beginWrapper}{input}{error}{endWrapper}',
@@ -30,16 +32,13 @@ $this->title = 'Login';
             ->label(false)
             ->passwordInput(['placeholder' => $model->getAttributeLabel('password')]) ?>
 
-
-            <div class="col-4">
-                <?= Html::submitButton('Sign In', ['class' => 'btn btn-primary btn-block']) ?>
-                <?= Html::a('Frontend', Url::to('..\..\frontend/web'), ['class' => 'btn btn-primary btn-block']) ?>
-
-            </div>
-
+        <div class="col-4">
+            <?= Html::submitButton('Sign In', ['class' => 'btn btn-primary btn-block']) ?>
+            <?= Html::a('Frontend', Url::to('/projeto/frontend/web/login'), ['class' => 'btn btn-primary btn-block']) ?>
+        </div>
     </div>
 
-        <?php \yii\bootstrap4\ActiveForm::end(); ?>
-    </div>
-    <!-- /.login-card-body -->
+    <?php \yii\bootstrap4\ActiveForm::end(); ?>
+</div>
+<!-- /.login-card-body -->
 </div>

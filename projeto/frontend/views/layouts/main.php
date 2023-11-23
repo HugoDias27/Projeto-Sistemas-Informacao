@@ -27,29 +27,24 @@ AppAsset::register($this);
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
 
-        <!-- Favicon -->
-        <link href="logo.ico" rel="icon">
 
         <!-- Google Web Fonts -->
         <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@400;700&display=swap"
-              rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
         <!-- Icon Font Stylesheet -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
         <!-- Libraries Stylesheet -->
-        <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-        <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet"/>
 
-        <!-- Customized Bootstrap Stylesheet -->
-        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="<?= Yii::$app->request->baseUrl ?>/logo.ico" rel="icon">
+        <link href="<?= Yii::$app->request->baseUrl ?>/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+        <link href="<?= Yii::$app->request->baseUrl ?>/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet">
+        <link href="<?= Yii::$app->request->baseUrl ?>/css/bootstrap.min.css" rel="stylesheet">
+        <link href="<?= Yii::$app->request->baseUrl ?>/css/style.css" rel="stylesheet">
 
-        <!-- Template Stylesheet -->
-        <link href="css/style.css" rel="stylesheet">
     </head>
-
 
     <body class="d-flex flex-column h-100">
     <?php $this->beginBody() ?>
@@ -58,7 +53,7 @@ AppAsset::register($this);
     <header>
         <?php
         NavBar::begin([
-            'brandLabel' => Html::img('img/logo.png', ['alt' => Yii::$app->name]),
+            'brandLabel' => Html::img(Yii::$app->request->baseUrl . '/img/logo.png', ['alt' => Yii::$app->name]),
             'brandUrl' => Yii::$app->homeUrl,
         ]);
 
@@ -84,7 +79,7 @@ AppAsset::register($this);
             $menuItems[] = [
                 'label' => '<i class="fa fa-user"></i>',
                 'items' => [
-                    ['label' => 'Definições do perfil', 'url' => ['/profile/view', 'id' => Yii::$app->user->identity->getId()]],
+                    ['label' => 'Definições do perfil', 'url' => ['profile/view', 'id' => Yii::$app->user->identity->getId()]],
                     ['label' => 'Editar perfil', 'url' => ['/profile/update', 'id' => Yii::$app->user->identity->getId()]],
                 ],
                 'encode' => false,
@@ -93,7 +88,7 @@ AppAsset::register($this);
 
 
         if (Yii::$app->user->isGuest) {
-            $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
+            $menuItems[] = ['label' => 'Signup', 'url' => ['signup']];
         }
 
         if (!Yii::$app->user->isGuest) {
@@ -106,7 +101,7 @@ AppAsset::register($this);
             'items' => $menuItems,
         ]);
         if (Yii::$app->user->isGuest) {
-            echo Html::a('Login', ['/site/login'], ['class' => 'nav-item nav-link active']);
+            echo Html::a('Login', ['login'], ['class' => 'nav-item nav-link active']);
         } else {
             echo Html::beginForm(['/site/logout'], 'post')
                 . Html::submitButton('Logout (' . Yii::$app->user->identity->username . ')', ['class' => 'nav-item nav-link active'])
@@ -191,7 +186,8 @@ AppAsset::register($this);
         <div class="container">
             <div class="row g-5">
                 <div class="col-md-6 text-center text-md-start">
-                    <p class="mb-md-0">&copy; <a class="text-primary" href="#">Carolo Farmacêutica</a>. All Rights Reserved.
+                    <p class="mb-md-0">&copy; <a class="text-primary" href="#">Carolo Farmacêutica</a>. All Rights
+                        Reserved.
                     </p>
                 </div>
             </div>
@@ -204,3 +200,5 @@ AppAsset::register($this);
     </body>
     </html>
 <?php $this->endPage();
+
+

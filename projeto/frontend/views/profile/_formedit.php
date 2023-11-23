@@ -16,6 +16,16 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'telefone')->textInput() ?>
 
+    <?php
+    if ($mostra_n_utente == 1)
+        echo $form->field($model, 'n_utente')->textInput();
+    ?>
+
+    <?php
+    if ($mostra_nif == 1)
+        echo $form->field($model, 'nif')->textInput();
+    ?>
+
     <br>
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

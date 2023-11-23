@@ -36,14 +36,16 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
+        'layout' => 'main', // Define o layout padrão para o frontend como 'main'
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'login' => 'site/login',
+                'signup' => 'site/signup',
             ],
         ],
-        */
+
     ],
     'params' => $params,
 ];

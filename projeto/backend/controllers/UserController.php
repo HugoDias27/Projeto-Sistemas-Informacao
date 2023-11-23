@@ -36,7 +36,7 @@ class UserController extends Controller
                     'class' => AccessControl::className(),
                     'rules' => [
                         [
-                            'actions' => ['index', 'view', 'create', 'update'],
+                            'actions' => ['index', 'view', 'create', 'update', 'createuser'],
                             'allow' => true,
                             'roles' => ['admin', 'funcionario'],
                         ],
@@ -174,19 +174,27 @@ class UserController extends Controller
             $post = $this->request->post();
 
             if ($this->request->isPost && $modelProfile->load($post) && $modelProfile->save()) {
-                // Atualiza e salva os dados do modelo
-                $modelProfile->morada = $post['Profile']['morada'];
-                $modelProfile->telefone = $post['Profile']['telefone'];
                 $modelProfile->save();
 
                 return $this->redirect(['view', 'id' => $modelProfile->user_id]);
             }
-
-            return $this->render('update', ['modelProfile' => $modelProfile,]);
+            if ($modelProfile->n_utente == null) {
+                $mostra_n_utente = 1;
+            } else {
+                $mostra_n_utente = 0;
+            }
+            if ($modelProfile->nif == null) {
+                $mostra_nif = 1;
+            } else {
+                $mostra_nif = 0;
+            }
         } else {
             return $this->redirect(['createuser', 'id' => $id]); // Substitua 'create' com a rota correta
         }
+        return $this->render('update', ['modelProfile' => $modelProfile, 'mostra_n_utente' => $mostra_n_utente, 'mostra_nif' => $mostra_nif]);
+
     }
+
 
     public function actionCreateuser($id)
     {

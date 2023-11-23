@@ -67,6 +67,7 @@ class ProfileController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
+
         if ($model != null) {
             return $this->render('view', [
                 'model' => $model,
@@ -115,14 +116,22 @@ class ProfileController extends Controller
             if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->user_id]);
             }
-        }else
-        {
+        } else {
             return $this->redirect(['create', 'id' => $id]);
         }
+        if ($model->n_utente == null) {
+            $mostra_n_utente = 1;
+        } else {
+            $mostra_n_utente = 0;
+        }
+        if ($model->nif == null) {
+            $mostra_nif = 1;
+        } else {
+            $mostra_nif = 0;
+        }
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+        return $this->render('update', ['model' => $model, 'mostra_n_utente' => $mostra_n_utente, 'mostra_nif' => $mostra_nif]);
+
     }
 
     /**
@@ -152,6 +161,6 @@ class ProfileController extends Controller
             return $model;
         }
 
-      // throw new NotFoundHttpException('The requested page does not exist.');
+        // throw new NotFoundHttpException('The requested page does not exist.');
     }
 }

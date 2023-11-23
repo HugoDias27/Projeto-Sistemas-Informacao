@@ -2,13 +2,12 @@
 
 /** @var yii\web\View $this */
 /** @var yii\bootstrap5\ActiveForm $form */
-/** @var \common\models\LoginForm $model */
+/** @var common\models\LoginForm $model */
 
 use yii\bootstrap5\Html;
 use yii\bootstrap5\ActiveForm;
 
 use yii\helpers\Url;
-
 $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -37,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
                 <br>
                 <br>
-                <?= Html::a('Backend', Url::to('..\..\backend/web')) ?>
+                <?= Html::a('Backend', Url::to('/projeto/backend/web/site/login')) ?>
             </div>
 
             <?php ActiveForm::end(); ?>
