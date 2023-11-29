@@ -11,12 +11,21 @@ use yii\widgets\ActiveForm;
 
 <div class="profile-form">
 
-    <?php $form = ActiveForm::begin();?>
+    <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($modelProfile, 'morada')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($modelProfile, 'telefone')->textInput() ?>
 
+    <?php
+    if ($mostra_n_utente == 1)
+        echo $form->field($modelProfile, 'n_utente')->textInput();
+    ?>
+
+    <?php
+    if ($mostra_nif == 1)
+        echo $form->field($modelProfile, 'nif')->textInput();
+    ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

@@ -5,7 +5,7 @@ $this->title = 'Login';
 
 ?>
 <title><?= Html::encode($this->title) ?></title>
-<link href="logo.ico" rel="icon">
+<link href="..\logo.ico" rel="icon">
 
 <div class="card">
     <div class="card-body login-card-body">
@@ -30,13 +30,10 @@ $this->title = 'Login';
             ->label(false)
             ->passwordInput(['placeholder' => $model->getAttributeLabel('password')]) ?>
 
-
             <div class="col-4">
                 <?= Html::submitButton('Sign In', ['class' => 'btn btn-primary btn-block']) ?>
-                <?= Html::a('Frontend', Url::to('..\..\frontend/web'), ['class' => 'btn btn-primary btn-block']) ?>
-
+                <?= Html::a('Frontend', Url::to('/projeto/frontend/web/login'), ['class' => 'btn btn-primary btn-block']) ?>
             </div>
-
     </div>
 
         <?php \yii\bootstrap4\ActiveForm::end(); ?>

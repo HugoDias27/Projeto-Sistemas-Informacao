@@ -143,7 +143,7 @@ class UserController extends Controller
                     $modelProfile->user_id = $userId;
 
                     if ($modelProfile->save()) {
-                        return $this->redirect(['view', 'id' => $model->id]);
+                        return $this->redirect('index');
                     }
                 }
             } else {
@@ -171,47 +171,11 @@ class UserController extends Controller
         $modelProfile = $this->findModelProfile($id);
 
         if ($modelProfile !== null) {
-            $post = $this->request->post();
-
-            if ($this->request->isPost && $modelProfile->load($post) && $modelProfile->save()) {
-                // Atualiza e salva os dados do modelo
-                $modelProfile->morada = $post['Profile']['morada'];
-                $modelProfile->telefone = $post['Profile']['telefone'];
-                $modelProfile->save();
-
-                return $this->redirect(['view', 'id' => $modelProfile->user_id]);
-            }
-
-            return $this->render('update', ['modelProfile' => $modelProfile,]);
+            return $this->redirect(['profile/update', 'id' => $id]);
         } else {
-            return $this->redirect(['createuser', 'id' => $id]); // Substitua 'create' com a rota correta
-        }
-    }
-
-    public function actionCreateuser($id)
-    {
-
-        $modelProfile = Profile::findOne(['user_id' => $id]);
-
-        if ($modelProfile !== null) {
-            // Se um perfil já existe para este usuário, redirecionar para a página inicial (index)
-            return $this->redirect(['index']); // Substitua 'index' pelo nome da sua ação de página inicial
+            return $this->redirect(['profile/create', 'id' => $id]);
         }
 
-        $modelProfile = new Profile();
-        $modelProfile->user_id = $id;
-
-        if ($this->request->isPost) {
-            if ($modelProfile->load($this->request->post()) && $modelProfile->save()) {
-                return $this->redirect(['view', 'id' => $modelProfile->user_id]);
-            }
-        } else {
-            $modelProfile->loadDefaultValues();
-        }
-
-        return $this->render('createuser', [
-            'modelProfile' => $modelProfile,
-        ]);
     }
 
 
