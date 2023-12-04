@@ -69,7 +69,6 @@ AppAsset::register($this);
                     ['label' => 'Bens de beleza', 'url' => ['site/team']],
                     ['label' => 'Higiene', 'url' => ['site/testimonial']],
                     ['label' => 'Serviços', 'url' => ['site/appointment']],
-                    ['label' => 'Receita médica', 'url' => ['site/search']],
                     ['label' => 'Encontrar farmácia', 'url' => ['site/search']],
                 ],
             ],
@@ -81,6 +80,7 @@ AppAsset::register($this);
                 'items' => [
                     ['label' => 'Definições do perfil', 'url' => ['profile/view', 'id' => Yii::$app->user->identity->getId()]],
                     ['label' => 'Editar perfil', 'url' => ['/profile/update', 'id' => Yii::$app->user->identity->getId()]],
+                    ['label' => 'Receita médica', 'url' => ['site/search', 'id' => Yii::$app->user->identity->getId()]],
                 ],
                 'encode' => false,
             ];

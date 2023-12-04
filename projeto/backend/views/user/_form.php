@@ -11,13 +11,13 @@ use yii\widgets\ActiveForm;
 
 <div class="profile-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin();?>
 
     <?= $form->field($modelSignup, 'username')->textInput() ?>
 
-    <?= $form->field($modelSignup, 'email')->textInput() ?>
-
     <?= $form->field($modelSignup, 'password')->passwordInput() ?>
+
+    <?= $form->field($modelSignup, 'email')->textInput() ?>
 
     <?= $form->field($modelProfile, 'n_utente')->textInput() ?>
 

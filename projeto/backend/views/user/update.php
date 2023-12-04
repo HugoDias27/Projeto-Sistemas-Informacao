@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = 'Update';
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_formedit', [
-        'modelProfile' => $modelProfile, 'mostra_n_utente' => $mostra_n_utente, 'mostra_nif' => $mostra_nif,
+        'modelProfile' => $modelProfile, 'mostra_n_utente' => $mostra_n_utente, 'mostra_nif' => $mostra_nif
     ]) ?>
 
 </div>

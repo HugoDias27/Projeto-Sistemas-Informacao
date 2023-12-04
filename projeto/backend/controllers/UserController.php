@@ -36,7 +36,7 @@ class UserController extends Controller
                     'class' => AccessControl::className(),
                     'rules' => [
                         [
-                            'actions' => ['index', 'view', 'create', 'update', 'createuser'],
+                            'actions' => ['index', 'view', 'create', 'update'],
                             'allow' => true,
                             'roles' => ['admin', 'funcionario'],
                         ],
@@ -143,7 +143,7 @@ class UserController extends Controller
                     $modelProfile->user_id = $userId;
 
                     if ($modelProfile->save()) {
-                        return $this->redirect(['view', 'id' => $model->id]);
+                        return $this->redirect('index');
                     }
                 }
             } else {
@@ -171,55 +171,11 @@ class UserController extends Controller
         $modelProfile = $this->findModelProfile($id);
 
         if ($modelProfile !== null) {
-            $post = $this->request->post();
-
-            if ($this->request->isPost && $modelProfile->load($post) && $modelProfile->save()) {
-                $modelProfile->save();
-
-                return $this->redirect(['view', 'id' => $modelProfile->user_id]);
-            }
-            if ($modelProfile->n_utente == null) {
-                $mostra_n_utente = 1;
-            } else {
-                $mostra_n_utente = 0;
-            }
-            if ($modelProfile->nif == null) {
-                $mostra_nif = 1;
-            } else {
-                $mostra_nif = 0;
-            }
+            return $this->redirect(['profile/update', 'id' => $id]);
         } else {
-            return $this->redirect(['createuser', 'id' => $id]); // Substitua 'create' com a rota correta
-        }
-        return $this->render('update', ['modelProfile' => $modelProfile, 'mostra_n_utente' => $mostra_n_utente, 'mostra_nif' => $mostra_nif]);
-
-    }
-
-
-    public function actionCreateuser($id)
-    {
-
-        $modelProfile = Profile::findOne(['user_id' => $id]);
-
-        if ($modelProfile !== null) {
-            // Se um perfil já existe para este usuário, redirecionar para a página inicial (index)
-            return $this->redirect(['index']); // Substitua 'index' pelo nome da sua ação de página inicial
+            return $this->redirect(['profile/create', 'id' => $id]);
         }
 
-        $modelProfile = new Profile();
-        $modelProfile->user_id = $id;
-
-        if ($this->request->isPost) {
-            if ($modelProfile->load($this->request->post()) && $modelProfile->save()) {
-                return $this->redirect(['view', 'id' => $modelProfile->user_id]);
-            }
-        } else {
-            $modelProfile->loadDefaultValues();
-        }
-
-        return $this->render('createuser', [
-            'modelProfile' => $modelProfile,
-        ]);
     }
 
 

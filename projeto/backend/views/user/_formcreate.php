@@ -11,7 +11,7 @@ use yii\widgets\ActiveForm;
 
 <div class="profile-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin();?>
 
 
     <?= $form->field($modelProfile, 'n_utente')->textInput() ?>

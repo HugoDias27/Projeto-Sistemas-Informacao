@@ -215,6 +215,40 @@ class RbacController extends Controller
         $deleteCarrinhoCompras->description = 'Apagar Carrinho de Compras';
         $auth->add($deleteCarrinhoCompras);
 
+        // permissão RBAC dos Ivas
+        $viewIvas = $auth->createPermission('viewIvas');
+        $viewIvas->description = 'Ver Ivas';
+        $auth->add($viewIvas);
+
+        $createIvas = $auth->createPermission('createIvas');
+        $createIvas->description = 'Criar Ivas';
+        $auth->add($createIvas);
+
+        $updateIvas = $auth->createPermission('updateIvas');
+        $updateIvas->description = 'Editar Ivas';
+        $auth->add($updateIvas);
+
+        $deleteIvas = $auth->createPermission('deleteIvas');
+        $deleteIvas->description = 'Apagar Ivas';
+        $auth->add($deleteIvas);
+
+        //permissão RBAC das categorias
+        $viewCategorias = $auth->createPermission('viewCategorias');
+        $viewCategorias->description = "Ver categorias";
+        $auth->add($viewCategorias);
+
+        $createCategorias = $auth->createPermission('createCategorias');
+        $createCategorias->description = "Criar categorias";
+        $auth->add($createCategorias);
+
+        $updateCategorias = $auth->createPermission('updateCategorias');
+        $updateCategorias->description = "Atualizar categorias";
+        $auth->add($updateCategorias);
+
+        $deleteCategorias = $auth->createPermission('deleteCategorias');
+        $createCategorias->description = "Eliminar categorias";
+        $auth->add($deleteCategorias);
+
 
         // adicionar as permissões ao cliente
         $cliente = $auth->createRole('cliente');
@@ -226,6 +260,7 @@ class RbacController extends Controller
         $auth->addChild($cliente, $viewFatura);
         $auth->addChild($cliente, $viewEstatisticas);
         $auth->addChild($cliente, $viewServico);
+        $auth->addChild($cliente,$viewCategorias);
         $auth->addChild($cliente, $viewCarrinhoCompras);
         $auth->addChild($cliente, $createCarrinhoCompras);
         $auth->addChild($cliente, $updateCarrinhoCompras);
@@ -237,7 +272,6 @@ class RbacController extends Controller
         $auth->add($funcionario);
         $auth->addChild($funcionario, $createMedicamento);
         $auth->addChild($funcionario, $updateMedicamento);
-        $auth->addChild($funcionario, $deleteMedicamento);
         $auth->addChild($funcionario, $viewUtente);
         $auth->addChild($funcionario, $createUtente);
         $auth->addChild($funcionario, $updateUtente);
@@ -252,6 +286,10 @@ class RbacController extends Controller
         $auth->addChild($funcionario, $createFatura);
         $auth->addChild($funcionario, $createServico);
         $auth->addChild($funcionario, $updateServico);
+        $auth->addChild($funcionario, $viewIvas);
+        $auth->addChild($funcionario,$updateCategorias);
+        $auth->addChild($funcionario,$createCategorias);
+        $auth->addChild($funcionario, $createIvas);
         $auth->addChild($funcionario, $cliente);
 
         // adicionar as permissões ao admin
@@ -276,6 +314,9 @@ class RbacController extends Controller
         $auth->addChild($admin, $deleteDespesa);
         $auth->addChild($admin, $deleteFatura);
         $auth->addChild($admin, $deleteServico);
+        $auth->addChild($admin, $deleteCategorias);
+        $auth->addChild($funcionario, $deleteMedicamento);
+        $auth->addChild($admin, $updateIvas);
         $auth->addChild($admin, $funcionario);
 
         // Assign roles to users. 1 and 2 are IDs returned by IdentityInterface::getId()
