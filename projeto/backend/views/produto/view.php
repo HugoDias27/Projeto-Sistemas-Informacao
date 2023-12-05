@@ -11,6 +11,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Produtos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
+
 <div class="produto-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
@@ -38,5 +39,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'iva_id',
         ],
     ]) ?>
+    <?php
+
+    echo '<h2>Imagens:</h2>';
+    foreach ($imagemArray as $imagem) {
+        echo Html::img($imagem, ['width' => '300px']);
+       echo '       ';
+    }
+      ?>
 
 </div>

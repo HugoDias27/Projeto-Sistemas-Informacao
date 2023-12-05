@@ -85,8 +85,17 @@ class ProdutoController extends Controller
      */
     public function actionView($id)
     {
+
+        $model = $this->findModel($id);
+
+        $imagens = Imagem::find()->where(['produto_id' => $id])->all();
+        foreach ($imagens as $imagem) {
+            $imagem->filename = Yii::getAlias('@web') . '/uploads/' . $imagem->filename;
+            $imagemArray[] = $imagem->filename;
+        }
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $this->findModel($id),'imagemArray' => $imagemArray,
         ]);
     }
 

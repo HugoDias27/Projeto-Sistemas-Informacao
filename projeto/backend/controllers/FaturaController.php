@@ -2,22 +2,16 @@
 
 namespace backend\controllers;
 
-use common\models\UploadForm;
-use common\models\Imagem;
-use common\models\ImagemSearch;
-use common\models\Produto;
-use Yii;
-use yii\helpers\Html;
+use common\models\Fatura;
+use common\models\FaturaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\web\UploadedFile;
-
 
 /**
- * ImagemController implements the CRUD actions for Imagem model.
+ * FaturaController implements the CRUD actions for Fatura model.
  */
-class ImagemController extends Controller
+class FaturaController extends Controller
 {
     /**
      * @inheritDoc
@@ -38,13 +32,13 @@ class ImagemController extends Controller
     }
 
     /**
-     * Lists all Imagem models.
+     * Lists all Fatura models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new ImagemSearch();
+        $searchModel = new FaturaSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -54,52 +48,42 @@ class ImagemController extends Controller
     }
 
     /**
-     * Displays a single Imagem model.
+     * Displays a single Fatura model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-
     public function actionView($id)
     {
-        $model = $this->findModel($id);
-
-
-       $imageHtml = Yii::getAlias('@web') . '/uploads/' . $model->filename;
-
         return $this->render('view', [
-            'model' => $model,
-            'imageHtml' => $imageHtml,
+            'model' => $this->findModel($id),
         ]);
     }
 
     /**
-     * Creates a new Imagem model.
+     * Creates a new Fatura model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-
-
-    public function actionCreate($produto_id)
+    public function actionCreate()
     {
-        $image = new Imagem();
-        $uploadForm = new UploadForm();
+        $model = new Fatura();
 
-        if (Yii::$app->request->isPost) {
-            $uploadForm->imageFiles = UploadedFile::getInstances($image, 'imageFiles');
-            $uploadForm->produto_id = $produto_id;
-
-            if ($uploadForm->upload()) {
-                return $this->redirect(['produto/view', 'id' => $produto_id]);
+        if ($this->request->isPost) {
+            if ($model->load($this->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
             }
+        } else {
+            $model->loadDefaultValues();
         }
 
-        return $this->render('create', ['image' => $image]);
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
-
     /**
-     * Updates an existing Imagem model.
+     * Updates an existing Fatura model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -119,7 +103,7 @@ class ImagemController extends Controller
     }
 
     /**
-     * Deletes an existing Imagem model.
+     * Deletes an existing Fatura model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -133,20 +117,18 @@ class ImagemController extends Controller
     }
 
     /**
-     * Finds the Imagem model based on its primary key value.
+     * Finds the Fatura model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Imagem the loaded model
+     * @return Fatura the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Imagem::findOne(['id' => $id])) !== null) {
+        if (($model = Fatura::findOne(['id' => $id])) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
-
-
 }
