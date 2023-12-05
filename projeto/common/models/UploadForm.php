@@ -29,6 +29,7 @@ class UploadForm extends Model
                 $image = new Imagem();
                 $image->filename = $imageName;
                 $image->produto_id = $this->produto_id;
+                $file->saveAs('uploads/' . $file->baseName . '.' . $file->extension);
                 $image->save(false);
             }
             return true;

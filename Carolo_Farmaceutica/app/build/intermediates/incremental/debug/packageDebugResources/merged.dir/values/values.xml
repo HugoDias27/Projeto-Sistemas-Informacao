@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="green">#4CAF50</color>
+    <color name="white">#FFFFFFFF</color>
+    <string name="app_name">Carolo Farmacêutica</string>
+    <string name="dosagem">Dosagem</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="lista_receita_codigo">Código</string>
+    <string name="menuPesquisa">Pesquisa</string>
+    <string name="ndClose">close</string>
+    <string name="ndOpen">open</string>
+    <string name="nomeNavHeader">username</string>
+    <string name="txt_credenciais_submit">Por favor preencha as suas credenciais</string>
+    <string name="txt_email">Introduza o seu email</string>
+    <string name="txt_login">Login</string>
+    <string name="txt_menu_descontos">Descontos Exclusivos</string>
+    <string name="txt_menu_localizacao">Localização</string>
+    <string name="txt_menu_produtos">Produtos</string>
+    <string name="txt_menu_receita_medica">Receita Médica</string>
+    <string name="txt_pass">Introduza a password</string>
+    <string name="txt_registar">Registar</string>
+    <string name="txt_registo_hint">Não tem conta? Registe-se aqui</string>
+    <string name="txt_username">Introduza o seu username</string>
+    <string name="valido">Válido até:</string>
+    <style name="Base.Theme.Carolo_Farmaceutica" parent="Theme.Material3.DayNight.NoActionBar">
+        
+        
+        <item name="colorPrimary">@color/green</item>
+    </style>
+    <style name="Theme.Carolo_Farmaceutica" parent="Base.Theme.Carolo_Farmaceutica"/>
+</resources>
