@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use backend\models\Fornecedor;
 use backend\models\FornecedorSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -27,6 +28,22 @@ class FornecedorController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'rules' => [
+                        [
+                            'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                            'allow' => true,
+                            'roles' => ['admin'],
+                        ],
+                        [
+                            'actions' => ['index'],
+                            'allow' => true,
+                            'roles' => ['funcionario'],
+                        ],
+                    ],
+                ],
+
             ]
         );
     }

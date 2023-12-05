@@ -30,8 +30,22 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
             'id',
             'nome',
-            'prescricao_medica',
-            'preco',
+            'prescricao_medica' => [
+                'attribute' => 'prescricao_medica',
+                'value' => function ($model) {
+                    return $model->prescricao_medica ? 'Sim' : 'Não';
+                },
+                'filter' => [
+                    0 => 'Não',
+                    1 => 'Sim',
+                ],
+            ],
+            'preco' => [
+                'attribute' => 'preco',
+                'value' => function ($model) {
+                    return $model->preco . '€';
+                },
+            ],
             'quantidade',
             [
                 'class' => 'yii\grid\ActionColumn',
