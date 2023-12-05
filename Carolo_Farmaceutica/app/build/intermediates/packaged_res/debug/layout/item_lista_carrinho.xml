@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp">
+
+    <ImageView
+        android:id="@+id/imgLivro"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="5dp"
+        android:src="@drawable/medicamento_stock" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.7"
+        android:layout_marginStart="5dp"
+        android:orientation="horizontal">
+        <ImageButton
+            android:id="@+id/btRemover"
+            android:layout_width="30sp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_action_remove"/>
+        <TextView
+            android:layout_width="120sp"
+            android:layout_height="match_parent"
+            android:id="@+id/tvProduto"
+            />
+        <ImageButton
+            android:layout_width="30sp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_action_reduzir"/>
+        <EditText
+            android:layout_width="30sp"
+            android:layout_height="match_parent"
+            android:inputType="number"
+            android:text="@string/padraoNumero"/>
+        <ImageButton
+            android:layout_width="30sp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_action_adicionar"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/tvPreco"
+            />
+
+
+    </LinearLayout>
+</LinearLayout>
