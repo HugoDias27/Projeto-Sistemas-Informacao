@@ -46,6 +46,36 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->preco . '€';
                 },
             ],
+            [
+                'label' => 'Nome Fornecedor',
+                'value' => function ($model) {
+                    $fornecedores = '';
+                    foreach ($model->fornecedores as $fornecedor) {
+                        $fornecedores .= $fornecedor->nome ;
+                    }
+                    return $fornecedores;
+                },
+            ],
+            [
+                'label' => 'Data de Importação',
+                'value' => function ($model) {
+                    $fornecedores = '';
+                    foreach ($model->fornecedoresProdutos as $fornecedor) {
+                        $fornecedores .= $fornecedor->data_importacao ;
+                    }
+                    return $fornecedores;
+                },
+            ],
+            [
+                'label' => 'Hora de Importação',
+                'value' => function ($model) {
+                    $fornecedores = '';
+                    foreach ($model->fornecedoresProdutos as $fornecedor) {
+                        $fornecedores .= $fornecedor->hora_importacao ;
+                    }
+                    return $fornecedores;
+                },
+            ],
             'quantidade',
             [
                 'class' => 'yii\grid\ActionColumn',
@@ -62,6 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                 ],
             ],
+
         ],
     ]); ?>
 

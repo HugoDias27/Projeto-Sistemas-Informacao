@@ -73,7 +73,7 @@ class FornecedorController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'fornecedor' => $this->findModel($id),
         ]);
     }
 
@@ -84,18 +84,18 @@ class FornecedorController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Fornecedor();
+        $fornecedor = new Fornecedor();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($fornecedor->load($this->request->post()) && $fornecedor->save()) {
+                return $this->redirect(['view', 'id' => $fornecedor->id]);
             }
         } else {
-            $model->loadDefaultValues();
+            $fornecedor->loadDefaultValues();
         }
 
         return $this->render('create', [
-            'model' => $model,
+            'fornecedor' => $fornecedor,
         ]);
     }
 
@@ -108,14 +108,14 @@ class FornecedorController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $fornecedor = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost && $fornecedor->load($this->request->post()) && $fornecedor->save()) {
+            return $this->redirect(['view', 'id' => $fornecedor->id]);
         }
 
         return $this->render('update', [
-            'model' => $model,
+            'fornecedor' => $fornecedor,
         ]);
     }
 
@@ -142,8 +142,8 @@ class FornecedorController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Fornecedor::findOne(['id' => $id])) !== null) {
-            return $model;
+        if (($fornecedor = Fornecedor::findOne(['id' => $id])) !== null) {
+            return $fornecedor;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');

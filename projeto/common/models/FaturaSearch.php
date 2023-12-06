@@ -7,7 +7,7 @@ use yii\data\ActiveDataProvider;
 use common\models\Fatura;
 
 /**
- * FaturaSearch represents the model behind the search form of `common\models\Fatura`.
+ * FaturaSearch represents the model behind the search form of `common\models\fatura`.
  */
 class FaturaSearch extends Fatura
 {

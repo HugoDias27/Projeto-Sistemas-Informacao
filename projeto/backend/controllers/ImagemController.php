@@ -79,13 +79,12 @@ class ImagemController extends Controller
 
     public function actionView($id)
     {
-        $model = $this->findModel($id);
+        $imagem = $this->findModel($id);
 
-
-       $imageHtml = Yii::getAlias('@web') . '/uploads/' . $model->filename;
+        $imageHtml = Yii::getAlias('@web') . '/uploads/' . $imagem->filename;
 
         return $this->render('view', [
-            'model' => $model,
+            'imagem' => $imagem,
             'imageHtml' => $imageHtml,
         ]);
     }
@@ -99,11 +98,11 @@ class ImagemController extends Controller
 
     public function actionCreate($produto_id)
     {
-        $image = new Imagem();
+        $imagem = new Imagem();
         $uploadForm = new UploadForm();
 
         if (Yii::$app->request->isPost) {
-            $uploadForm->imageFiles = UploadedFile::getInstances($image, 'imageFiles');
+            $uploadForm->imageFiles = UploadedFile::getInstances($imagem, 'imageFiles');
             $uploadForm->produto_id = $produto_id;
 
             if ($uploadForm->upload()) {
@@ -111,7 +110,7 @@ class ImagemController extends Controller
             }
         }
 
-        return $this->render('create', ['image' => $image]);
+        return $this->render('create', ['imagem' => $imagem]);
     }
 
 
@@ -124,14 +123,14 @@ class ImagemController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $imagem = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost && $imagem->load($this->request->post()) && $imagem->save()) {
+            return $this->redirect(['view', 'id' => $imagem->id]);
         }
 
         return $this->render('update', [
-            'model' => $model,
+            'imagem' => $imagem,
         ]);
     }
 
@@ -158,8 +157,8 @@ class ImagemController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Imagem::findOne(['id' => $id])) !== null) {
-            return $model;
+        if (($imagem = Imagem::findOne(['id' => $id])) !== null) {
+            return $imagem;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');

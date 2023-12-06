@@ -20,7 +20,7 @@ use Yii;
  * @property Profile $cliente
  * @property ServicosEstabelecimento $estabelecimento
  * @property LinhaFatura[] $linhaFaturas
- * @property ReceitasMedica $receita
+ * @property ReceitaMedica $receita
  */
 class Fatura extends \yii\db\ActiveRecord
 {
@@ -60,7 +60,7 @@ class Fatura extends \yii\db\ActiveRecord
             'dta_emissao' => 'Dta Emissao',
             'loja' => 'Loja',
             'emissor' => 'Emissor',
-            'total_fatura' => 'Total Fatura',
+            'total_fatura' => 'Total fatura',
             'cliente_id' => 'Cliente ID',
             'receita_id' => 'Receita ID',
             'estabelecimento_id' => 'Estabelecimento ID',

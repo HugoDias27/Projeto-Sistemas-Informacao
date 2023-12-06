@@ -17,8 +17,8 @@ class ReceitaMedicaSearch extends ReceitaMedica
     public function rules()
     {
         return [
-            [['id', 'codigo', 'dosagem', 'telefone', 'valido'], 'integer'],
-            [['nome', 'local_prescricao', 'medico_prescricao', 'data_validade', 'posologia'], 'safe'],
+            [['id', 'codigo', 'dosagem', 'telefone', 'valido', 'user_id'], 'integer'],
+            [['local_prescricao', 'medico_prescricao', 'data_validade', 'posologia'], 'safe'],
         ];
     }
 
@@ -64,10 +64,10 @@ class ReceitaMedicaSearch extends ReceitaMedica
             'data_validade' => $this->data_validade,
             'telefone' => $this->telefone,
             'valido' => $this->valido,
+            'user_id' => $this->user_id,
         ]);
 
-        $query->andFilterWhere(['like', 'nome', $this->nome])
-            ->andFilterWhere(['like', 'local_prescricao', $this->local_prescricao])
+        $query->andFilterWhere(['like', 'local_prescricao', $this->local_prescricao])
             ->andFilterWhere(['like', 'medico_prescricao', $this->medico_prescricao])
             ->andFilterWhere(['like', 'posologia', $this->posologia]);
 

@@ -71,7 +71,8 @@ class ProdutoController extends Controller
             $model->iva_id = $model->iva->percentagem . '%' ;
             $model->categoria_id = $model->categoria->descricao;
         }
-
+        $dataProvider->query->with('fornecedoresprodutos');
+        $dataProvider->query->with('fornecedores');
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -89,6 +90,9 @@ class ProdutoController extends Controller
     {
         $imagemArray = [];
         $model = $this->findModel($id);
+        $fornecedores = $model->fornecedores;
+        $fornecedorProduto = $model->fornecedoresProdutos;
+
 
         $imagens = Imagem::find()->where(['produto_id' => $id])->all();
         foreach ($imagens as $imagem) {
@@ -97,7 +101,7 @@ class ProdutoController extends Controller
         }
 
         return $this->render('view', [
-            'model' => $this->findModel($id),'imagemArray' => $imagemArray,
+            'produto' => $this->findModel($id),'imagemArray' => $imagemArray, 'fornecedores' => $fornecedores, 'fornecedorProduto' => $fornecedorProduto
         ]);
     }
 
@@ -108,7 +112,7 @@ class ProdutoController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Produto();
+        $produto = new Produto();
         $fornecedorProduto = new FornecedorProduto();
         $fornecedoresList = Fornecedor::find()->all();
         $fornecedores = ArrayHelper::map($fornecedoresList, 'id', 'nome');
@@ -123,9 +127,9 @@ class ProdutoController extends Controller
         $post = $this->request->post();
 
         if ($this->request->isPost) {
-            $model->load($this->request->post());
-            if ($model->save()) {
-                $fornecedorProduto->produto_id = $model->id;
+            $produto->load($this->request->post());
+            if ($produto->save()) {
+                $fornecedorProduto->produto_id = $produto->id;
                 $fornecedorProduto->data_importacao = $post['FornecedorProduto']['data_importacao'];
                 $fornecedorProduto->fornecedor_id = $post['FornecedorProduto']['fornecedor_id'];
                 $fornecedorProduto->hora_importacao = $post['FornecedorProduto']['hora_importacao'];
@@ -138,7 +142,7 @@ class ProdutoController extends Controller
         }
 
         return $this->render('create', [
-            'model' => $model,
+            'produto' => $produto,
             'ivaItems' => $ivaItems,
             'categoriaItems' => $categoriaItems,
             'fornecedorProduto' => $fornecedorProduto,
@@ -156,19 +160,19 @@ class ProdutoController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $produto = $this->findModel($id);
 
         $ivaList = Iva::find()->where(['vigor' => 1])->all();
         $ivaItems = ArrayHelper::map($ivaList, 'id', 'percentagem');
 
         $categoriaList = Categoria::find()->all();
         $categoriaItems = ArrayHelper::map($categoriaList, 'id', 'descricao');
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost && $produto->load($this->request->post()) && $produto->save()) {
+            return $this->redirect(['view', 'id' => $produto->id]);
         }
 
         return $this->render('update', [
-            'model' => $model,
+            'produto' => $produto,
             'ivaItems' => $ivaItems,
             'categoriaItems' => $categoriaItems,
         ]);
@@ -183,7 +187,6 @@ class ProdutoController extends Controller
      */
     public function actionDelete($id)
     {
-
         $imagens = Imagem::find()->where(['produto_id' => $id])->all();
         foreach ($imagens as $imagem) {
             $imagem->delete();
@@ -191,8 +194,6 @@ class ProdutoController extends Controller
         $FornecedorProduto = FornecedorProduto::find()->where(['produto_id' => $id])->one();
         $FornecedorProduto->delete();
         $this->findModel($id)->delete();
-
-
 
         return $this->redirect(['index']);
     }
@@ -206,8 +207,8 @@ class ProdutoController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Produto::findOne(['id' => $id])) !== null) {
-            return $model;
+        if (($produto = Produto::findOne(['id' => $id])) !== null) {
+            return $produto;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');

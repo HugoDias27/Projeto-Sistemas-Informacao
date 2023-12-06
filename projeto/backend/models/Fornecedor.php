@@ -58,7 +58,7 @@ class Fornecedor extends \yii\db\ActiveRecord
      */
     public function getFornecedoresProdutos()
     {
-        return $this->hasMany(FornecedoresProduto::class, ['fornecedor_id' => 'id']);
+        return $this->hasMany(FornecedorProduto::class, ['fornecedor_id' => 'id']);
     }
 
     /**

@@ -73,7 +73,7 @@ class ProfileController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'perfil' => $this->findModel($id),
         ]);
     }
 
@@ -84,26 +84,26 @@ class ProfileController extends Controller
      */
     public function actionCreate($id)
     {
-        $model = Profile::findOne(['user_id' => $id]);
+        $perfil = Profile::findOne(['user_id' => $id]);
 
-        if ($model !== null) {
+        if ($perfil !== null) {
             // Se um perfil já existe para este usuário, redirecionar para a página inicial (index)
             return $this->redirect(['user/index']); // Substitua 'index' pelo nome da sua ação de página inicial
         }
 
-        $model = new Profile();
-        $model->user_id = $id;
+        $perfil = new Profile();
+        $perfil->user_id = $id;
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($perfil->load($this->request->post()) && $perfil->save()) {
+                return $this->redirect(['view', 'id' => $perfil->id]);
             }
         } else {
-            $model->loadDefaultValues();
+            $perfil->loadDefaultValues();
         }
 
         return $this->render('create', [
-            'model' => $model,
+            'perfil' => $perfil,
         ]);
     }
 
@@ -116,22 +116,22 @@ class ProfileController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $perfil = $this->findModel($id);
 
-        if ($model !== null) {
+        if ($perfil !== null) {
             $post = $this->request->post();
 
-            if ($this->request->isPost && $model->load($post) && $model->save()) {
-                $model->save();
+            if ($this->request->isPost && $perfil->load($post) && $perfil->save()) {
+                $perfil->save();
 
                 return $this->redirect('index');
             }
-            if ($model->n_utente == null) {
+            if ($perfil->n_utente == null) {
                 $mostra_n_utente = 1;
             } else {
                 $mostra_n_utente = 0;
             }
-            if ($model->nif == null) {
+            if ($perfil->nif == null) {
                 $mostra_nif = 1;
             } else {
                 $mostra_nif = 0;
@@ -139,7 +139,7 @@ class ProfileController extends Controller
         } else {
             return $this->redirect(['create', 'id' => $id]);
         }
-        return $this->render('update', ['model' => $model, 'mostra_n_utente' => $mostra_n_utente, 'mostra_nif' => $mostra_nif]);
+        return $this->render('update', ['perfil' => $perfil, 'mostra_n_utente' => $mostra_n_utente, 'mostra_nif' => $mostra_nif]);
 
     }
 
@@ -167,8 +167,8 @@ class ProfileController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Profile::findOne(['user_id' => $id])) !== null) {
-            return $model;
+        if (($perfil = Profile::findOne(['user_id' => $id])) !== null) {
+            return $perfil;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');

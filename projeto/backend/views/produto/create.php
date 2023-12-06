@@ -3,9 +3,9 @@
 use yii\helpers\Html;
 
 /** @var yii\web\View $this */
-/** @var common\models\Produto $model */
+/** @var common\models\Produto $produto */
 
-$this->title = 'Create Produto';
+$this->title = 'Criar Produto';
 $this->params['breadcrumbs'][] = ['label' => 'Produtos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
-        'model' => $model,'ivaItems' => $ivaItems, 'categoriaItems'=> $categoriaItems, 'fornecedorProduto' => $fornecedorProduto, 'fornecedores' => $fornecedores
+        'produto' => $produto,'ivaItems' => $ivaItems, 'categoriaItems'=> $categoriaItems, 'fornecedorProduto' => $fornecedorProduto, 'fornecedores' => $fornecedores
     ]) ?>
 
 </div>

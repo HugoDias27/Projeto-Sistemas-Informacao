@@ -15,7 +15,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'duracao')->input('time', ['step' => '1', 'min' => '00:00:00', 'max' => '23:59:59']) ?>
+    <?= $form->field($model, 'duracao')->input('time') ?>
 
     <?= $form->field($model, 'preco')->textInput() ?>
 
