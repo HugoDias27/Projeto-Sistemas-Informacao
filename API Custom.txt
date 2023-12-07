@@ -1,0 +1,22 @@
+View searchProduto - 'GET produto/{nome}' => searchProduto
+View precoProduto - 'GET {produto}/preco' => precoProduto
+View prescricaoMedicaProduto - 'GET {produto}/prescricaoMedica' => prescricaoMedicaProduto
+View stockProduto - 'GET {produto}/quantidade' => stockProduto
+View categoriaProduto - 'GET {produto}/categoria' => categoriaProduto
+View ivaProduto - 'GET {produto}/iva' => ivaProduto
+
+View searchServico - 'GET servico/{nome}' => searchServico
+View precoServico - 'GET {servico}/preco' => precoServico
+View duracaoServico - 'GET {servico}/duracao' => duracaoServico
+
+View nomeEstabelecimento - 'GET estabelecimento/{nome}' => nomeEstabelecimento
+View searchMorada - 'GET {estabelecimento}/morada' => searchMorada;
+View searchEstabelecimento - 'GET estabelecimento/{morada}' => searchEstabelecimento;
+View telefoneEstabelecimento - 'GET {estabelecimento}/telefone' => telefoneEstabelecimento
+View emailEstabelecimento - 'GET {estabelecimento}/email' => emailEstabelecimento
+
+View searchCategoria - 'GET categoria/{nome}' => searchCategoria
+
+View searchFaturasDta - 'GET fatura/{dtaemissao}' => searchFaturasDta
+View searchFaturasLoja - 'GET faturas/{loja}' => searchFaturasLoja
+
