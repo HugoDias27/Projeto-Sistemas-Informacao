@@ -89,10 +89,8 @@ class ProdutoController extends Controller
     public function actionView($id)
     {
         $imagemArray = [];
-        $model = $this->findModel($id);
-        $fornecedores = $model->fornecedores;
-        $fornecedorProduto = $model->fornecedoresProdutos;
 
+        $fornecedorProduto = FornecedorProduto::find()->where(['produto_id' => $id])->with('fornecedor')->all();
 
         $imagens = Imagem::find()->where(['produto_id' => $id])->all();
         foreach ($imagens as $imagem) {
@@ -101,9 +99,12 @@ class ProdutoController extends Controller
         }
 
         return $this->render('view', [
-            'produto' => $this->findModel($id),'imagemArray' => $imagemArray, 'fornecedores' => $fornecedores, 'fornecedorProduto' => $fornecedorProduto
+            'produto' => $this->findModel($id),
+            'imagemArray' => $imagemArray,
+            'fornecedorProduto' => $fornecedorProduto
         ]);
     }
+
 
     /**
      * Creates a new Produto model.

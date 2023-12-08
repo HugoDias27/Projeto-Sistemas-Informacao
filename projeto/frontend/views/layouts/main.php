@@ -4,6 +4,7 @@
 
 /** @var string $content */
 
+use frontend\controllers\MenuController;
 use common\models\Categoria;
 use common\widgets\Alert;
 use frontend\assets\AppAsset;
@@ -66,42 +67,17 @@ AppAsset::register($this);
             ['label' => 'Contactos', 'url' => ['/site/contact']],
             [
                 'label' => 'Produtos',
-                'items' => [],
+                'items' => [
+                    ['label' => 'Medicamentos Sem Receita', 'url' => ['produto/categoriamedicamentossemreceita']],
+                    ['label' => 'Medicamentos Com Receita', 'url' => ['produto/categoriamedicamentoscomreceita']],
+                    ['label' => 'Saúde Oral', 'url' => ['produto/categoriasaudeoral']],
+                    ['label' => 'Bens de beleza', 'url' => ['produto/categoriabensbeleza']],
+                    ['label' => 'Higiene', 'url' => ['produto/categoriahigiene']],
+                    ['label' => 'Serviços', 'url' => ['produto/categoriaservicos']],
+                    ['label' => 'Encontrar farmácia', 'url' => ['site/search']]
+                ],
             ],
         ];
-
-        $categoriaMedicamentos = Categoria::findOne(['descricao' => 'Medicamentos']);
-
-        if ($categoriaMedicamentos) {
-            $menuItems[3]['items'][] = ['label' => 'Medicamentos Sem Receita', 'url' => ['produto/categoriamedicamentossemreceita']];
-            $menuItems[3]['items'][] = ['label' => 'Medicamentos Com Receita', 'url' => ['produto/categoriamedicamentoscomreceita']];
-        }
-
-        $categoriaSaudeOral = Categoria::findOne(['descricao' => 'Saúde Oral']);
-
-        if ($categoriaSaudeOral) {
-            $menuItems[3]['items'][] = ['label' => 'Saúde Oral', 'url' => ['produto/categoriasaudeoral']];
-        }
-
-        $categoriaBensBeleza = Categoria::findOne(['descricao' => 'Bens de beleza']);
-
-        if ($categoriaBensBeleza) {
-            $menuItems[3]['items'][] = ['label' => 'Bens de beleza', 'url' => ['produto/categoriabensbeleza']];
-        }
-
-        $categoriaHigiene = Categoria::findOne(['descricao' => 'Higiene']);
-
-        if ($categoriaHigiene) {
-            $menuItems[3]['items'][] = ['label' => 'Higiene', 'url' => ['produto/categoriahigiene']];
-        }
-
-        $categoriaServicos = Categoria::findOne(['descricao' => 'Serviços']);
-
-        if ($categoriaServicos) {
-            $menuItems[3]['items'][] = ['label' => 'Serviços', 'url' => ['produto/categoriaservicos']];
-        }
-
-        $menuItems[3]['items'][] = ['label' => 'Encontrar farmácia', 'url' => ['site/search']];
 
         if (!Yii::$app->user->isGuest) {
             $menuItems[] = [

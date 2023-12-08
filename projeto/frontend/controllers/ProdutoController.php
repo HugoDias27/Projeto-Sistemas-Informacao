@@ -55,155 +55,188 @@ class ProdutoController extends Controller
 
             //Apresenta na página de detalhes os dados pretendidos para o utilizador, consoante os campos selecionados no index
             return $this->render('index', ['produtoDetalhes' => $produtoDetalhes, 'receitaMedica' => $receitaMedica, 'precoFinal' => $precoFinal]);
-        } else {
-            //Caso apresente erro, apresentar mensagem de erro
-            throw new \yii\web\NotFoundHttpException('Produtos não encontrados.');
         }
     }
 
     public function actionCategoriamedicamentossemreceita()
     {
-        //Procurar na categoria dos Medicamentos
-        $categoriaMedicamentos = Produto::find()->where(['prescricao_medica' => 0]);
+        $categoria = Categoria::find()->where(['descricao' => 'Medicamentos'])->one();
+        if ($categoria != null) {
+            //Procurar na categoria dos Medicamentos
+            $categoriaMedicamentos = Produto::find()->where(['prescricao_medica' => 0]);
 
-        if ($categoriaMedicamentos) {
+            if ($categoriaMedicamentos) {
 
-            $paginacao = new Pagination([
-                'defaultPageSize' => 20,
-                'totalCount' => $categoriaMedicamentos->count(),
-            ]);
+                $paginacao = new Pagination([
+                    'defaultPageSize' => 20,
+                    'totalCount' => $categoriaMedicamentos->count(),
+                ]);
 
-            $produtos = $categoriaMedicamentos->offset($paginacao->offset)
-                ->limit($paginacao->limit)
-                ->all();
+                $produtos = $categoriaMedicamentos->offset($paginacao->offset)
+                    ->limit($paginacao->limit)
+                    ->all();
 
-            return $this->render('medicamentos', [
-                'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
-                'paginacao' => $paginacao
-            ]);
+                return $this->render('medicamentos', [
+                    'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
+                    'paginacao' => $paginacao
+                ]);
+            }
+        } else {
+            throw new \yii\web\NotFoundHttpException('Medicamentos não encontrados!');
         }
     }
 
-    public function actionCategoriamedicamentoscomreceita()
+    public
+    function actionCategoriamedicamentoscomreceita()
     {
-        //Procurar na categoria dos Medicamentos
-        $categoriaMedicamentos = Produto::find()->where(['prescricao_medica' => 1]);
+        $categoria = Categoria::find()->where(['descricao' => 'Medicamentos'])->one();
+        if ($categoria != null) {
+            //Procurar na categoria dos Medicamentos
+            $categoriaMedicamentos = Produto::find()->where(['prescricao_medica' => 1]);
 
-        if ($categoriaMedicamentos) {
+            if ($categoriaMedicamentos) {
 
-            $paginacao = new Pagination([
-                'defaultPageSize' => 20,
-                'totalCount' => $categoriaMedicamentos->count(),
-            ]);
+                $paginacao = new Pagination([
+                    'defaultPageSize' => 20,
+                    'totalCount' => $categoriaMedicamentos->count(),
+                ]);
 
-            $produtos = $categoriaMedicamentos->offset($paginacao->offset)
-                ->limit($paginacao->limit)
-                ->all();
+                $produtos = $categoriaMedicamentos->offset($paginacao->offset)
+                    ->limit($paginacao->limit)
+                    ->all();
 
-            return $this->render('medicamentos', [
-                'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
-                'paginacao' => $paginacao
-            ]);
+                return $this->render('medicamentos', [
+                    'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
+                    'paginacao' => $paginacao
+                ]);
+            }
+        } else {
+            throw new \yii\web\NotFoundHttpException('Medicamentos não encontrados!');
         }
     }
 
-    public function actionCategoriasaudeoral()
+    public
+    function actionCategoriasaudeoral()
     {
-        //Procura os Medicamentos pela categoria
-        $categoriaMedicamentos = Categoria::findOne(['descricao' => 'Saúde Oral']);
+        $categoria = Categoria::find()->where(['descricao' => 'saudeoral'])->one();
+        if ($categoria != null) {
+            //Procura os Medicamentos pela categoria
+            $categoriaMedicamentos = Categoria::findOne(['descricao' => 'saudeoral']);
 
-        if ($categoriaMedicamentos) {
-            $queryProdutos = Produto::find()
-                ->where(['categoria_id' => $categoriaMedicamentos->id]);
+            if ($categoriaMedicamentos) {
+                $queryProdutos = Produto::find()
+                    ->where(['categoria_id' => $categoriaMedicamentos->id]);
 
-            $paginacao = new Pagination([
-                'defaultPageSize' => 20,
-                'totalCount' => $queryProdutos->count(),
-            ]);
+                $paginacao = new Pagination([
+                    'defaultPageSize' => 20,
+                    'totalCount' => $queryProdutos->count(),
+                ]);
 
-            $produtos = $queryProdutos->offset($paginacao->offset)
-                ->limit($paginacao->limit)
-                ->all();
+                $produtos = $queryProdutos->offset($paginacao->offset)
+                    ->limit($paginacao->limit)
+                    ->all();
 
-            return $this->render('medicamentos', [
-                'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
-                'paginacao' => $paginacao
-            ]);
+                return $this->render('medicamentos', [
+                    'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
+                    'paginacao' => $paginacao
+                ]);
+            }
+        } else {
+            throw new \yii\web\NotFoundHttpException('Categoria não encontrada!');
         }
     }
 
-    public function actionCategoriabensbeleza()
+    public
+    function actionCategoriabensbeleza()
     {
-        //Procura os Medicamentos pela categoria
-        $categoriaMedicamentos = Categoria::findOne(['descricao' => 'Bens de Beleza']);
+        $categoria = Categoria::find()->where(['descricao' => 'bens_beleza'])->one();
+        if ($categoria != null) {
 
-        if ($categoriaMedicamentos) {
-            $queryProdutos = Produto::find()
-                ->where(['categoria_id' => $categoriaMedicamentos->id]);
+            //Procura os Medicamentos pela categoria
+            $categoriaMedicamentos = Categoria::findOne(['descricao' => 'bens_beleza']);
 
-            $paginacao = new Pagination([
-                'defaultPageSize' => 20,
-                'totalCount' => $queryProdutos->count(),
-            ]);
+            if ($categoriaMedicamentos) {
+                $queryProdutos = Produto::find()
+                    ->where(['categoria_id' => $categoriaMedicamentos->id]);
 
-            $produtos = $queryProdutos->offset($paginacao->offset)
-                ->limit($paginacao->limit)
-                ->all();
+                $paginacao = new Pagination([
+                    'defaultPageSize' => 20,
+                    'totalCount' => $queryProdutos->count(),
+                ]);
 
-            return $this->render('medicamentos', [
-                'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
-                'paginacao' => $paginacao
-            ]);
+                $produtos = $queryProdutos->offset($paginacao->offset)
+                    ->limit($paginacao->limit)
+                    ->all();
+
+                return $this->render('medicamentos', [
+                    'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
+                    'paginacao' => $paginacao
+                ]);
+            }
+        } else {
+            throw new \yii\web\NotFoundHttpException('Categoria não encontrada!');
         }
     }
 
-    public function actionCategoriahigiene()
+    public
+    function actionCategoriahigiene()
     {
-        //Procura os Medicamentos pela categoria
-        $categoriaMedicamentos = Categoria::findOne(['descricao' => 'Higiene']);
+        $categoria = Categoria::find()->where(['descricao' => 'higiene'])->one();
+        if ($categoria != null) {
+            //Procura os Medicamentos pela categoria
+            $categoriaMedicamentos = Categoria::findOne(['descricao' => 'Higiene']);
 
-        if ($categoriaMedicamentos) {
-            $queryProdutos = Produto::find()
-                ->where(['categoria_id' => $categoriaMedicamentos->id]);
+            if ($categoriaMedicamentos) {
+                $queryProdutos = Produto::find()
+                    ->where(['categoria_id' => $categoriaMedicamentos->id]);
 
-            $paginacao = new Pagination([
-                'defaultPageSize' => 20,
-                'totalCount' => $queryProdutos->count(),
-            ]);
+                $paginacao = new Pagination([
+                    'defaultPageSize' => 20,
+                    'totalCount' => $queryProdutos->count(),
+                ]);
 
-            $produtos = $queryProdutos->offset($paginacao->offset)
-                ->limit($paginacao->limit)
-                ->all();
+                $produtos = $queryProdutos->offset($paginacao->offset)
+                    ->limit($paginacao->limit)
+                    ->all();
 
-            return $this->render('medicamentos', [
-                'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
-                'paginacao' => $paginacao
-            ]);
+                return $this->render('medicamentos', [
+                    'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
+                    'paginacao' => $paginacao
+                ]);
+            }
+        } else {
+            throw new \yii\web\NotFoundHttpException('Categoria não encontrada!');
         }
     }
 
-    public function actionCategoriaservicos()
+    public
+    function actionCategoriaservicos()
     {
-        //Procura os Medicamentos pela categoria
-        $categoriaMedicamentos = Categoria::findOne(['descricao' => 'Serviços']);
+        $categoria = Categoria::find()->where(['descricao' => 'servicos'])->one();
+        if ($categoria != null) {
+            //Procura os Medicamentos pela categoria
+            $categoriaMedicamentos = Categoria::findOne(['descricao' => 'Serviços']);
 
-        if ($categoriaMedicamentos) {
-            $queryProdutos = Produto::find()
-                ->where(['categoria_id' => $categoriaMedicamentos->id]);
+            if ($categoriaMedicamentos) {
+                $queryProdutos = Produto::find()
+                    ->where(['categoria_id' => $categoriaMedicamentos->id]);
 
-            $paginacao = new Pagination([
-                'defaultPageSize' => 20,
-                'totalCount' => $queryProdutos->count(),
-            ]);
+                $paginacao = new Pagination([
+                    'defaultPageSize' => 20,
+                    'totalCount' => $queryProdutos->count(),
+                ]);
 
-            $produtos = $queryProdutos->offset($paginacao->offset)
-                ->limit($paginacao->limit)
-                ->all();
+                $produtos = $queryProdutos->offset($paginacao->offset)
+                    ->limit($paginacao->limit)
+                    ->all();
 
-            return $this->render('medicamentos', [
-                'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
-                'paginacao' => $paginacao
-            ]);
+                return $this->render('medicamentos', [
+                    'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
+                    'paginacao' => $paginacao
+                ]);
+            }
+        } else {
+            throw new \yii\web\NotFoundHttpException('Categoria não encontrada!');
         }
     }
 }
