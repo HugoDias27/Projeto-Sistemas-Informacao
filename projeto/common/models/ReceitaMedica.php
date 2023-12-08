@@ -8,7 +8,6 @@ use Yii;
  * This is the model class for table "receitas_medica".
  *
  * @property int $id
- * @property string $nome
  * @property int $codigo
  * @property string $local_prescricao
  * @property string $medico_prescricao
@@ -17,8 +16,10 @@ use Yii;
  * @property int $telefone
  * @property int $valido
  * @property string $posologia
+ * @property int $user_id
  *
  * @property Fatura[] $faturas
+ * @property Profile $user
  */
 class ReceitaMedica extends \yii\db\ActiveRecord
 {
@@ -36,11 +37,12 @@ class ReceitaMedica extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nome', 'codigo', 'local_prescricao', 'medico_prescricao', 'dosagem', 'data_validade', 'telefone', 'valido', 'posologia'], 'required'],
-            [['codigo', 'dosagem', 'telefone', 'valido'], 'integer'],
+            [['codigo', 'local_prescricao', 'medico_prescricao', 'dosagem', 'data_validade', 'telefone', 'valido', 'posologia', 'user_id'], 'required'],
+            [['codigo', 'dosagem', 'telefone', 'valido', 'user_id'], 'integer'],
             [['data_validade'], 'safe'],
-            [['nome', 'local_prescricao', 'medico_prescricao'], 'string', 'max' => 45],
+            [['local_prescricao', 'medico_prescricao'], 'string', 'max' => 45],
             [['posologia'], 'string', 'max' => 50],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Profile::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -51,7 +53,6 @@ class ReceitaMedica extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'nome' => 'Nome',
             'codigo' => 'Codigo',
             'local_prescricao' => 'Local Prescricao',
             'medico_prescricao' => 'Medico Prescricao',
@@ -60,6 +61,7 @@ class ReceitaMedica extends \yii\db\ActiveRecord
             'telefone' => 'Telefone',
             'valido' => 'Valido',
             'posologia' => 'Posologia',
+            'user_id' => 'User ID',
         ];
     }
 
@@ -71,5 +73,15 @@ class ReceitaMedica extends \yii\db\ActiveRecord
     public function getFaturas()
     {
         return $this->hasMany(Fatura::class, ['receita_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[User]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 }

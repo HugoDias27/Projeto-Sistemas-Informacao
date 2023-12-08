@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var common\models\ImagemSearch $model */
+/** @var common\models\ImagemSearch $imagem */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
@@ -15,11 +15,11 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+    <?= $form->field($imagem, 'id') ?>
 
-    <?= $form->field($model, 'filename') ?>
+    <?= $form->field($imagem, 'filename') ?>
 
-    <?= $form->field($model, 'produto_id') ?>
+    <?= $form->field($imagem, 'produto_id') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

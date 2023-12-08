@@ -3,10 +3,10 @@
 use yii\helpers\Html;
 
 /** @var yii\web\View $this */
-/** @var common\models\ReceitaMedica $model */
+/** @var common\models\ReceitaMedica $receita */
 
-$this->title = 'Create Receita Medica';
-$this->params['breadcrumbs'][] = ['label' => 'Receita Medicas', 'url' => ['index']];
+$this->title = 'Criar Receita Médica';
+$this->params['breadcrumbs'][] = ['label' => 'Receita Médica', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="receita-medica-create">
@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
-        'model' => $model,
+        'receita' => $receita, 'clientes' => $clientes,
     ]) ?>
 
 </div>

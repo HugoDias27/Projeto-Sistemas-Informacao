@@ -35,6 +35,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->percentagem . '%';
                 },
             ],
+            'vigor' => [
+                'attribute' => 'vigor',
+                'value' => function ($model) {
+                    return $model->vigor == 1 ? 'Em vigor' : 'Não está em vigor';
+                },
+                'filter' => [
+                    0 => 'Não',
+                    1 => 'Sim',
+                ],
+            ],
             'descricao',
             [
                 'class' => ActionColumn::className(),

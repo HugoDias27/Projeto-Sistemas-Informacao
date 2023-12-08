@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var common\models\ReceitaMedica $model */
+/** @var common\models\ReceitaMedica $receita */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
@@ -12,23 +12,23 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($receita, 'user_id')->dropDownList($clientes, ['prompt' => 'Selecione...']) ?>
 
-    <?= $form->field($model, 'codigo')->textInput() ?>
+    <?= $form->field($receita, 'codigo')->textInput() ?>
 
-    <?= $form->field($model, 'local_prescricao')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($receita, 'local_prescricao')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'medico_prescricao')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($receita, 'medico_prescricao')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'dosagem')->textInput() ?>
+    <?= $form->field($receita, 'dosagem')->textInput() ?>
 
-    <?= $form->field($model, 'data_validade')->textInput() ?>
+    <?= $form->field($receita, 'data_validade')->input('date') ?>
 
-    <?= $form->field($model, 'telefone')->textInput() ?>
+    <?= $form->field($receita, 'telefone')->textInput() ?>
 
-    <?= $form->field($model, 'valido')->textInput() ?>
+    <?= $form->field($receita, 'valido')->dropDownList([1 => 'Sim', 0=> 'Não']) ?>
 
-    <?= $form->field($model, 'posologia')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($receita, 'posologia')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

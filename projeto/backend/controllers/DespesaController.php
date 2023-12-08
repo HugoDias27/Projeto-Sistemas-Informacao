@@ -78,7 +78,7 @@ class DespesaController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'despesa' => $this->findModel($id),
         ]);
     }
 
@@ -89,20 +89,20 @@ class DespesaController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Despesa();
+        $despesa = new Despesa();
         $estabelecimentoList = Estabelecimento::find()->all();
         $estabelecimentoItems = ArrayHelper::map($estabelecimentoList, 'id', 'nome');
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($despesa->load($this->request->post()) && $despesa->save()) {
+                return $this->redirect(['view', 'id' => $despesa->id]);
             }
         } else {
-            $model->loadDefaultValues();
+            $despesa->loadDefaultValues();
         }
 
         return $this->render('create', [
-            'model' => $model, 'estabelecimentoItems' => $estabelecimentoItems,
+            'despesa' => $despesa, 'estabelecimentoItems' => $estabelecimentoItems,
         ]);
     }
 
@@ -115,14 +115,14 @@ class DespesaController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $despesa = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost && $despesa->load($this->request->post()) && $despesa->save()) {
+            return $this->redirect(['view', 'id' => $despesa->id]);
         }
 
         return $this->render('update', [
-            'model' => $model,
+            'despesa' => $despesa,
         ]);
     }
 
@@ -149,8 +149,8 @@ class DespesaController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Despesa::findOne(['id' => $id])) !== null) {
-            return $model;
+        if (($despesa = Despesa::findOne(['id' => $id])) !== null) {
+            return $despesa;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');

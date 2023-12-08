@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var common\models\IvaSearch $model */
+/** @var common\models\IvaSearch $iva */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
@@ -15,13 +15,13 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+    <?= $form->field($iva, 'id') ?>
 
-    <?= $form->field($model, 'percentagem') ?>
+    <?= $form->field($iva, 'percentagem') ?>
 
-    <?= $form->field($model, 'vigor') ?>
+    <?= $form->field($iva, 'vigor') ?>
 
-    <?= $form->field($model, 'descricao') ?>
+    <?= $form->field($iva, 'descricao') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

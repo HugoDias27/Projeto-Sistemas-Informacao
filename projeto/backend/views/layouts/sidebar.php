@@ -44,14 +44,14 @@
                         'icon' => 'nav-icon fas fa-edit',
                         'items' => [
                             ['label' => 'Gerir medicamentos', 'url' => ['produto/index'], 'icon' => 'fa-solid fa-pills'],
-                            ['label' => 'Gerir categorias', 'url' => ['categoria/index'], 'icon' => 'fa-solid fa-pills'],
+                            ['label' => 'Gerir categorias', 'url' => ['categoria/index'], 'icon' => 'fa-solid fa-folder'],
                             ['label' => 'Gerir vendas', 'url' => ['venda/index'], 'icon' => 'fa-solid fa-money-bill'],
                             ['label' => 'Gerir serviços', 'url' => ['servico/index'], 'icon' => 'fas fa-mail-bulk'],
                             ['label' => 'Gerir fornecedor', 'url' => ['fornecedor/index'], 'icon' => 'fas fa-truck', 'style' =>'color: #ffffff'],
                             ['label' => 'Gerir receitas médicas', 'url' => ['receita/index'],'icon' => 'fas fa-prescription-bottle-alt', 'style' =>'color: #ffffff'],
                             ['label' => 'Gerir estabelecimentos', 'url' => ['estabelecimento/index'], 'icon' => 'fas fa-building', 'style' =>'color: #ffffff'],
                             ['label' => 'Gerir despesas', 'url' => ['despesa/index'], 'icon' => 'fas fa-money-check-alt', 'style' =>'color: #ffffff'],
-                            ['label' => 'Gerir faturas', 'icon' => 'fas fa-file-invoice', 'style' =>'color: #ffffff'],
+                            ['label' => 'Gerir faturas', 'url' => ['fatura/index'],'icon' => 'fas fa-file-invoice', 'style' =>'color: #ffffff'],
                             ['label' => 'Gerir ivas', 'url' => ['iva/index'], 'icon' => 'fas fa-euro-sign', 'style' =>'color: #ffffff'],
                         ]
                     ],

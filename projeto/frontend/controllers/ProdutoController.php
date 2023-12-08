@@ -57,13 +57,13 @@ class ProdutoController extends Controller
             return $this->render('index', ['produtoDetalhes' => $produtoDetalhes, 'receitaMedica' => $receitaMedica, 'precoFinal' => $precoFinal]);
         } else {
             //Caso apresente erro, apresentar mensagem de erro
-            throw new \yii\web\NotFoundHttpException('Produto não encontrado.');
+            throw new \yii\web\NotFoundHttpException('Produtos não encontrados.');
         }
     }
 
     public function actionCategoriamedicamentossemreceita()
     {
-        // Busca a categoria 'Medicamentos'
+        //Procurar na categoria dos Medicamentos
         $categoriaMedicamentos = Produto::find()->where(['prescricao_medica' => 0]);
 
         if ($categoriaMedicamentos) {
@@ -86,7 +86,7 @@ class ProdutoController extends Controller
 
     public function actionCategoriamedicamentoscomreceita()
     {
-        // Busca a categoria 'Medicamentos'
+        //Procurar na categoria dos Medicamentos
         $categoriaMedicamentos = Produto::find()->where(['prescricao_medica' => 1]);
 
         if ($categoriaMedicamentos) {
@@ -109,11 +109,10 @@ class ProdutoController extends Controller
 
     public function actionCategoriasaudeoral()
     {
-        // Busca a categoria 'Medicamentos'
-        $categoriaMedicamentos = Categoria::findOne(['descricao' => 'saudeOral']);
+        //Procura os Medicamentos pela categoria
+        $categoriaMedicamentos = Categoria::findOne(['descricao' => 'Saúde Oral']);
 
         if ($categoriaMedicamentos) {
-            //
             $queryProdutos = Produto::find()
                 ->where(['categoria_id' => $categoriaMedicamentos->id]);
 
@@ -135,11 +134,10 @@ class ProdutoController extends Controller
 
     public function actionCategoriabensbeleza()
     {
-        // Busca a categoria 'Medicamentos'
-        $categoriaMedicamentos = Categoria::findOne(['descricao' => 'bensBeleza']);
+        //Procura os Medicamentos pela categoria
+        $categoriaMedicamentos = Categoria::findOne(['descricao' => 'Bens de Beleza']);
 
         if ($categoriaMedicamentos) {
-            //
             $queryProdutos = Produto::find()
                 ->where(['categoria_id' => $categoriaMedicamentos->id]);
 
@@ -161,11 +159,10 @@ class ProdutoController extends Controller
 
     public function actionCategoriahigiene()
     {
-        // Busca a categoria 'Medicamentos'
-        $categoriaMedicamentos = Categoria::findOne(['descricao' => 'higiene']);
+        //Procura os Medicamentos pela categoria
+        $categoriaMedicamentos = Categoria::findOne(['descricao' => 'Higiene']);
 
         if ($categoriaMedicamentos) {
-            //
             $queryProdutos = Produto::find()
                 ->where(['categoria_id' => $categoriaMedicamentos->id]);
 
@@ -187,11 +184,10 @@ class ProdutoController extends Controller
 
     public function actionCategoriaservicos()
     {
-        // Busca a categoria 'Medicamentos'
-        $categoriaMedicamentos = Categoria::findOne(['descricao' => 'servicos']);
+        //Procura os Medicamentos pela categoria
+        $categoriaMedicamentos = Categoria::findOne(['descricao' => 'Serviços']);
 
         if ($categoriaMedicamentos) {
-            //
             $queryProdutos = Produto::find()
                 ->where(['categoria_id' => $categoriaMedicamentos->id]);
 

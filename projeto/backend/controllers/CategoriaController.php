@@ -72,7 +72,7 @@ class CategoriaController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'categoria' => $this->findModel($id),
         ]);
     }
 
@@ -83,18 +83,18 @@ class CategoriaController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Categoria();
+        $categoria = new Categoria();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($categoria->load($this->request->post()) && $categoria->save()) {
+                return $this->redirect(['view', 'id' => $categoria->id]);
             }
         } else {
-            $model->loadDefaultValues();
+            $categoria->loadDefaultValues();
         }
 
         return $this->render('create', [
-            'model' => $model,
+            'categoria' => $categoria,
         ]);
     }
 
@@ -107,14 +107,14 @@ class CategoriaController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $categoria = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost && $categoria->load($this->request->post()) && $categoria->save()) {
+            return $this->redirect(['view', 'id' => $categoria->id]);
         }
 
         return $this->render('update', [
-            'model' => $model,
+            'categoria' => $categoria,
         ]);
     }
 
@@ -141,8 +141,8 @@ class CategoriaController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Categoria::findOne(['id' => $id])) !== null) {
-            return $model;
+        if (($categoria = Categoria::findOne(['id' => $id])) !== null) {
+            return $categoria;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');

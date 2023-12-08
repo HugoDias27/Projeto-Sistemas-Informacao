@@ -16,6 +16,7 @@ use Yii;
  *
  * @property CarrinhoCompra[] $carrinhoCompras
  * @property Fatura[] $faturas
+ * @property ReceitaMedica[] $receitasMedicas
  * @property User $user
  */
 class Profile extends \yii\db\ActiveRecord
@@ -37,7 +38,6 @@ class Profile extends \yii\db\ActiveRecord
             [['n_utente', 'nif', 'telefone', 'user_id'], 'integer'],
             [['nif', 'morada', 'telefone', 'user_id'], 'required'],
             [['morada'], 'string', 'max' => 30],
-            [['nif', 'telefone', 'n_utente'], 'double', 'max' => 1000000000],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -49,11 +49,11 @@ class Profile extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'n_utente' => 'Número de Utente',
+            'n_utente' => 'N Utente',
             'nif' => 'Nif',
             'morada' => 'Morada',
             'telefone' => 'Telefone',
-            'user_id' => 'Utilizador',
+            'user_id' => 'User ID',
         ];
     }
 
@@ -75,6 +75,16 @@ class Profile extends \yii\db\ActiveRecord
     public function getFaturas()
     {
         return $this->hasMany(Fatura::class, ['cliente_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[ReceitasMedicas]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReceitasMedicas()
+    {
+        return $this->hasMany(ReceitaMedica::class, ['user_id' => 'id']);
     }
 
     /**

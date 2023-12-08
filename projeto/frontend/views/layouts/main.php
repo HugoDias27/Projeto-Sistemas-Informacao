@@ -4,6 +4,7 @@
 
 /** @var string $content */
 
+use common\models\Categoria;
 use common\widgets\Alert;
 use frontend\assets\AppAsset;
 use http\Url;
@@ -65,17 +66,42 @@ AppAsset::register($this);
             ['label' => 'Contactos', 'url' => ['/site/contact']],
             [
                 'label' => 'Produtos',
-                'items' => [
-                    ['label' => 'Medicamentos Sem Receita', 'url' => ['produto/categoriamedicamentossemreceita']],
-                    ['label' => 'Medicamentos Com Receita', 'url' => ['produto/categoriamedicamentoscomreceita']],
-                    ['label' => 'Saúde Oral', 'url' => ['produto/categoriasaudeoral']],
-                    ['label' => 'Bens de beleza', 'url' => ['produto/categoriabensbeleza']],
-                    ['label' => 'Higiene', 'url' => ['produto/categoriahigiene']],
-                    ['label' => 'Serviços', 'url' => ['produto/categoriaservicos']],
-                    ['label' => 'Encontrar farmácia', 'url' => ['site/search']],
-                ],
+                'items' => [],
             ],
         ];
+
+        $categoriaMedicamentos = Categoria::findOne(['descricao' => 'Medicamentos']);
+
+        if ($categoriaMedicamentos) {
+            $menuItems[3]['items'][] = ['label' => 'Medicamentos Sem Receita', 'url' => ['produto/categoriamedicamentossemreceita']];
+            $menuItems[3]['items'][] = ['label' => 'Medicamentos Com Receita', 'url' => ['produto/categoriamedicamentoscomreceita']];
+        }
+
+        $categoriaSaudeOral = Categoria::findOne(['descricao' => 'Saúde Oral']);
+
+        if ($categoriaSaudeOral) {
+            $menuItems[3]['items'][] = ['label' => 'Saúde Oral', 'url' => ['produto/categoriasaudeoral']];
+        }
+
+        $categoriaBensBeleza = Categoria::findOne(['descricao' => 'Bens de beleza']);
+
+        if ($categoriaBensBeleza) {
+            $menuItems[3]['items'][] = ['label' => 'Bens de beleza', 'url' => ['produto/categoriabensbeleza']];
+        }
+
+        $categoriaHigiene = Categoria::findOne(['descricao' => 'Higiene']);
+
+        if ($categoriaHigiene) {
+            $menuItems[3]['items'][] = ['label' => 'Higiene', 'url' => ['produto/categoriahigiene']];
+        }
+
+        $categoriaServicos = Categoria::findOne(['descricao' => 'Serviços']);
+
+        if ($categoriaServicos) {
+            $menuItems[3]['items'][] = ['label' => 'Serviços', 'url' => ['produto/categoriaservicos']];
+        }
+
+        $menuItems[3]['items'][] = ['label' => 'Encontrar farmácia', 'url' => ['site/search']];
 
         if (!Yii::$app->user->isGuest) {
             $menuItems[] = [
@@ -104,7 +130,7 @@ AppAsset::register($this);
             'items' => $menuItems,
         ]);
         if (Yii::$app->user->isGuest) {
-            echo Html::a('Login', ['login'], ['class' => 'nav-item nav-link active']);
+            echo Html::a('Login', ['site/login'], ['class' => 'nav-item nav-link active']);
         } else {
             echo Html::beginForm(['/site/logout'], 'post')
                 . Html::submitButton('Logout (' . Yii::$app->user->identity->username . ')', ['class' => 'nav-item nav-link active'])
@@ -132,20 +158,15 @@ AppAsset::register($this);
                     <h4 class="d-inline-block text-primary text-uppercase border-bottom border-5 border-secondary mb-4">
                         Localização</h4>
                     <p class="mb-2"><i class="fa fa-map-marker-alt text-primary me-3"></i>Leiria, PORTUGAL</p>
-                    <p class="mb-2"><i class="fa fa-envelope text-primary me-3"></i>carolofarmaceutica@gmail.com</p>
-                    <p class="mb-0"><i class="fa fa-phone-alt text-primary me-3"></i>+351 912 345 678</p>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <h4 class="d-inline-block text-primary text-uppercase border-bottom border-5 border-secondary mb-4">
                         Acessos Rápidos</h4>
                     <div class="d-flex flex-column justify-content-start">
-                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Página Inicial</a>
-                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Contactos</a>
-                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Medicamentos Sem
-                            Receita</a>
-                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Medicamentos Com
-                            Receita</a>
-                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Localizar Farmácia
+                        <a class="text-light mb-2" href=<?= Yii::$app->urlManager->createUrl(['site/contact']) ?>>
+                            <i class="fa fa-angle-right me-2"></i>Contactos</a>
+                        <a class="text-light mb-2" href=<?= Yii::$app->urlManager->createUrl(['#']) ?>><i
+                                    class="fa fa-angle-right me-2"></i>Localizar Farmácia
                             Próxima</a>
                     </div>
                 </div>
@@ -158,7 +179,11 @@ AppAsset::register($this);
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
-                    <img src="img/logo.png" width="300px">
+                    <h4 class="d-inline-block text-primary text-uppercase border-bottom border-5 border-secondary mb-4">
+                        Acesso Reservado</h4>
+                    <p><a class="text-light mb-2"
+                          href=<?= Yii::$app->urlManager->createUrl(['../../backend/web/site']) ?>>
+                            <i class="fa fa-angle-right me-2"></i>Backend</a></p>
                 </div>
             </div>
         </div>

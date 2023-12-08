@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var common\models\ReceitaMedicaSearch $model */
+/** @var common\models\ReceitaMedicaSearch $receita */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
@@ -15,15 +15,15 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+    <?= $form->field($receita, 'id') ?>
 
-    <?= $form->field($model, 'nome') ?>
+    <?= $form->field($receita, 'nome') ?>
 
-    <?= $form->field($model, 'codigo') ?>
+    <?= $form->field($receita, 'codigo') ?>
 
-    <?= $form->field($model, 'local_prescricao') ?>
+    <?= $form->field($receita, 'local_prescricao') ?>
 
-    <?= $form->field($model, 'medico_prescricao') ?>
+    <?= $form->field($receita, 'medico_prescricao') ?>
 
     <?php // echo $form->field($model, 'dosagem') ?>
 

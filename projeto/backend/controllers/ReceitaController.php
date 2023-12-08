@@ -2,8 +2,13 @@
 
 namespace backend\controllers;
 
+use common\models\Profile;
 use common\models\ReceitaMedica;
 use common\models\ReceitaMedicaSearch;
+use common\models\User;
+use Yii;
+use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -27,6 +32,22 @@ class ReceitaController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'rules' => [
+                        [
+                            'actions' => ['index', 'view', 'create', 'update'],
+                            'allow' => true,
+                            'roles' => ['admin', 'funcionario'],
+                        ],
+                        [
+                            'actions' => ['delete'],
+                            'allow' => true,
+                            'roles' => ['admin'],
+                        ],
+                    ],
+                ],
+
             ]
         );
     }
@@ -47,6 +68,7 @@ class ReceitaController extends Controller
         ]);
     }
 
+
     /**
      * Displays a single ReceitaMedica model.
      * @param int $id ID
@@ -55,8 +77,10 @@ class ReceitaController extends Controller
      */
     public function actionView($id)
     {
+        $receita = $this->findModel($id);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'receita' => $receita,
         ]);
     }
 
@@ -67,40 +91,34 @@ class ReceitaController extends Controller
      */
     public function actionCreate()
     {
-        $model = new ReceitaMedica();
+        $receita = new ReceitaMedica();
+        $authManager = Yii::$app->authManager;
+        $clienteRole = $authManager->getRole('cliente');
+
+        $clientes = User::find()
+            ->innerJoin('auth_assignment', 'auth_assignment.user_id = user.id')
+            ->andWhere(['auth_assignment.item_name' => $clienteRole->name])
+            ->select(['id', 'username'])
+            ->asArray()
+            ->all();
+
+        $clientesItems = ArrayHelper::map($clientes, 'id', 'username');
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($receita->load($this->request->post()) && $receita->save()) {
+                return $this->redirect(['view', 'id' => $receita->id]);
             }
         } else {
-            $model->loadDefaultValues();
+            $receita->loadDefaultValues();
         }
 
         return $this->render('create', [
-            'model' => $model,
+            'receita' => $receita,
+            'clientes' => $clientesItems,
         ]);
     }
 
-    /**
-     * Updates an existing ReceitaMedica model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
-    }
 
     /**
      * Deletes an existing ReceitaMedica model.
@@ -125,8 +143,8 @@ class ReceitaController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = ReceitaMedica::findOne(['id' => $id])) !== null) {
-            return $model;
+        if (($receita = ReceitaMedica::findOne(['id' => $id])) !== null) {
+            return $receita;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');

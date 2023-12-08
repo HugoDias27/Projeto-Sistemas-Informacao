@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /** @var yii\web\View $this */
-/** @var common\models\Categoria $model */
+/** @var common\models\Categoria $categoria */
 
 $this->title = 'Create Categoria';
 $this->params['breadcrumbs'][] = ['label' => 'Categorias', 'url' => ['index']];
@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
-        'model' => $model,
+        'categoria' => $categoria,
     ]) ?>
 
 </div>

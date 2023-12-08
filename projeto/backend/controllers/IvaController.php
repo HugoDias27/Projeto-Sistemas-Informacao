@@ -72,7 +72,7 @@ class IvaController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'iva' => $this->findModel($id),
         ]);
     }
 
@@ -83,18 +83,18 @@ class IvaController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Iva();
+        $iva = new Iva();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($iva->load($this->request->post()) && $iva->save()) {
+                return $this->redirect(['view', 'id' => $iva->id]);
             }
         } else {
-            $model->loadDefaultValues();
+            $iva->loadDefaultValues();
         }
 
         return $this->render('create', [
-            'model' => $model,
+            'iva' => $iva,
         ]);
     }
 
@@ -107,14 +107,14 @@ class IvaController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $iva = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost && $iva->load($this->request->post()) && $iva->save()) {
+            return $this->redirect(['view', 'id' => $iva->id]);
         }
 
         return $this->render('update', [
-            'model' => $model,
+            'iva' => $iva,
         ]);
     }
 
@@ -141,8 +141,8 @@ class IvaController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Iva::findOne(['id' => $id])) !== null) {
-            return $model;
+        if (($iva = Iva::findOne(['id' => $id])) !== null) {
+            return $iva;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');

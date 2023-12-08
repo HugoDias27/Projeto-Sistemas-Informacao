@@ -3,11 +3,11 @@
 use yii\helpers\Html;
 
 /** @var yii\web\View $this */
-/** @var common\models\Iva $model */
+/** @var common\models\Iva $iva */
 
-$this->title = 'Update Iva: ' . $model->id;
+$this->title = 'Atualizar Iva: ' . $iva->percentagem;
 $this->params['breadcrumbs'][] = ['label' => 'Ivas', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = ['label' => $iva->id, 'url' => ['view', 'id' => $iva->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="iva-update">
@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = 'Update';
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
-        'model' => $model,
+        'iva' => $iva,
     ]) ?>
 
 </div>
