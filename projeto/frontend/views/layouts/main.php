@@ -30,7 +30,8 @@ AppAsset::register($this);
 
         <!-- Google Web Fonts -->
         <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@400;700&display=swap"
+              rel="stylesheet">
 
         <!-- Icon Font Stylesheet -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
@@ -40,7 +41,8 @@ AppAsset::register($this);
 
         <link href="<?= Yii::$app->request->baseUrl ?>/logo.ico" rel="icon">
         <link href="<?= Yii::$app->request->baseUrl ?>/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-        <link href="<?= Yii::$app->request->baseUrl ?>/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet">
+        <link href="<?= Yii::$app->request->baseUrl ?>/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css"
+              rel="stylesheet">
         <link href="<?= Yii::$app->request->baseUrl ?>/css/bootstrap.min.css" rel="stylesheet">
         <link href="<?= Yii::$app->request->baseUrl ?>/css/style.css" rel="stylesheet">
 
@@ -60,15 +62,16 @@ AppAsset::register($this);
         $menuItems = [
             ['label' => 'Página Inicial', 'url' => ['../web']],
             ['label' => 'Sobre', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
+            ['label' => 'Contactos', 'url' => ['/site/contact']],
             [
                 'label' => 'Produtos',
                 'items' => [
-                    ['label' => 'Medicamentos', 'url' => ['site/blog']],
-                    ['label' => 'Saúde Oral', 'url' => ['site/blog-detail']],
-                    ['label' => 'Bens de beleza', 'url' => ['site/team']],
-                    ['label' => 'Higiene', 'url' => ['site/testimonial']],
-                    ['label' => 'Serviços', 'url' => ['site/appointment']],
+                    ['label' => 'Medicamentos Sem Receita', 'url' => ['produto/categoriamedicamentossemreceita']],
+                    ['label' => 'Medicamentos Com Receita', 'url' => ['produto/categoriamedicamentoscomreceita']],
+                    ['label' => 'Saúde Oral', 'url' => ['produto/categoriasaudeoral']],
+                    ['label' => 'Bens de beleza', 'url' => ['produto/categoriabensbeleza']],
+                    ['label' => 'Higiene', 'url' => ['produto/categoriahigiene']],
+                    ['label' => 'Serviços', 'url' => ['produto/categoriaservicos']],
                     ['label' => 'Encontrar farmácia', 'url' => ['site/search']],
                 ],
             ],

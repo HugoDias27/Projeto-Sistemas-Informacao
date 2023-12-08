@@ -60,4 +60,154 @@ class ProdutoController extends Controller
             throw new \yii\web\NotFoundHttpException('Produto não encontrado.');
         }
     }
+
+    public function actionCategoriamedicamentossemreceita()
+    {
+        // Busca a categoria 'Medicamentos'
+        $categoriaMedicamentos = Produto::find()->where(['prescricao_medica' => 0]);
+
+        if ($categoriaMedicamentos) {
+
+            $paginacao = new Pagination([
+                'defaultPageSize' => 20,
+                'totalCount' => $categoriaMedicamentos->count(),
+            ]);
+
+            $produtos = $categoriaMedicamentos->offset($paginacao->offset)
+                ->limit($paginacao->limit)
+                ->all();
+
+            return $this->render('medicamentos', [
+                'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
+                'paginacao' => $paginacao
+            ]);
+        }
+    }
+
+    public function actionCategoriamedicamentoscomreceita()
+    {
+        // Busca a categoria 'Medicamentos'
+        $categoriaMedicamentos = Produto::find()->where(['prescricao_medica' => 1]);
+
+        if ($categoriaMedicamentos) {
+
+            $paginacao = new Pagination([
+                'defaultPageSize' => 20,
+                'totalCount' => $categoriaMedicamentos->count(),
+            ]);
+
+            $produtos = $categoriaMedicamentos->offset($paginacao->offset)
+                ->limit($paginacao->limit)
+                ->all();
+
+            return $this->render('medicamentos', [
+                'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
+                'paginacao' => $paginacao
+            ]);
+        }
+    }
+
+    public function actionCategoriasaudeoral()
+    {
+        // Busca a categoria 'Medicamentos'
+        $categoriaMedicamentos = Categoria::findOne(['descricao' => 'saudeOral']);
+
+        if ($categoriaMedicamentos) {
+            //
+            $queryProdutos = Produto::find()
+                ->where(['categoria_id' => $categoriaMedicamentos->id]);
+
+            $paginacao = new Pagination([
+                'defaultPageSize' => 20,
+                'totalCount' => $queryProdutos->count(),
+            ]);
+
+            $produtos = $queryProdutos->offset($paginacao->offset)
+                ->limit($paginacao->limit)
+                ->all();
+
+            return $this->render('medicamentos', [
+                'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
+                'paginacao' => $paginacao
+            ]);
+        }
+    }
+
+    public function actionCategoriabensbeleza()
+    {
+        // Busca a categoria 'Medicamentos'
+        $categoriaMedicamentos = Categoria::findOne(['descricao' => 'bensBeleza']);
+
+        if ($categoriaMedicamentos) {
+            //
+            $queryProdutos = Produto::find()
+                ->where(['categoria_id' => $categoriaMedicamentos->id]);
+
+            $paginacao = new Pagination([
+                'defaultPageSize' => 20,
+                'totalCount' => $queryProdutos->count(),
+            ]);
+
+            $produtos = $queryProdutos->offset($paginacao->offset)
+                ->limit($paginacao->limit)
+                ->all();
+
+            return $this->render('medicamentos', [
+                'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
+                'paginacao' => $paginacao
+            ]);
+        }
+    }
+
+    public function actionCategoriahigiene()
+    {
+        // Busca a categoria 'Medicamentos'
+        $categoriaMedicamentos = Categoria::findOne(['descricao' => 'higiene']);
+
+        if ($categoriaMedicamentos) {
+            //
+            $queryProdutos = Produto::find()
+                ->where(['categoria_id' => $categoriaMedicamentos->id]);
+
+            $paginacao = new Pagination([
+                'defaultPageSize' => 20,
+                'totalCount' => $queryProdutos->count(),
+            ]);
+
+            $produtos = $queryProdutos->offset($paginacao->offset)
+                ->limit($paginacao->limit)
+                ->all();
+
+            return $this->render('medicamentos', [
+                'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
+                'paginacao' => $paginacao
+            ]);
+        }
+    }
+
+    public function actionCategoriaservicos()
+    {
+        // Busca a categoria 'Medicamentos'
+        $categoriaMedicamentos = Categoria::findOne(['descricao' => 'servicos']);
+
+        if ($categoriaMedicamentos) {
+            //
+            $queryProdutos = Produto::find()
+                ->where(['categoria_id' => $categoriaMedicamentos->id]);
+
+            $paginacao = new Pagination([
+                'defaultPageSize' => 20,
+                'totalCount' => $queryProdutos->count(),
+            ]);
+
+            $produtos = $queryProdutos->offset($paginacao->offset)
+                ->limit($paginacao->limit)
+                ->all();
+
+            return $this->render('medicamentos', [
+                'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
+                'paginacao' => $paginacao
+            ]);
+        }
+    }
 }
