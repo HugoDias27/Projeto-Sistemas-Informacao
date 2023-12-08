@@ -62,6 +62,13 @@ class ReceitaController extends Controller
         $searchModel = new ReceitaMedicaSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
+        // Adiciona o JOIN e a seleção do nome do usuário no $dataProvider
+        $dataProvider->query->joinWith('user'); // Supondo que 'user' é o nome do relacionamento na classe ReceitaMedica
+        $dataProvider->query->select([
+            'receitas_medica.*', // Todos os campos de receita_medica
+            'user.username AS nome_usuario', // Nome de usuário da tabela user
+        ]);
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -77,10 +84,8 @@ class ReceitaController extends Controller
      */
     public function actionView($id)
     {
-        $receita = $this->findModel($id);
-
         return $this->render('view', [
-            'receita' => $receita,
+            'receita' => $this->findModel($id),
         ]);
     }
 
@@ -119,6 +124,25 @@ class ReceitaController extends Controller
     }
 
 
+    /**
+     * Updates an existing ReceitaMedica model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param int $id ID
+     * @return string|\yii\web\Response
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionUpdate($id)
+    {
+        $receita = $this->findModel($id);
+
+        if ($this->request->isPost && $receita->load($this->request->post()) && $receita->save()) {
+            return $this->redirect(['view', 'id' => $receita->id]);
+        }
+
+        return $this->render('update', [
+            'receita' => $receita,
+        ]);
+    }
 
     /**
      * Deletes an existing ReceitaMedica model.

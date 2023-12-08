@@ -39,31 +39,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'iva_id',
         ],
     ]) ?>
-    <h2>Detalhes dos Fornecedores:</h2>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>Nome do Fornecedor</th>
-            <th>Data do Fornecedor</th>
-            <th>Hora do Fornecedor</th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php foreach ($fornecedorProduto as $fornecedor): ?>
-            <tr>
-                <td><?= $fornecedor->fornecedor->nome ?></td>
-                <td><?= $fornecedor->data_importacao ?></td>
-                <td><?= $fornecedor->hora_importacao ?></td>
-            </tr>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
+    <?php
 
-
-    <!-- Exibir imagens associadas ao produto -->
-    <h2>Imagens:</h2>
-    <?php foreach ($imagemArray as $imagem): ?>
-        <?= Html::img($imagem, ['width' => '300px']); ?>
-    <?php endforeach; ?>
+    echo '<h2>Imagens:</h2>';
+    foreach ($imagemArray as $imagem) {
+        echo Html::img($imagem, ['width' => '300px']);
+       echo '       ';
+    }
+      ?>
 
 </div>

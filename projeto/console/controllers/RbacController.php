@@ -249,6 +249,28 @@ class RbacController extends Controller
         $createCategorias->description = "Eliminar categorias";
         $auth->add($deleteCategorias);
 
+        //permissão RBAC da linha de fatura
+        $viewLinhaFatura = $auth->createPermission('viewLinhaFatura');
+        $viewLinhaFatura->description = "Ver linha de fatura";
+        $auth->add($viewLinhaFatura);
+
+        $createLinhaFatura = $auth->createPermission('createLinhaFatura');
+        $createLinhaFatura->description = "Criar linha de fatura";
+        $auth->add($createLinhaFatura);
+
+        $createprimeiraLinhaFatura = $auth->createPermission('createprimeiraLinhaFatura');
+        $createprimeiraLinhaFatura->description = "Criar linha de fatura";
+        $auth->add($createprimeiraLinhaFatura);
+
+        $updateLinhaFatura = $auth->createPermission('updateLinhaFatura');
+        $updateLinhaFatura->description = "Atualizar linha de fatura";
+        $auth->add($updateLinhaFatura);
+
+        $deleteLinhaFatura = $auth->createPermission('deleteLinhaFatura');
+        $deleteLinhaFatura->description = "Eliminar linha de fatura";
+        $auth->add($deleteLinhaFatura);
+
+
 
         // adicionar as permissões ao cliente
         $cliente = $auth->createRole('cliente');
@@ -258,6 +280,7 @@ class RbacController extends Controller
         $auth->addChild($cliente, $viewReceita);
         $auth->addChild($cliente, $viewDespesa);
         $auth->addChild($cliente, $viewFatura);
+        $auth->addChild($cliente, $viewLinhaFatura);
         $auth->addChild($cliente, $viewEstatisticas);
         $auth->addChild($cliente, $viewServico);
         $auth->addChild($cliente,$viewCategorias);
@@ -284,6 +307,11 @@ class RbacController extends Controller
         $auth->addChild($funcionario, $updateDespesa);
         $auth->addChild($funcionario, $deleteDespesa);
         $auth->addChild($funcionario, $createFatura);
+        $auth->addChild($funcionario, $createLinhaFatura);
+        $auth->addChild($funcionario, $createprimeiraLinhaFatura);
+        $auth->addChild($funcionario, $updateLinhaFatura);
+        $auth->addChild($funcionario, $deleteLinhaFatura);
+
         $auth->addChild($funcionario, $createServico);
         $auth->addChild($funcionario, $updateServico);
         $auth->addChild($funcionario, $viewIvas);

@@ -31,21 +31,23 @@ class FaturaController extends Controller
                     'class' => VerbFilter::className(),
                     'actions' => [
                         'delete' => ['POST'],
+
+
                     ],
                 ],
                 'access' => [
                     'class' => AccessControl::className(),
                     'rules' => [
                         [
-                            'actions' => ['index', 'view', 'create', 'update'],
+                            'actions' => ['view','index', 'create', 'delete'],
                             'allow' => true,
-                            'roles' => ['funcionario'],
+                            'roles' => ['funcionario', 'admin'],
                         ],
                         [
-                            'actions' => ['delete'],
+                            'actions' => ['view'],
                             'allow' => true,
-                            'roles' => ['admin'],
-                        ],
+                            'roles' => ['cliente'],
+                        ]
                     ],
                 ],
 
@@ -86,6 +88,8 @@ class FaturaController extends Controller
             'clientes' => $clientesItems,
             'estabelecimento' => $estabelecimento,
             'cliente' => $cliente,
+
+
         ]);
     }
 
@@ -107,13 +111,21 @@ class FaturaController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate()
+    public function actionCreate($estabelecimento_id, $cliente_id)
     {
         $model = new Fatura();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['linhafatura/create']);
+                $model->estabelecimento_id = $estabelecimento_id;
+                $model->cliente_id = $cliente_id;
+                if ($model->save()) {
+                    return $this->redirect(['linha/createprimeira', 'estabelecimento_id' => $estabelecimento_id, 'cliente_id' => $cliente_id]);
+                } else {
+                    Yii::error('Error saving Fatura model: ' . print_r($model->errors, true));
+                }
+            } else {
+                Yii::error('Error loading Fatura model: ' . print_r($model->errors, true));
             }
         } else {
             $model->loadDefaultValues();
@@ -123,6 +135,8 @@ class FaturaController extends Controller
             'model' => $model,
         ]);
     }
+
+
 
     /**
      * Updates an existing fatura model.
@@ -136,6 +150,7 @@ class FaturaController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -170,6 +185,7 @@ class FaturaController extends Controller
         if (($model = Fatura::findOne(['id' => $id])) !== null) {
             return $model;
         }
+
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 }

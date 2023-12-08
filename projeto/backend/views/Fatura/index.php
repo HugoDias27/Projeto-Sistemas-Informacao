@@ -19,22 +19,52 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="fatura-index">
 
+
+
+
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
     <?php $form = ActiveForm::begin(); ?>
 
     <?= Html::label('Estabelecimento ID') ?>
     <?= Html::dropDownList('estabelecimento_id', $estabelecimento, $estabelecimentos, ['prompt' => 'Selecione o estabelecimento...', 'class' => 'form-control']) ?>
-    <br>
+
     <?= Html::label('Cliente ID') ?>
     <?= Html::dropDownList('cliente_id', $cliente, $clientes, ['prompt' => 'Selecione o cliente...', 'class' => 'form-control']) ?>
-    <br>
+
     <div class="form-group">
-        <?= Html::submitButton('Aplicar', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Aplicar' ,['class' => 'btn btn-success']) ?>
     </div>
-    <?php ActiveForm::end(); ?>
+<?php ActiveForm::end(); ?>
     <p>
+
         <?php if ($estabelecimento && $cliente) : ?>
-            <?= Html::a('Create fatura', ['linhafatura/create', 'estabelecimento_id' => $estabelecimento, 'cliente_id' => $cliente], ['class' => 'btn btn-success']) ?>
+
+            <?= Html::a('Create Primeira', ['linha/createprimeira', 'estabelecimento_id' => $estabelecimento, 'cliente_id' => $cliente], ['class' => 'btn btn-success']) ?>
         <?php endif; ?>
     </p>
+
+
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            'id',
+            'dta_emissao',
+            'loja',
+            'emissor',
+            'total_fatura',
+            //'cliente_id',
+            //'receita_id',
+            [
+                'class' => ActionColumn::className(),
+                'urlCreator' => function ($action, Fatura $model, $key, $index, $column) {
+                    return Url::toRoute([$action, 'id' => $model->id]);
+                 }
+            ],
+        ],
+    ]); ?>
+
+
 </div>

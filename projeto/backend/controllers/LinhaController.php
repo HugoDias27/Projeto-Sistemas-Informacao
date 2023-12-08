@@ -5,15 +5,16 @@ namespace backend\controllers;
 use common\models\Fatura;
 use common\models\LinhaFatura;
 use common\models\LinhaFaturaSearch;
+use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * LinhaFaturaController implements the CRUD actions for LinhaFatura model.
+ * LinhaController implements the CRUD actions for LinhaFatura model.
  */
-class LinhaFaturaController extends Controller
+class LinhaController extends Controller
 {
     /**
      * @inheritDoc
@@ -27,13 +28,14 @@ class LinhaFaturaController extends Controller
                     'class' => VerbFilter::className(),
                     'actions' => [
                         'delete' => ['POST'],
+                        
                     ],
                 ],
                 'access' => [
                     'class' => AccessControl::className(),
                     'rules' => [
                         [
-                            'actions' => ['index', 'view', 'create'],
+                            'actions' => ['index', 'view', 'create','createprimeira'],
                             'allow' => true,
                             'roles' => ['funcionario'],
                         ],
@@ -62,6 +64,7 @@ class LinhaFaturaController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'modelfatura' => $modelfatura,
         ]);
     }
 
@@ -83,22 +86,69 @@ class LinhaFaturaController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate($id)
+    public function actionCreate($id, $estabelecimento_id, $cliente_id)
     {
         $model = new LinhaFatura();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load($this->request->post())) {
+                $model->fatura_id = $id;
+                $model->estabelecimento_id = $estabelecimento_id;
+                $model->cliente_id = $cliente_id;
+                if ($model->save()) {
+                    return $this->redirect(['index', 'id' => $id]);
+                }
             }
         } else {
             $model->loadDefaultValues();
         }
 
         return $this->render('create', [
-            'model' => $model,
+            'model' => $model, 'estabelecimento_id' => $estabelecimento_id, 'cliente_id' => $cliente_id,
         ]);
     }
+
+
+
+
+    public function actionCreateprimeira($estabelecimento_id, $cliente_id)
+    {
+        $modelFatura = new Fatura();
+        $model = new LinhaFatura();
+
+        if ($this->request->isPost) {
+            // Load and save Fatura model
+            if ($modelFatura->load($this->request->post())) {
+                $modelFatura->estabelecimento_id = $estabelecimento_id;
+                $modelFatura->cliente_id = $cliente_id;
+
+                if ($modelFatura->save()) {
+                    // Load and save LinhaFatura model
+                    $model->fatura->id = $modelFatura->id;
+
+                    if ($model->load($this->request->post()) && $model->save()) {
+                        return $this->redirect(['fatura/index', 'id' => $modelFatura->id, 'estabelecimento_id' => $estabelecimento_id, 'cliente_id' => $cliente_id]);
+                    } else {
+                        // Handle LinhaFatura save error
+                        Yii::error('Error saving LinhaFatura model: ' . print_r($model->errors, true));
+                    }
+                } else {
+                    // Handle Fatura save error
+                    Yii::error('Error saving Fatura model: ' . print_r($modelFatura->errors, true));
+                }
+            }
+        } else {
+            // Load default values if not a POST request
+            $modelFatura->loadDefaultValues();
+            $model->loadDefaultValues();
+        }
+
+        return $this->render('createprimeira', [
+            'model' => $model, 'modelFatura' => $modelFatura, 'estabelecimento_id' => $estabelecimento_id, 'cliente_id' => $cliente_id,
+        ]);
+    }
+
+
 
     /**
      * Updates an existing LinhaFatura model.

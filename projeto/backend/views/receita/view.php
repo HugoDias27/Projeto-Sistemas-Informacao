@@ -30,19 +30,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $receita,
         'attributes' => [
             'id',
-            'user.username',
+            'nome',
             'codigo',
             'local_prescricao',
             'medico_prescricao',
             'dosagem',
             'data_validade',
             'telefone',
-            'valido' => [
-                'attribute' => 'valido',
-                'value' => function ($model) {
-                    return $model->valido ? 'Sim' : 'Não';
-                },
-            ],
+            'valido',
             'posologia',
         ],
     ]) ?>
