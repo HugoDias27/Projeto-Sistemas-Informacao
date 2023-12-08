@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($categoria, 'descricao')->dropDownList(['Medicamentos' => 'Medicamentos','Saúde Oral' =>'Saúde Oral', 'Bens de beleza' => 'Bens de beleza', 'Higiene' => 'Higiene', 'Serviços' =>'Serviços']) ?>
+    <?= $form->field($categoria, 'descricao')->dropDownList(['medicamentos_receita' => 'Medicamentos com receita médica','medicamentos_sem_receita' => 'Medicamentos sem receita médica','saudeoral' =>'Saúde Oral', 'bens_beleza' => 'Bens de beleza', 'higiene' => 'Higiene', 'servicos' =>'Serviços']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

@@ -11,6 +11,8 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
+use common\models\Produto;
+use yii\data\Pagination;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
@@ -80,7 +82,18 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $query = Produto::find();
+
+        $paginacao = new Pagination([
+            'defaultPageSize' => 9,
+            'totalCount' => $query->count(),
+        ]);
+
+        $produtos = $query->offset($paginacao->offset)
+            ->limit($paginacao->limit)
+            ->all();
+
+        return $this->render('index', ['produtos' => $produtos, 'paginacao' => $paginacao,]);
     }
 
     /**

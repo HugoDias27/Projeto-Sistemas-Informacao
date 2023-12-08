@@ -39,9 +39,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'iva_id',
         ],
     ]) ?>
-
-
-    <!-- Exibindo informações dos fornecedores e relação Fornecedor/Produto em tabela -->
     <h2>Detalhes dos Fornecedores:</h2>
     <table class="table table-bordered">
         <thead>
@@ -52,16 +49,11 @@ $this->params['breadcrumbs'][] = $this->title;
         </tr>
         </thead>
         <tbody>
-        <?php foreach ($fornecedores as $index => $fornecedor): ?>
+        <?php foreach ($fornecedorProduto as $fornecedor): ?>
             <tr>
-                <td><?= $fornecedor->nome ?></td>
-                <?php if (isset($fornecedorProduto[$index])): ?>
-                    <td><?= $fornecedorProduto[$index]->data_importacao ?></td>
-                    <td><?= $fornecedorProduto[$index]->hora_importacao ?></td>
-                <?php else: ?>
-                    <td></td>
-                    <td></td>
-                <?php endif; ?>
+                <td><?= $fornecedor->fornecedor->nome ?></td>
+                <td><?= $fornecedor->data_importacao ?></td>
+                <td><?= $fornecedor->hora_importacao ?></td>
             </tr>
         <?php endforeach; ?>
         </tbody>

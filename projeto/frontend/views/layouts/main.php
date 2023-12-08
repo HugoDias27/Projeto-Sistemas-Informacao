@@ -4,6 +4,7 @@
 
 /** @var string $content */
 
+use common\models\Categoria;
 use common\widgets\Alert;
 use frontend\assets\AppAsset;
 use http\Url;
@@ -30,7 +31,8 @@ AppAsset::register($this);
 
         <!-- Google Web Fonts -->
         <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@400;700&display=swap"
+              rel="stylesheet">
 
         <!-- Icon Font Stylesheet -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
@@ -40,7 +42,8 @@ AppAsset::register($this);
 
         <link href="<?= Yii::$app->request->baseUrl ?>/logo.ico" rel="icon">
         <link href="<?= Yii::$app->request->baseUrl ?>/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-        <link href="<?= Yii::$app->request->baseUrl ?>/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet">
+        <link href="<?= Yii::$app->request->baseUrl ?>/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css"
+              rel="stylesheet">
         <link href="<?= Yii::$app->request->baseUrl ?>/css/bootstrap.min.css" rel="stylesheet">
         <link href="<?= Yii::$app->request->baseUrl ?>/css/style.css" rel="stylesheet">
 
@@ -58,21 +61,47 @@ AppAsset::register($this);
         ]);
 
         $menuItems = [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
+            ['label' => 'Página Inicial', 'url' => ['../web']],
+            ['label' => 'Sobre', 'url' => ['/site/about']],
+            ['label' => 'Contactos', 'url' => ['/site/contact']],
             [
                 'label' => 'Produtos',
-                'items' => [
-                    ['label' => 'Medicamentos', 'url' => ['site/blog']],
-                    ['label' => 'Saúde Oral', 'url' => ['site/blog-detail']],
-                    ['label' => 'Bens de beleza', 'url' => ['site/team']],
-                    ['label' => 'Higiene', 'url' => ['site/testimonial']],
-                    ['label' => 'Serviços', 'url' => ['site/appointment']],
-                    ['label' => 'Encontrar farmácia', 'url' => ['site/search']],
-                ],
+                'items' => [],
             ],
         ];
+
+        $categoriaMedicamentos = Categoria::findOne(['descricao' => 'Medicamentos']);
+
+        if ($categoriaMedicamentos) {
+            $menuItems[3]['items'][] = ['label' => 'Medicamentos Sem Receita', 'url' => ['produto/categoriamedicamentossemreceita']];
+            $menuItems[3]['items'][] = ['label' => 'Medicamentos Com Receita', 'url' => ['produto/categoriamedicamentoscomreceita']];
+        }
+
+        $categoriaSaudeOral = Categoria::findOne(['descricao' => 'Saúde Oral']);
+
+        if ($categoriaSaudeOral) {
+            $menuItems[3]['items'][] = ['label' => 'Saúde Oral', 'url' => ['produto/categoriasaudeoral']];
+        }
+
+        $categoriaBensBeleza = Categoria::findOne(['descricao' => 'Bens de beleza']);
+
+        if ($categoriaBensBeleza) {
+            $menuItems[3]['items'][] = ['label' => 'Bens de beleza', 'url' => ['produto/categoriabensbeleza']];
+        }
+
+        $categoriaHigiene = Categoria::findOne(['descricao' => 'Higiene']);
+
+        if ($categoriaHigiene) {
+            $menuItems[3]['items'][] = ['label' => 'Higiene', 'url' => ['produto/categoriahigiene']];
+        }
+
+        $categoriaServicos = Categoria::findOne(['descricao' => 'Serviços']);
+
+        if ($categoriaServicos) {
+            $menuItems[3]['items'][] = ['label' => 'Serviços', 'url' => ['produto/categoriaservicos']];
+        }
+
+        $menuItems[3]['items'][] = ['label' => 'Encontrar farmácia', 'url' => ['site/search']];
 
         if (!Yii::$app->user->isGuest) {
             $menuItems[] = [
@@ -101,7 +130,7 @@ AppAsset::register($this);
             'items' => $menuItems,
         ]);
         if (Yii::$app->user->isGuest) {
-            echo Html::a('Login', ['login'], ['class' => 'nav-item nav-link active']);
+            echo Html::a('Login', ['site/login'], ['class' => 'nav-item nav-link active']);
         } else {
             echo Html::beginForm(['/site/logout'], 'post')
                 . Html::submitButton('Logout (' . Yii::$app->user->identity->username . ')', ['class' => 'nav-item nav-link active'])
@@ -127,57 +156,34 @@ AppAsset::register($this);
             <div class="row g-5">
                 <div class="col-lg-3 col-md-6">
                     <h4 class="d-inline-block text-primary text-uppercase border-bottom border-5 border-secondary mb-4">
-                        Get In Touch</h4>
-                    <p class="mb-4">No dolore ipsum accusam no lorem. Invidunt sed clita kasd clita et et dolor sed
-                        dolor</p>
-                    <p class="mb-2"><i class="fa fa-map-marker-alt text-primary me-3"></i>123 Street, New York, USA</p>
-                    <p class="mb-2"><i class="fa fa-envelope text-primary me-3"></i>info@example.com</p>
-                    <p class="mb-0"><i class="fa fa-phone-alt text-primary me-3"></i>+012 345 67890</p>
+                        Localização</h4>
+                    <p class="mb-2"><i class="fa fa-map-marker-alt text-primary me-3"></i>Leiria, PORTUGAL</p>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <h4 class="d-inline-block text-primary text-uppercase border-bottom border-5 border-secondary mb-4">
-                        Quick Links</h4>
+                        Acessos Rápidos</h4>
                     <div class="d-flex flex-column justify-content-start">
-                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Home</a>
-                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>About Us</a>
-                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Our Services</a>
-                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Meet The Team</a>
-                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Latest Blog</a>
-                        <a class="text-light" href="#"><i class="fa fa-angle-right me-2"></i>Contact Us</a>
+                        <a class="text-light mb-2" href=<?= Yii::$app->urlManager->createUrl(['site/contact']) ?>>
+                            <i class="fa fa-angle-right me-2"></i>Contactos</a>
+                        <a class="text-light mb-2" href=<?= Yii::$app->urlManager->createUrl(['#']) ?>><i
+                                    class="fa fa-angle-right me-2"></i>Localizar Farmácia
+                            Próxima</a>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <h4 class="d-inline-block text-primary text-uppercase border-bottom border-5 border-secondary mb-4">
-                        Popular Links</h4>
-                    <div class="d-flex flex-column justify-content-start">
-                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Home</a>
-                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>About Us</a>
-                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Our Services</a>
-                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Meet The Team</a>
-                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Latest Blog</a>
-                        <a class="text-light" href="#"><i class="fa fa-angle-right me-2"></i>Contact Us</a>
+                        Métodos de Pagamento</h4>
+                    <div align="center">
+                        <i class="fab fa-cc-visa fa-3x mr-2" style="color: #0033ff;"></i>
+                        <i class="fab fa-cc-mastercard fa-3x" style="color: #ff5a00;"></i>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <h4 class="d-inline-block text-primary text-uppercase border-bottom border-5 border-secondary mb-4">
-                        Newsletter</h4>
-                    <form action="">
-                        <div class="input-group">
-                            <input type="text" class="form-control p-3 border-0" placeholder="Your Email Address">
-                            <button class="btn btn-primary">Sign Up</button>
-                        </div>
-                    </form>
-                    <h6 class="text-primary text-uppercase mt-4 mb-3">Follow Us</h6>
-                    <div class="d-flex">
-                        <a class="btn btn-lg btn-primary btn-lg-square rounded-circle me-2" href="#"><i
-                                    class="fab fa-twitter"></i></a>
-                        <a class="btn btn-lg btn-primary btn-lg-square rounded-circle me-2" href="#"><i
-                                    class="fab fa-facebook-f"></i></a>
-                        <a class="btn btn-lg btn-primary btn-lg-square rounded-circle me-2" href="#"><i
-                                    class="fab fa-linkedin-in"></i></a>
-                        <a class="btn btn-lg btn-primary btn-lg-square rounded-circle" href="#"><i
-                                    class="fab fa-instagram"></i></a>
-                    </div>
+                        Acesso Reservado</h4>
+                    <p><a class="text-light mb-2"
+                          href=<?= Yii::$app->urlManager->createUrl(['../../backend/web/site']) ?>>
+                            <i class="fa fa-angle-right me-2"></i>Backend</a></p>
                 </div>
             </div>
         </div>
