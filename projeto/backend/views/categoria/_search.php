@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var common\models\CategoriaSearch $categoria */
+/** @var common\models\CategoriaSearch $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
@@ -15,9 +15,9 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($categoria, 'id') ?>
+    <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($categoria, 'descricao') ?>
+    <?= $form->field($model, 'descricao') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

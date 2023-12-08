@@ -13,7 +13,7 @@ use Yii;
  * @property int $telefone
  * @property string $email
  *
- * @property FornecedorProduto[] $fornecedoresProdutos
+ * @property FornecedoresProduto[] $fornecedoresProdutos
  * @property Produto[] $produtos
  */
 class Fornecedor extends \yii\db\ActiveRecord
@@ -58,7 +58,7 @@ class Fornecedor extends \yii\db\ActiveRecord
      */
     public function getFornecedoresProdutos()
     {
-        return $this->hasMany(FornecedorProduto::class, ['fornecedor_id' => 'id']);
+        return $this->hasMany(FornecedoresProduto::class, ['fornecedor_id' => 'id']);
     }
 
     /**

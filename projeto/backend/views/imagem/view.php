@@ -4,9 +4,9 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /** @var yii\web\View $this */
-/** @var common\models\Imagem $imagem */
+/** @var common\models\Imagem $model */
 
-$this->title = $imagem->id;
+$this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Imagems', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -16,8 +16,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $imagem->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $imagem->id], [
+        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
@@ -27,17 +27,11 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
     <?= DetailView::widget([
-        'model' => $imagem,
+        'model' => $model,
         'attributes' => [
             'id',
             'filename',
             'produto_id',
-            'imagem' => [
-                'label' => 'Imagem',
-                'format' => 'raw',
-                'value' => Html::img($imageHtml, ['width' => '300px']),
-            ]
-
         ],
     ]) ?>
 

@@ -3,7 +3,6 @@ namespace common\models;
 
 use common\models\Imagem;
 use common\models\Produto;
-use common\models\GuidGenerator;
 use yii\base\Model;
 use yii\web\UploadedFile;
 
@@ -26,11 +25,10 @@ class UploadForm extends Model
     {
         if ($this->validate()) {
             foreach ($this->imageFiles as $file) {
-                $imageName = GuidGenerator::getGUID();
+                $imageName = $file->baseName . '.' . $file->extension;
                 $image = new Imagem();
                 $image->filename = $imageName;
                 $image->produto_id = $this->produto_id;
-                $file->saveAs('uploads/' . $imageName. '.' . $file->extension);
                 $image->save(false);
             }
             return true;

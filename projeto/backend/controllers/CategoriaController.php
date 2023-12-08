@@ -72,7 +72,7 @@ class CategoriaController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
-            'categoria' => $this->findModel($id),
+            'model' => $this->findModel($id),
         ]);
     }
 
@@ -83,18 +83,18 @@ class CategoriaController extends Controller
      */
     public function actionCreate()
     {
-        $categoria = new Categoria();
+        $model = new Categoria();
 
         if ($this->request->isPost) {
-            if ($categoria->load($this->request->post()) && $categoria->save()) {
-                return $this->redirect(['view', 'id' => $categoria->id]);
+            if ($model->load($this->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
-            $categoria->loadDefaultValues();
+            $model->loadDefaultValues();
         }
 
         return $this->render('create', [
-            'categoria' => $categoria,
+            'model' => $model,
         ]);
     }
 
@@ -107,14 +107,14 @@ class CategoriaController extends Controller
      */
     public function actionUpdate($id)
     {
-        $categoria = $this->findModel($id);
+        $model = $this->findModel($id);
 
-        if ($this->request->isPost && $categoria->load($this->request->post()) && $categoria->save()) {
-            return $this->redirect(['view', 'id' => $categoria->id]);
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
-            'categoria' => $categoria,
+            'model' => $model,
         ]);
     }
 
@@ -141,8 +141,8 @@ class CategoriaController extends Controller
      */
     protected function findModel($id)
     {
-        if (($categoria = Categoria::findOne(['id' => $id])) !== null) {
-            return $categoria;
+        if (($model = Categoria::findOne(['id' => $id])) !== null) {
+            return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');

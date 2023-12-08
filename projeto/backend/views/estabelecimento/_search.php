@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var backend\models\EstabelecimentoSearch $estabelecimento */
+/** @var backend\models\EstabelecimentoSearch $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
@@ -15,15 +15,15 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($estabelecimento, 'id') ?>
+    <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($estabelecimento, 'nome') ?>
+    <?= $form->field($model, 'nome') ?>
 
-    <?= $form->field($estabelecimento, 'morada') ?>
+    <?= $form->field($model, 'morada') ?>
 
-    <?= $form->field($estabelecimento, 'telefone') ?>
+    <?= $form->field($model, 'telefone') ?>
 
-    <?= $form->field($estabelecimento, 'email') ?>
+    <?= $form->field($model, 'email') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var common\models\ProdutoSearch $produto */
+/** @var common\models\ProdutoSearch $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
@@ -15,15 +15,15 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($produto, 'id') ?>
+    <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($produto, 'nome') ?>
+    <?= $form->field($model, 'nome') ?>
 
-    <?= $form->field($produto, 'prescricao_medica') ?>
+    <?= $form->field($model, 'prescricao_medica') ?>
 
-    <?= $form->field($produto, 'preco') ?>
+    <?= $form->field($model, 'preco') ?>
 
-    <?= $form->field($produto, 'quantidade') ?>
+    <?= $form->field($model, 'quantidade') ?>
 
     <?php // echo $form->field($model, 'categoria_id') ?>
 

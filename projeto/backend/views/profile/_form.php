@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var common\models\Profile $perfil */
+/** @var common\models\Profile $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
@@ -12,13 +12,13 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($perfil, 'n_utente')->textInput() ?>
+    <?= $form->field($model, 'n_utente')->textInput() ?>
 
-    <?= $form->field($perfil, 'nif')->textInput() ?>
+    <?= $form->field($model, 'nif')->textInput() ?>
 
-    <?= $form->field($perfil, 'morada')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'morada')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($perfil, 'telefone')->textInput() ?>
+    <?= $form->field($model, 'telefone')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

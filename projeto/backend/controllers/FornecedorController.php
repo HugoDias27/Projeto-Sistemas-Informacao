@@ -4,7 +4,6 @@ namespace backend\controllers;
 
 use backend\models\Fornecedor;
 use backend\models\FornecedorSearch;
-use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -28,22 +27,6 @@ class FornecedorController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
-                'access' => [
-                    'class' => AccessControl::className(),
-                    'rules' => [
-                        [
-                            'actions' => ['index', 'view', 'create', 'update', 'delete'],
-                            'allow' => true,
-                            'roles' => ['admin'],
-                        ],
-                        [
-                            'actions' => ['index'],
-                            'allow' => true,
-                            'roles' => ['funcionario'],
-                        ],
-                    ],
-                ],
-
             ]
         );
     }
@@ -73,7 +56,7 @@ class FornecedorController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
-            'fornecedor' => $this->findModel($id),
+            'model' => $this->findModel($id),
         ]);
     }
 
@@ -84,18 +67,18 @@ class FornecedorController extends Controller
      */
     public function actionCreate()
     {
-        $fornecedor = new Fornecedor();
+        $model = new Fornecedor();
 
         if ($this->request->isPost) {
-            if ($fornecedor->load($this->request->post()) && $fornecedor->save()) {
-                return $this->redirect(['view', 'id' => $fornecedor->id]);
+            if ($model->load($this->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
-            $fornecedor->loadDefaultValues();
+            $model->loadDefaultValues();
         }
 
         return $this->render('create', [
-            'fornecedor' => $fornecedor,
+            'model' => $model,
         ]);
     }
 
@@ -108,14 +91,14 @@ class FornecedorController extends Controller
      */
     public function actionUpdate($id)
     {
-        $fornecedor = $this->findModel($id);
+        $model = $this->findModel($id);
 
-        if ($this->request->isPost && $fornecedor->load($this->request->post()) && $fornecedor->save()) {
-            return $this->redirect(['view', 'id' => $fornecedor->id]);
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
-            'fornecedor' => $fornecedor,
+            'model' => $model,
         ]);
     }
 
@@ -142,8 +125,8 @@ class FornecedorController extends Controller
      */
     protected function findModel($id)
     {
-        if (($fornecedor = Fornecedor::findOne(['id' => $id])) !== null) {
-            return $fornecedor;
+        if (($model = Fornecedor::findOne(['id' => $id])) !== null) {
+            return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');

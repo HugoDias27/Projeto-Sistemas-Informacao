@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var common\models\ProfileSearch $perfil */
+/** @var common\models\ProfileSearch $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
@@ -15,15 +15,15 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($perfil, 'id') ?>
+    <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($perfil, 'n_utente') ?>
+    <?= $form->field($model, 'n_utente') ?>
 
-    <?= $form->field($perfil, 'nif') ?>
+    <?= $form->field($model, 'nif') ?>
 
-    <?= $form->field($perfil, 'morada') ?>
+    <?= $form->field($model, 'morada') ?>
 
-    <?= $form->field($perfil, 'telefone') ?>
+    <?= $form->field($model, 'telefone') ?>
 
     <?php // echo $form->field($model, 'user_id') ?>
 

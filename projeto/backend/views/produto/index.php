@@ -30,52 +30,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
             'id',
             'nome',
-            'prescricao_medica' => [
-                'attribute' => 'prescricao_medica',
-                'value' => function ($model) {
-                    return $model->prescricao_medica ? 'Sim' : 'Não';
-                },
-                'filter' => [
-                    0 => 'Não',
-                    1 => 'Sim',
-                ],
-            ],
-            'preco' => [
-                'attribute' => 'preco',
-                'value' => function ($model) {
-                    return $model->preco . '€';
-                },
-            ],
-            [
-                'label' => 'Nome Fornecedor',
-                'value' => function ($model) {
-                    $fornecedores = '';
-                    foreach ($model->fornecedores as $fornecedor) {
-                        $fornecedores .= $fornecedor->nome ;
-                    }
-                    return $fornecedores;
-                },
-            ],
-            [
-                'label' => 'Data de Importação',
-                'value' => function ($model) {
-                    $fornecedores = '';
-                    foreach ($model->fornecedoresProdutos as $fornecedor) {
-                        $fornecedores .= $fornecedor->data_importacao ;
-                    }
-                    return $fornecedores;
-                },
-            ],
-            [
-                'label' => 'Hora de Importação',
-                'value' => function ($model) {
-                    $fornecedores = '';
-                    foreach ($model->fornecedoresProdutos as $fornecedor) {
-                        $fornecedores .= $fornecedor->hora_importacao ;
-                    }
-                    return $fornecedores;
-                },
-            ],
+            'prescricao_medica',
+            'preco',
             'quantidade',
             [
                 'class' => 'yii\grid\ActionColumn',
@@ -92,7 +48,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                 ],
             ],
-
         ],
     ]); ?>
 

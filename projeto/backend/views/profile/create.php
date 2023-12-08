@@ -3,9 +3,9 @@
 use yii\helpers\Html;
 
 /** @var yii\web\View $this */
-/** @var common\models\Profile $perfil */
+/** @var common\models\Profile $model */
 
-$this->title = 'Criar Perfil';
+$this->title = 'Create Profile';
 $this->params['breadcrumbs'][] = ['label' => 'Profiles', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
-        'perfil' => $perfil,
+        'model' => $model,
     ]) ?>
 
 </div>

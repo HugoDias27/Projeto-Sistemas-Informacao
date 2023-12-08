@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var backend\models\FornecedorSearch $fornecedor */
+/** @var backend\models\FornecedorSearch $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
@@ -15,13 +15,13 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($fornecedor, 'id') ?>
+    <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($fornecedor, 'nome') ?>
+    <?= $form->field($model, 'nome') ?>
 
-    <?= $form->field($fornecedor, 'telefone') ?>
+    <?= $form->field($model, 'telefone') ?>
 
-    <?= $form->field($fornecedor, 'email') ?>
+    <?= $form->field($model, 'email') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

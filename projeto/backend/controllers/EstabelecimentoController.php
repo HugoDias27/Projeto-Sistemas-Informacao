@@ -72,7 +72,7 @@ class EstabelecimentoController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
-            'estabelecimento' => $this->findModel($id),
+            'model' => $this->findModel($id),
         ]);
     }
 
@@ -83,18 +83,18 @@ class EstabelecimentoController extends Controller
      */
     public function actionCreate()
     {
-        $estabelecimento = new Estabelecimento();
+        $model = new Estabelecimento();
 
         if ($this->request->isPost) {
-            if ($estabelecimento->load($this->request->post()) && $estabelecimento->save()) {
-                return $this->redirect(['view', 'id' => $estabelecimento->id]);
+            if ($model->load($this->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
-            $estabelecimento->loadDefaultValues();
+            $model->loadDefaultValues();
         }
 
         return $this->render('create', [
-            'estabelecimento' => $estabelecimento,
+            'model' => $model,
         ]);
     }
 
@@ -107,14 +107,14 @@ class EstabelecimentoController extends Controller
      */
     public function actionUpdate($id)
     {
-        $estabelecimento = $this->findModel($id);
+        $model = $this->findModel($id);
 
-        if ($this->request->isPost && $estabelecimento->load($this->request->post()) && $estabelecimento->save()) {
-            return $this->redirect(['view', 'id' => $estabelecimento->id]);
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
-            'estabelecimento' => $estabelecimento,
+            'model' => $model,
         ]);
     }
 
@@ -141,8 +141,8 @@ class EstabelecimentoController extends Controller
      */
     protected function findModel($id)
     {
-        if (($estabelecimento = Estabelecimento::findOne(['id' => $id])) !== null) {
-            return $estabelecimento;
+        if (($model = Estabelecimento::findOne(['id' => $id])) !== null) {
+            return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');

@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /** @var yii\web\View $this */
-/** @var backend\models\Despesa $despesa */
+/** @var backend\models\Despesa $model */
 
 $this->title = 'Create Despesa';
 $this->params['breadcrumbs'][] = ['label' => 'Despesas', 'url' => ['index']];
@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
-        'despesa' => $despesa, 'estabelecimentoItems' => $estabelecimentoItems,
+        'model' => $model, 'estabelecimentoItems' => $estabelecimentoItems,
     ]) ?>
 
 </div>

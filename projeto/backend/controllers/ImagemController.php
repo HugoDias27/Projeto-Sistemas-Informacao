@@ -7,8 +7,6 @@ use common\models\Imagem;
 use common\models\ImagemSearch;
 use common\models\Produto;
 use Yii;
-use yii\filters\AccessControl;
-use yii\helpers\Html;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -34,22 +32,6 @@ class ImagemController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
-                'access' => [
-                    'class' => AccessControl::className(),
-                    'rules' => [
-                        [
-                            'actions' => ['index', 'view', 'create', 'update'],
-                            'allow' => true,
-                            'roles' => ['admin', 'funcionario'],
-                        ],
-                        [
-                            'actions' => ['delete'],
-                            'allow' => true,
-                            'roles' => ['admin'],
-                        ],
-                    ],
-                ],
-
             ]
         );
     }
@@ -76,16 +58,10 @@ class ImagemController extends Controller
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-
     public function actionView($id)
     {
-        $imagem = $this->findModel($id);
-
-        $imageHtml = Yii::getAlias('@web') . '/uploads/' . $imagem->filename;
-
         return $this->render('view', [
-            'imagem' => $imagem,
-            'imageHtml' => $imageHtml,
+            'model' => $this->findModel($id),
         ]);
     }
 
@@ -98,11 +74,11 @@ class ImagemController extends Controller
 
     public function actionCreate($produto_id)
     {
-        $imagem = new Imagem();
+        $image = new Imagem();
         $uploadForm = new UploadForm();
 
         if (Yii::$app->request->isPost) {
-            $uploadForm->imageFiles = UploadedFile::getInstances($imagem, 'imageFiles');
+            $uploadForm->imageFiles = UploadedFile::getInstances($image, 'imageFiles');
             $uploadForm->produto_id = $produto_id;
 
             if ($uploadForm->upload()) {
@@ -110,7 +86,7 @@ class ImagemController extends Controller
             }
         }
 
-        return $this->render('create', ['imagem' => $imagem]);
+        return $this->render('create', ['image' => $image]);
     }
 
 
@@ -123,14 +99,14 @@ class ImagemController extends Controller
      */
     public function actionUpdate($id)
     {
-        $imagem = $this->findModel($id);
+        $model = $this->findModel($id);
 
-        if ($this->request->isPost && $imagem->load($this->request->post()) && $imagem->save()) {
-            return $this->redirect(['view', 'id' => $imagem->id]);
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
-            'imagem' => $imagem,
+            'model' => $model,
         ]);
     }
 
@@ -157,8 +133,8 @@ class ImagemController extends Controller
      */
     protected function findModel($id)
     {
-        if (($imagem = Imagem::findOne(['id' => $id])) !== null) {
-            return $imagem;
+        if (($model = Imagem::findOne(['id' => $id])) !== null) {
+            return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var backend\models\Despesa $despesa */
+/** @var backend\models\Despesa $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
@@ -12,13 +12,13 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($despesa, 'preco')->textInput() ?>
+    <?= $form->field($model, 'preco')->textInput() ?>
 
-    <?= $form->field($despesa, 'dta_despesa')->input('date') ?>
+    <?= $form->field($model, 'dta_despesa')->input('date') ?>
 
-    <?= $form->field($despesa, 'descricao')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'descricao')->textInput(['maxlength' => true]) ?>
 
-    <?=$form->field($despesa, 'estabelecimento_id')->dropDownList($estabelecimentoItems, ['prompt' => 'Selecione...']); ?>
+    <?=$form->field($model, 'estabelecimento_id')->dropDownList($estabelecimentoItems, ['prompt' => 'Selecione...']); ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

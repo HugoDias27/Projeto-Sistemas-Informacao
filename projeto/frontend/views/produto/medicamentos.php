@@ -18,8 +18,7 @@ $this->title = 'Categoria';
                             <i class="fa fa-2x fa-user-md text-white"></i>
                         </div>
                         <h4 class="mb-3"><?= $produto->nome; ?></h4>
-                        <a class="btn btn-lg btn-primary rounded-pill"
-                           href="<?= '../produto/index?id=' . $produto->id ?>">
+                        <a class="btn btn-lg btn-primary rounded-pill" href="<?= '../produto/index?id=' . $produto->id ?>">
                             <i class="bi bi-arrow-right"></i>
                         </a>
                     </div>
