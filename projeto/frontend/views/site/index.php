@@ -24,21 +24,25 @@ $this->title = 'Carolo Farmacêutica';
             <h5 class="d-inline-block text-primary text-uppercase border-bottom border-5">Produtos</h5>
         </div>
         <div class="row g-5">
-            <div class="col-lg-4 col-md-6">
-                <div class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center">
-                    <div class="service-icon mb-4">
-                        <i class="fa fa-2x fa-user-md text-white"></i>
+            <?php foreach ($produtos as $produto): ?>
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center">
+                        <div class="service-icon mb-4">
+                            <i class="fa fa-2x fa-user-md text-white"></i>
+                        </div>
+                        <h4 class="mb-3"><?= $produto->nome; ?></h4>
+                        <a class="btn btn-lg btn-primary rounded-pill" href="<?= 'produto/index?id=' . $produto->id ?>">
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
                     </div>
-                    <h4 class="mb-3">Nome do Produto</h4>
-                    <a class="btn btn-lg btn-primary rounded-pill" href="#">
-                        <i class="bi bi-arrow-right"></i>
-                    </a>
                 </div>
+            <?php endforeach; ?>
+            <div class="col-lg-12">
+                <?= \yii\widgets\LinkPager::widget(['pagination' => $paginacao]); ?>
             </div>
         </div>
     </div>
 </div>
-
 
 <!-- Blog Start -->
 <div class="container-fluid py-5">
