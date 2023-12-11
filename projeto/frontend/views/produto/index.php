@@ -2,6 +2,8 @@
 
 /** @var yii\web\View $this */
 
+use yii\helpers\Html;
+
 $this->title = 'Produto';
 ?>
 <div class="container-fluid py-5">
@@ -12,7 +14,9 @@ $this->title = 'Produto';
     <div class="row g-5">
         <div class="col-lg-4 col-md-6">
             <div class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center">
-                <p>Mostrar imagem!</p>
+                <?php foreach ($imagemArray as $imagem): ?>
+                <?= Html::img($imagem, ['width' => '100px']); ?>
+                <?php endforeach; ?>
             </div>
         </div>
 
@@ -30,7 +34,7 @@ $this->title = 'Produto';
             <div class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center">
                 <p>Referência: <?= $produtoDetalhes->id ?></p>
                 <p>Unidades Disponíveis: <?= $produtoDetalhes->quantidade ?></p>
-                <p>Preço: <?= $precoFinal ?>€</p>
+                <p>Preço: <?= $precoFinal = number_format($precoFinal, 2, '.', ''); ?>€</p>
                 <i class="fas fa-shopping-cart" style="color: #ff0000;"></i>
             </div>
         </div>

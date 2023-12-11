@@ -4,21 +4,23 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var \common\models\Servico $model */
+/** @var common\models\LinhaFatura $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
-<div class="servico-form">
+<div class="linha-fatura-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'dta_venda')->textInput() ?>
 
-    <?= $form->field($model, 'duracao')->input('time') ?>
+    <?= $form->field($model, 'quantidade')->textInput() ?>
 
     <?= $form->field($model, 'preco')->textInput() ?>
 
-    <?=$form->field($model, 'iva_id')->dropDownList($ivaItems, ['prompt' => 'Selecione...']); ?>
+    <?= $form->field($model, 'fatura_id')->textInput() ?>
+
+    <?= $form->field($model, 'produto_id')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

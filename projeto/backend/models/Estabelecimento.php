@@ -2,7 +2,7 @@
 
 namespace backend\models;
 
-use Yii;
+use common\models\Servico;
 
 /**
  * This is the model class for table "estabelecimentos".

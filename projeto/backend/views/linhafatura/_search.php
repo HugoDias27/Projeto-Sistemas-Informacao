@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var common\models\FaturaSearch $model */
+/** @var common\models\LinhaFaturaSearch $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
-<div class="fatura-search">
+<div class="linha-fatura-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
@@ -17,19 +17,15 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'dta_emissao') ?>
+    <?= $form->field($model, 'dta_venda') ?>
 
-    <?= $form->field($model, 'emissor') ?>
+    <?= $form->field($model, 'quantidade') ?>
 
-    <?= $form->field($model, 'total_fatura') ?>
+    <?= $form->field($model, 'preco') ?>
 
-    <?= $form->field($model, 'cliente_id') ?>
+    <?= $form->field($model, 'fatura_id') ?>
 
-    <?php // echo $form->field($model, 'receita_id') ?>
-
-    <?php // echo $form->field($model, 'estabelecimento_id') ?>
-
-    <?php // echo $form->field($model, 'servico_id') ?>
+    <?php // echo $form->field($model, 'produto_id') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

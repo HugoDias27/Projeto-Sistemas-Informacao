@@ -4,7 +4,6 @@
 
 /** @var string $content */
 
-use frontend\controllers\MenuController;
 use common\models\Categoria;
 use common\widgets\Alert;
 use frontend\assets\AppAsset;

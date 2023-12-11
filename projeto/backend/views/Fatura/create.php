@@ -5,8 +5,7 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var common\models\Fatura $model */
 
-
-$this->title = 'Create fatura';
+$this->title = 'Create Fatura';
 $this->params['breadcrumbs'][] = ['label' => 'Faturas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

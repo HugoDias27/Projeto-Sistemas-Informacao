@@ -52,13 +52,13 @@ class LinhaFatura extends \yii\db\ActiveRecord
             'dta_venda' => 'Dta Venda',
             'quantidade' => 'Quantidade',
             'preco' => 'Preco',
-            'fatura_id' => 'fatura ID',
+            'fatura_id' => 'Fatura ID',
             'produto_id' => 'Produto ID',
         ];
     }
 
     /**
-     * Gets query for [[fatura]].
+     * Gets query for [[Fatura]].
      *
      * @return \yii\db\ActiveQuery
      */

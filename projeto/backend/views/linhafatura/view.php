@@ -4,14 +4,14 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /** @var yii\web\View $this */
-/** @var common\models\ReceitaMedica $model */
+/** @var common\models\LinhaFatura $model */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Receita Medicas', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Linha Faturas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="receita-medica-view">
+<div class="linha-fatura-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -30,15 +30,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'codigo',
-            'local_prescricao',
-            'medico_prescricao',
-            'dosagem',
-            'data_validade',
-            'telefone',
-            'valido',
-            'posologia',
-            'user_id',
+            'dta_venda',
+            'quantidade',
+            'preco',
+            'fatura_id',
+            'produto_id',
         ],
     ]) ?>
 
