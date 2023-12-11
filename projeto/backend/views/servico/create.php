@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /** @var yii\web\View $this */
-/** @var backend\models\Servico $model */
+/** @var \common\models\Servico $model */
 
 $this->title = 'Create Servico';
 $this->params['breadcrumbs'][] = ['label' => 'Servicos', 'url' => ['index']];

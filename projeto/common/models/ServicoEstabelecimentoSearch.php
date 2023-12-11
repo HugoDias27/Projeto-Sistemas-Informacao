@@ -9,7 +9,7 @@ use common\models\Servico_Estabelecimento;
 /**
  * Servico_EstabelecimentoSearch represents the model behind the search form of `common\models\Servico_Estabelecimento`.
  */
-class Servico_EstabelecimentoSearch extends Servico_Estabelecimento
+class ServicoEstabelecimentoSearch extends ServicoEstabelecimento
 {
     /**
      * {@inheritdoc}

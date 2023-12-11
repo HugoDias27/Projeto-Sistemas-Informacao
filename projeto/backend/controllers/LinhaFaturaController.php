@@ -2,18 +2,16 @@
 
 namespace backend\controllers;
 
-use common\models\Fatura;
 use common\models\LinhaFatura;
 use common\models\LinhaFaturaSearch;
-use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * LinhaFaturaController implements the CRUD actions for LinhaFatura model.
+ * LinhaController implements the CRUD actions for LinhaFatura model.
  */
-class LinhaFaturaController extends Controller
+class LinhafaturaController extends Controller
 {
     /**
      * @inheritDoc
@@ -29,21 +27,6 @@ class LinhaFaturaController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
-                'access' => [
-                    'class' => AccessControl::className(),
-                    'rules' => [
-                        [
-                            'actions' => ['index', 'view', 'create'],
-                            'allow' => true,
-                            'roles' => ['funcionario'],
-                        ],
-                        [
-                            'actions' => ['delete'],
-                            'allow' => true,
-                            'roles' => ['admin'],
-                        ],
-                    ],
-                ],
             ]
         );
     }
@@ -53,11 +36,10 @@ class LinhaFaturaController extends Controller
      *
      * @return string
      */
-    public function actionIndex($id)
+    public function actionIndex()
     {
         $searchModel = new LinhaFaturaSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-        $modelfatura = LinhaFatura::getFatura($id);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -83,7 +65,7 @@ class LinhaFaturaController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate($id)
+    public function actionCreate()
     {
         $model = new LinhaFatura();
 

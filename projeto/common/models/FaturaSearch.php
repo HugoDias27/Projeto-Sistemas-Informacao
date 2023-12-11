@@ -7,7 +7,7 @@ use yii\data\ActiveDataProvider;
 use common\models\Fatura;
 
 /**
- * FaturaSearch represents the model behind the search form of `common\models\fatura`.
+ * FaturaSearch represents the model behind the search form of `common\models\Fatura`.
  */
 class FaturaSearch extends Fatura
 {
@@ -17,8 +17,8 @@ class FaturaSearch extends Fatura
     public function rules()
     {
         return [
-            [['id', 'cliente_id', 'receita_id'], 'integer'],
-            [['dta_emissao', 'loja', 'emissor'], 'safe'],
+            [['id', 'cliente_id', 'receita_id', 'estabelecimento_id', 'servico_id'], 'integer'],
+            [['dta_emissao', 'emissor'], 'safe'],
             [['total_fatura'], 'number'],
         ];
     }
@@ -64,10 +64,11 @@ class FaturaSearch extends Fatura
             'total_fatura' => $this->total_fatura,
             'cliente_id' => $this->cliente_id,
             'receita_id' => $this->receita_id,
+            'estabelecimento_id' => $this->estabelecimento_id,
+            'servico_id' => $this->servico_id,
         ]);
 
-        $query->andFilterWhere(['like', 'loja', $this->loja])
-            ->andFilterWhere(['like', 'emissor', $this->emissor]);
+        $query->andFilterWhere(['like', 'emissor', $this->emissor]);
 
         return $dataProvider;
     }

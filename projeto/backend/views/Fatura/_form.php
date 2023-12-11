@@ -14,8 +14,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'dta_emissao')->textInput() ?>
 
-    <?= $form->field($model, 'loja')->textInput(['maxlength' => true]) ?>
-
     <?= $form->field($model, 'emissor')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'total_fatura')->textInput() ?>
@@ -23,6 +21,10 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'cliente_id')->textInput() ?>
 
     <?= $form->field($model, 'receita_id')->textInput() ?>
+
+    <?= $form->field($model, 'estabelecimento_id')->textInput() ?>
+
+    <?= $form->field($model, 'servico_id')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

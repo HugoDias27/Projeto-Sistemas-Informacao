@@ -3,8 +3,10 @@
 namespace frontend\controllers;
 
 use common\models\Categoria;
+use common\models\Imagem;
 use common\models\Produto;
 use common\models\ProdutoSearch;
+use Yii;
 use yii\data\Pagination;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -44,6 +46,7 @@ class ProdutoController extends Controller
         $produtoDetalhes = Produto::findOne($id);
 
         if ($produtoDetalhes) {
+            $imagemArray = [];
             //caso necessite de receita médica
             if (($produtoDetalhes->prescricao_medica) === 1) {
                 $receitaMedica = "Sim";
@@ -53,11 +56,17 @@ class ProdutoController extends Controller
             //calcular o preço do produto com o iva atribuído
             $precoFinal = ($produtoDetalhes->preco) + (($produtoDetalhes->preco) * ($produtoDetalhes->iva->percentagem / 100));
 
+            $imagens = Imagem::find()->where(['produto_id' => $id])->all();
+            $imagemArray = [];
+
+            foreach ($imagens as $imagem) {
+                $imagem->filename = Yii::getAlias('@web') . '/uploads/' . $imagem->filename;
+                $imagemArray[] = $imagem->filename;
+            }
+
+
             //Apresenta na página de detalhes os dados pretendidos para o utilizador, consoante os campos selecionados no index
-            return $this->render('index', ['produtoDetalhes' => $produtoDetalhes, 'receitaMedica' => $receitaMedica, 'precoFinal' => $precoFinal]);
-        } else {
-            //Caso apresente erro, apresentar mensagem de erro
-            throw new \yii\web\NotFoundHttpException('Produtos não encontrados.');
+            return $this->render('index', ['produtoDetalhes' => $produtoDetalhes, 'receitaMedica' => $receitaMedica, 'precoFinal' => $precoFinal, 'imagemArray' => $imagemArray]);
         }
     }
 
@@ -107,103 +116,128 @@ class ProdutoController extends Controller
         }
     }
 
-    public function actionCategoriasaudeoral()
+    public
+    function actionCategoriasaudeoral()
     {
-        //Procura os Medicamentos pela categoria
-        $categoriaMedicamentos = Categoria::findOne(['descricao' => 'Saúde Oral']);
+        $categoria = Categoria::find()->where(['descricao' => 'saudeoral'])->one();
+        if ($categoria != null) {
+            //Procura os Medicamentos pela categoria
+            $categoriaMedicamentos = Categoria::findOne(['descricao' => 'saudeoral']);
 
-        if ($categoriaMedicamentos) {
-            $queryProdutos = Produto::find()
-                ->where(['categoria_id' => $categoriaMedicamentos->id]);
+            if ($categoriaMedicamentos) {
+                $queryProdutos = Produto::find()
+                    ->where(['categoria_id' => $categoriaMedicamentos->id]);
 
-            $paginacao = new Pagination([
-                'defaultPageSize' => 20,
-                'totalCount' => $queryProdutos->count(),
-            ]);
+                $paginacao = new Pagination([
+                    'defaultPageSize' => 20,
+                    'totalCount' => $queryProdutos->count(),
+                ]);
 
-            $produtos = $queryProdutos->offset($paginacao->offset)
-                ->limit($paginacao->limit)
-                ->all();
+                $produtos = $queryProdutos->offset($paginacao->offset)
+                    ->limit($paginacao->limit)
+                    ->all();
 
-            return $this->render('medicamentos', [
-                'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
-                'paginacao' => $paginacao
-            ]);
+                return $this->render('medicamentos', [
+                    'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
+                    'paginacao' => $paginacao
+                ]);
+            }
+        } else {
+            throw new \yii\web\NotFoundHttpException('Categoria não encontrada!');
         }
     }
 
-    public function actionCategoriabensbeleza()
+    public
+    function actionCategoriabensbeleza()
     {
-        //Procura os Medicamentos pela categoria
-        $categoriaMedicamentos = Categoria::findOne(['descricao' => 'Bens de Beleza']);
+        $categoria = Categoria::find()->where(['descricao' => 'bens_beleza'])->one();
+        if ($categoria != null) {
 
-        if ($categoriaMedicamentos) {
-            $queryProdutos = Produto::find()
-                ->where(['categoria_id' => $categoriaMedicamentos->id]);
+            //Procura os Medicamentos pela categoria
+            $categoriaMedicamentos = Categoria::findOne(['descricao' => 'bens_beleza']);
 
-            $paginacao = new Pagination([
-                'defaultPageSize' => 20,
-                'totalCount' => $queryProdutos->count(),
-            ]);
+            if ($categoriaMedicamentos) {
+                $queryProdutos = Produto::find()
+                    ->where(['categoria_id' => $categoriaMedicamentos->id]);
 
-            $produtos = $queryProdutos->offset($paginacao->offset)
-                ->limit($paginacao->limit)
-                ->all();
+                $paginacao = new Pagination([
+                    'defaultPageSize' => 20,
+                    'totalCount' => $queryProdutos->count(),
+                ]);
 
-            return $this->render('medicamentos', [
-                'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
-                'paginacao' => $paginacao
-            ]);
+                $produtos = $queryProdutos->offset($paginacao->offset)
+                    ->limit($paginacao->limit)
+                    ->all();
+
+                return $this->render('medicamentos', [
+                    'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
+                    'paginacao' => $paginacao
+                ]);
+            }
+        } else {
+            throw new \yii\web\NotFoundHttpException('Categoria não encontrada!');
         }
     }
 
-    public function actionCategoriahigiene()
+    public
+    function actionCategoriahigiene()
     {
-        //Procura os Medicamentos pela categoria
-        $categoriaMedicamentos = Categoria::findOne(['descricao' => 'Higiene']);
+        $categoria = Categoria::find()->where(['descricao' => 'higiene'])->one();
+        if ($categoria != null) {
+            //Procura os Medicamentos pela categoria
+            $categoriaMedicamentos = Categoria::findOne(['descricao' => 'Higiene']);
 
-        if ($categoriaMedicamentos) {
-            $queryProdutos = Produto::find()
-                ->where(['categoria_id' => $categoriaMedicamentos->id]);
+            if ($categoriaMedicamentos) {
+                $queryProdutos = Produto::find()
+                    ->where(['categoria_id' => $categoriaMedicamentos->id]);
 
-            $paginacao = new Pagination([
-                'defaultPageSize' => 20,
-                'totalCount' => $queryProdutos->count(),
-            ]);
+                $paginacao = new Pagination([
+                    'defaultPageSize' => 20,
+                    'totalCount' => $queryProdutos->count(),
+                ]);
 
-            $produtos = $queryProdutos->offset($paginacao->offset)
-                ->limit($paginacao->limit)
-                ->all();
+                $produtos = $queryProdutos->offset($paginacao->offset)
+                    ->limit($paginacao->limit)
+                    ->all();
 
-            return $this->render('medicamentos', [
-                'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
-                'paginacao' => $paginacao
-            ]);
+                return $this->render('medicamentos', [
+                    'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
+                    'paginacao' => $paginacao
+                ]);
+            }
+        } else {
+            throw new \yii\web\NotFoundHttpException('Categoria não encontrada!');
         }
     }
 
-    public function actionCategoriaservicos()
+    public
+    function actionCategoriaservicos()
     {
-        //Procura os Medicamentos pela categoria
-        $categoriaMedicamentos = Categoria::findOne(['descricao' => 'Serviços']);
+        $categoria = Categoria::find()->where(['descricao' => 'servicos'])->one();
+        if ($categoria != null) {
+            //Procura os Medicamentos pela categoria
+            $categoriaMedicamentos = Categoria::findOne(['descricao' => 'Serviços']);
 
-        if ($categoriaMedicamentos) {
-            $queryProdutos = Produto::find()
-                ->where(['categoria_id' => $categoriaMedicamentos->id]);
+            if ($categoriaMedicamentos) {
+                $queryProdutos = Produto::find()
+                    ->where(['categoria_id' => $categoriaMedicamentos->id]);
 
-            $paginacao = new Pagination([
-                'defaultPageSize' => 20,
-                'totalCount' => $queryProdutos->count(),
-            ]);
+                $paginacao = new Pagination([
+                    'defaultPageSize' => 20,
+                    'totalCount' => $queryProdutos->count(),
+                ]);
 
-            $produtos = $queryProdutos->offset($paginacao->offset)
-                ->limit($paginacao->limit)
-                ->all();
+                $produtos = $queryProdutos->offset($paginacao->offset)
+                    ->limit($paginacao->limit)
+                    ->all();
 
-            return $this->render('medicamentos', [
-                'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
-                'paginacao' => $paginacao
-            ]);
+                return $this->render('medicamentos', [
+                    'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
+                    'paginacao' => $paginacao
+                ]);
+            }
+        } else {
+            throw new \yii\web\NotFoundHttpException('Categoria não encontrada!');
         }
     }
 }

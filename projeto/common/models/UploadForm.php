@@ -30,7 +30,13 @@ class UploadForm extends Model
                 $image = new Imagem();
                 $image->filename = $imageName;
                 $image->produto_id = $this->produto_id;
-                $file->saveAs('uploads/' . $imageName. '.' . $file->extension);
+
+                $backendPath = 'uploads/' . $imageName . '.' . $file->extension;
+                $file->saveAs($backendPath);
+
+                $frontendPath = '..\..\frontend\web\uploads/' . $imageName . '.' . $file->extension;
+                copy($backendPath, $frontendPath);
+
                 $image->save(false);
             }
             return true;
@@ -38,4 +44,6 @@ class UploadForm extends Model
             return false;
         }
     }
+
+
 }
