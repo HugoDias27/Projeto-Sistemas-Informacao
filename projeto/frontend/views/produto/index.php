@@ -22,7 +22,7 @@ $this->title = 'Produto';
                     <div class="carousel-inner">
                         <?php foreach ($imagemArray as $index => $imagemUrl): ?>
                             <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
-                                <?= Html::img($imagemUrl, ['width' => '250px']); ?>
+                                <?= Html::img($imagemUrl, ['width' => '250px', 'height' => '250px']); ?>
                             </div>
                         <?php endforeach; ?>
                     </div>
