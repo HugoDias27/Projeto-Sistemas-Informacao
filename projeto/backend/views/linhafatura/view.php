@@ -4,14 +4,14 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /** @var yii\web\View $this */
-/** @var \common\models\Servico $model */
+/** @var common\models\LinhaFatura $model */
 
-$this->title = $model->nome;
-$this->params['breadcrumbs'][] = ['label' => 'Servicos', 'url' => ['index']];
+$this->title = $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Linha Faturas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="servico-view">
+<div class="linha-fatura-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -30,13 +30,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'nome',
-            'duracao',
+            'dta_venda',
+            'quantidade',
             'preco',
-            'iva_id' => [
-                'attribute' => 'Percentagem de Iva',
-                'value' => $ivaPercentagem
-            ],
+            'fatura_id',
+            'produto_id',
         ],
     ]) ?>
 

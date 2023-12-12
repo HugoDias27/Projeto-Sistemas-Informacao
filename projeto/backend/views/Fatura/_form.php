@@ -12,11 +12,6 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'dta_emissao')->input('date') ?>
-
-
-    <?= $form->field($model, 'total_fatura')->textInput() ?>
-
     <?= $form->field($model, 'cliente_id')->dropDownList($clientes, ['prompt' => 'Selecione o cliente']) ?>
 
     <?= $form->field($model, 'estabelecimento_id')->dropDownList($estabelecimentos, ['prompt' => 'Selecione a loja']) ?>

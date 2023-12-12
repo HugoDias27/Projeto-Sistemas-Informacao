@@ -2,19 +2,21 @@
 
 namespace backend\controllers;
 
-use common\models\Iva;
-use common\models\Servico;
-use common\models\ServicoSearch;
+use common\models\Profile;
+use common\models\ReceitaMedica;
+use common\models\ReceitaMedicaSearch;
+use common\models\User;
+use Yii;
 use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
 
 /**
- * ServicoController implements the CRUD actions for Servico model.
+ * ReceitaController implements the CRUD actions for ReceitaMedica model.
  */
-class ServicoController extends Controller
+class ReceitamedicaController extends Controller
 {
     /**
      * @inheritDoc
@@ -45,23 +47,20 @@ class ServicoController extends Controller
                         ],
                     ],
                 ],
+
             ]
         );
     }
 
     /**
-     * Lists all Servico models.
+     * Lists all ReceitaMedica models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new ServicoSearch();
+        $searchModel = new ReceitaMedicaSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-
-        foreach ($dataProvider->models as $model) {
-            $model->iva_id = $model->iva->percentagem . '%' ;
-        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -69,74 +68,61 @@ class ServicoController extends Controller
         ]);
     }
 
+
     /**
-     * Displays a single Servico model.
+     * Displays a single ReceitaMedica model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
-        $model = $this->findModel($id);
-
-        $ivaModel = $model->iva;
-
-        $ivaPercentagem =  $ivaModel->percentagem . '%';
+        $receita = $this->findModel($id);
 
         return $this->render('view', [
-            'model' => $model,
-            'ivaPercentagem' => $ivaPercentagem,
+            'receita' => $receita,
         ]);
     }
 
     /**
-     * Creates a new Servico model.
+     * Creates a new ReceitaMedica model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Servico();
-        $ivaList = Iva::find()->where(['vigor' => 1])->all();
-        $ivaItems = ArrayHelper::map($ivaList, 'id', 'percentagem');
+        $receita = new ReceitaMedica();
+        $authManager = Yii::$app->authManager;
+        $clienteRole = $authManager->getRole('cliente');
+
+        $clientes = User::find()
+            ->innerJoin('auth_assignment', 'auth_assignment.user_id = user.id')
+            ->andWhere(['auth_assignment.item_name' => $clienteRole->name])
+            ->select(['user.id', 'user.username']) // Ajuste aqui para referenciar corretamente a tabela 'user'
+            ->asArray()
+            ->all();
+
+        $clientesItems = ArrayHelper::map($clientes, 'id', 'username');
+
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($receita->load($this->request->post()) && $receita->save()) {
+                return $this->redirect(['view', 'id' => $receita->id]);
             }
         } else {
-            $model->loadDefaultValues();
+            $receita->loadDefaultValues();
         }
 
         return $this->render('create', [
-            'model' => $model,'ivaItems'=>$ivaItems,
+            'receita' => $receita,
+            'clientes' => $clientesItems,
         ]);
     }
 
-    /**
-     * Updates an existing Servico model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-        $ivaList = Iva::find()->where(['vigor' => 1])->all();
-        $ivaItems = ArrayHelper::map($ivaList, 'id', 'percentagem');
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('update', [
-            'model' => $model, 'ivaItems'=>$ivaItems,
-        ]);
-    }
 
     /**
-     * Deletes an existing Servico model.
+     * Deletes an existing ReceitaMedica model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -150,24 +136,18 @@ class ServicoController extends Controller
     }
 
     /**
-     * Finds the Servico model based on its primary key value.
+     * Finds the ReceitaMedica model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Servico the loaded model
+     * @return ReceitaMedica the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Servico::findOne(['id' => $id])) !== null) {
-            return $model;
+        if (($receita = ReceitaMedica::findOne(['id' => $id])) !== null) {
+            return $receita;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
-    }
-
-    public function actionGetIva($id)
-    {
-        $model = Iva::findOne(['id' => $id]);
-        return $model->percentagem;
     }
 }

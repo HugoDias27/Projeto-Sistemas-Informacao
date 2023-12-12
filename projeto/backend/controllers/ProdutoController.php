@@ -67,11 +67,9 @@ class ProdutoController extends Controller
         $searchModel = new ProdutoSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
-        foreach ($dataProvider->models as $model) {
-            $model->iva_id = $model->iva->percentagem . '%' ;
-            $model->categoria_id = $model->categoria->descricao;
-        }
 
+        $dataProvider->query->with('fornecedoresProdutos');
+        $dataProvider->query->with('fornecedores');
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -88,7 +86,8 @@ class ProdutoController extends Controller
     public function actionView($id)
     {
         $imagemArray = [];
-        $model = $this->findModel($id);
+
+        $fornecedorProduto = FornecedorProduto::find()->where(['produto_id' => $id])->with('fornecedor')->all();
 
         $imagens = Imagem::find()->where(['produto_id' => $id])->all();
         foreach ($imagens as $imagem) {
@@ -97,9 +96,12 @@ class ProdutoController extends Controller
         }
 
         return $this->render('view', [
-            'produto' => $this->findModel($id),'imagemArray' => $imagemArray,
+            'produto' => $this->findModel($id),
+            'imagemArray' => $imagemArray,
+            'fornecedorProduto' => $fornecedorProduto
         ]);
     }
+
 
     /**
      * Creates a new Produto model.

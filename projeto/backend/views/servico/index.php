@@ -1,13 +1,13 @@
 <?php
 
-use backend\models\Servico;
-use yii\helpers\Html;
-use yii\helpers\Url;
+use common\models\Servico;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\helpers\Html;
+use yii\helpers\Url;
 
 /** @var yii\web\View $this */
-/** @var backend\models\ServicoSearch $searchModel */
+/** @var \common\models\ServicoSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'Servicos';

@@ -47,8 +47,31 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             [
-                'attribute' => 'fornecedor_id',
-                'label' => 'Fornecedor',
+                'label' => 'Nome Fornecedor',
+                'value' => function ($model) {
+                    $fornecedores = '';
+                    foreach ($model->fornecedores as $fornecedor) {
+                        $fornecedores .= $fornecedor->nome ;
+                    }
+                    return $fornecedores;
+                },
+            ],
+            [
+                'label' => 'Data de Importação',
+                'value' => function ($model) {
+                    $fornecedores = '';
+                    foreach ($model->fornecedoresProdutos as $fornecedor) {
+                        $fornecedores .= $fornecedor->data_importacao ;
+                    }
+                    return $fornecedores;
+                },
+            ],
+            [
+                'attribute' => 'categoria_id',
+                'label' => 'Categoria',
+                'value' => function ($model) {
+                    return isset($model->categoria) ? $model->categoria->descricao : '';
+                },
             ],
             'quantidade',
             [

@@ -5,6 +5,7 @@ namespace backend\controllers;
 use backend\models\Estabelecimento;
 use common\models\Fatura;
 use common\models\FaturaSearch;
+use common\models\Profile;
 use common\models\User;
 use Yii;
 use yii\helpers\ArrayHelper;
@@ -85,8 +86,13 @@ class FaturaController extends Controller
         $clientesItems = ArrayHelper::map($clientes, 'id', 'username');
 
         if ($this->request->isPost) {
+            $perfilEmissor = Profile::findOne(['user_id' => Yii::$app->user->id]);
+            if (!$perfilEmissor) {
+                Yii::$app->session->setFlash('error', 'O utilizador não tem o perfil criado.');
+                return $this->redirect('index');
+            }
+            $model->dta_emissao = date('Y-m-d');
             $model->emissor_id = Yii::$app->user->id;
-
             if ($model->load($this->request->post()) && $model->save()) {
 
                 return $this->redirect(['view', 'id' => $model->id]);

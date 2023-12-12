@@ -35,8 +35,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'preco',
             'fatura_id',
             //'produto_id',
-           // 'receitas_medica_id',
-            //'servicos_id',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, LinhaFatura $model, $key, $index, $column) {
