@@ -1,15 +1,14 @@
 <?php
 
-namespace common\models;
+namespace backend\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Fatura;
 
 /**
- * FaturaSearch represents the model behind the search form of `common\models\Fatura`.
+ * ServicoEstabelecimentoSearch represents the model behind the search form of `common\models\ServicoEstabelecimento`.
  */
-class FaturaSearch extends Fatura
+class ServicoEstabelecimentoSearch extends ServicoEstabelecimento
 {
     /**
      * {@inheritdoc}
@@ -17,9 +16,7 @@ class FaturaSearch extends Fatura
     public function rules()
     {
         return [
-            [['id', 'cliente_id', 'estabelecimento_id', 'emissor_id'], 'integer'],
-            [['dta_emissao'], 'safe'],
-            [['total_fatura'], 'number'],
+            [['estabelecimento_id', 'servico_id'], 'integer'],
         ];
     }
 
@@ -41,7 +38,7 @@ class FaturaSearch extends Fatura
      */
     public function search($params)
     {
-        $query = Fatura::find();
+        $query = ServicoEstabelecimento::find();
 
         // add conditions that should always apply here
 
@@ -59,12 +56,8 @@ class FaturaSearch extends Fatura
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'dta_emissao' => $this->dta_emissao,
-            'total_fatura' => $this->total_fatura,
-            'cliente_id' => $this->cliente_id,
             'estabelecimento_id' => $this->estabelecimento_id,
-            'emissor_id' => $this->emissor_id,
+            'servico_id' => $this->servico_id,
         ]);
 
         return $dataProvider;

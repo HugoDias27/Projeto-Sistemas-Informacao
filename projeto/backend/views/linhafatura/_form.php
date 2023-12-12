@@ -22,6 +22,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'produto_id')->textInput() ?>
 
+    <?= $form->field($model, 'receita_id')->textInput() ?>
+
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>

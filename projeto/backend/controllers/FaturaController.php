@@ -2,8 +2,12 @@
 
 namespace backend\controllers;
 
+use backend\models\Estabelecimento;
 use common\models\Fatura;
 use common\models\FaturaSearch;
+use common\models\User;
+use Yii;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -50,15 +54,13 @@ class FaturaController extends Controller
     /**
      * Displays a single Fatura model.
      * @param int $id ID
-     * @param int $estabelecimento_id Estabelecimento ID
-     * @param int $servico_id Servico ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id, $estabelecimento_id, $servico_id)
+    public function actionView($id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id, $estabelecimento_id, $servico_id),
+            'model' => $this->findModel($id),
         ]);
     }
 
@@ -70,10 +72,24 @@ class FaturaController extends Controller
     public function actionCreate()
     {
         $model = new Fatura();
+        $estabelecimentos = Estabelecimento::find()->all();
+        $estabelecimentosItems = ArrayHelper::map($estabelecimentos, 'id', 'nome');
+
+
+        $authManager = Yii::$app->authManager;
+        $clienteRole = $authManager->getRole('cliente');
+        $clientes = User::find()
+            ->innerJoin('auth_assignment', 'auth_assignment.user_id = user.id')
+            ->andWhere(['auth_assignment.item_name' => $clienteRole->name])
+            ->all();
+        $clientesItems = ArrayHelper::map($clientes, 'id', 'username');
 
         if ($this->request->isPost) {
+            $model->emissor_id = Yii::$app->user->id;
+
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id, 'estabelecimento_id' => $model->estabelecimento_id, 'servico_id' => $model->servico_id]);
+
+                return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
             $model->loadDefaultValues();
@@ -81,6 +97,8 @@ class FaturaController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'estabelecimentos' => $estabelecimentosItems,
+            'clientes' => $clientesItems,
         ]);
     }
 
@@ -88,17 +106,15 @@ class FaturaController extends Controller
      * Updates an existing Fatura model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
-     * @param int $estabelecimento_id Estabelecimento ID
-     * @param int $servico_id Servico ID
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id, $estabelecimento_id, $servico_id)
+    public function actionUpdate($id)
     {
-        $model = $this->findModel($id, $estabelecimento_id, $servico_id);
+        $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id, 'estabelecimento_id' => $model->estabelecimento_id, 'servico_id' => $model->servico_id]);
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
@@ -110,14 +126,12 @@ class FaturaController extends Controller
      * Deletes an existing Fatura model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
-     * @param int $estabelecimento_id Estabelecimento ID
-     * @param int $servico_id Servico ID
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id, $estabelecimento_id, $servico_id)
+    public function actionDelete($id)
     {
-        $this->findModel($id, $estabelecimento_id, $servico_id)->delete();
+        $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
@@ -126,14 +140,12 @@ class FaturaController extends Controller
      * Finds the Fatura model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @param int $estabelecimento_id Estabelecimento ID
-     * @param int $servico_id Servico ID
      * @return Fatura the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id, $estabelecimento_id, $servico_id)
+    protected function findModel($id)
     {
-        if (($model = Fatura::findOne(['id' => $id, 'estabelecimento_id' => $estabelecimento_id, 'servico_id' => $servico_id])) !== null) {
+        if (($model = Fatura::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

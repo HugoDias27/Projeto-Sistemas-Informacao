@@ -53,6 +53,8 @@
                             ['label' => 'Gerir despesas', 'url' => ['despesa/index'], 'icon' => 'fas fa-money-check-alt', 'style' =>'color: #ffffff'],
                             ['label' => 'Gerir faturas', 'url' => ['fatura/index'],'icon' => 'fas fa-file-invoice', 'style' =>'color: #ffffff'],
                             ['label' => 'Gerir ivas', 'url' => ['iva/index'], 'icon' => 'fas fa-euro-sign', 'style' =>'color: #ffffff'],
+                            ['label' => 'Gerir serviços-estabelecimentos', 'url' => ['servicoestabelecimento/index'], 'icon' => 'fas fa-clinic-medical', 'style' =>'color: #ffffff'],
+
                         ]
                     ],
                 ],

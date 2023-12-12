@@ -2,7 +2,7 @@
 
 namespace backend\models;
 
-use common\models\Servico;
+use Yii;
 
 /**
  * This is the model class for table "estabelecimentos".
@@ -14,6 +14,7 @@ use common\models\Servico;
  * @property string $email
  *
  * @property Despesa[] $despesas
+ * @property Fatura[] $faturas
  * @property Servico[] $servicos
  * @property ServicosEstabelecimento[] $servicosEstabelecimentos
  */
@@ -63,6 +64,16 @@ class Estabelecimento extends \yii\db\ActiveRecord
     public function getDespesas()
     {
         return $this->hasMany(Despesa::class, ['estabelecimento_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Faturas]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFaturas()
+    {
+        return $this->hasMany(Fatura::class, ['estabelecimentos_id' => 'id']);
     }
 
     /**

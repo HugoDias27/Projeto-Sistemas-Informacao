@@ -2,15 +2,14 @@
 
 namespace backend\controllers;
 
+use backend\models\Servico;
+use backend\models\ServicoSearch;
 use common\models\Iva;
-use common\models\Servico;
-use common\models\ServicoEstabelecimento;
-use common\models\ServicoSearch;
 use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
 
 /**
  * ServicoController implements the CRUD actions for Servico model.
@@ -100,7 +99,6 @@ class ServicoController extends Controller
         $model = new Servico();
         $ivaList = Iva::find()->where(['vigor' => 1])->all();
         $ivaItems = ArrayHelper::map($ivaList, 'id', 'percentagem');
-        $servicoEstabelecimento = new ServicoEstabelecimento();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {

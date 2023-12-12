@@ -14,7 +14,7 @@ use Yii;
  * @property Fatura[] $faturas
  * @property Servico $servico
  */
-class ServicoEstabelecimento extends \yii\db\ActiveRecord
+class Servico_estabelecimento extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}

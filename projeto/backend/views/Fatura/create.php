@@ -5,7 +5,8 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var common\models\Fatura $model */
 
-$this->title = 'Create Fatura';
+
+$this->title = 'Create fatura';
 $this->params['breadcrumbs'][] = ['label' => 'Faturas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -14,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
-        'model' => $model,
+        'model' => $model, 'estabelecimentos' => $estabelecimentos, 'clientes' => $clientes,
     ]) ?>
 
 </div>

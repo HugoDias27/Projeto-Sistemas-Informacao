@@ -31,16 +31,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'dta_emissao',
-            'emissor',
             'total_fatura',
             'cliente_id',
-            //'receita_id',
-            //'estabelecimento_id',
-            //'servico_id',
+            'estabelecimento_id',
+            //'emissor_id',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Fatura $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id, 'estabelecimento_id' => $model->estabelecimento_id, 'servico_id' => $model->servico_id]);
+                    return Url::toRoute([$action, 'id' => $model->id]);
                  }
             ],
         ],

@@ -2,6 +2,8 @@
 
 namespace common\models;
 
+use backend\models\Servico;
+
 /**
  * This is the model class for table "ivas".
  *

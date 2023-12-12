@@ -29,7 +29,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             'id',
-            'user.username',
+            [
+                'attribute' => 'nome_usuario', // Mostra o nome do usuário
+                'label' => 'Nome do Usuário', // Define o rótulo da coluna
+            ],
             'codigo',
             'local_prescricao',
             'medico_prescricao',
@@ -48,10 +51,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'posologia',
             [
                 'class' => ActionColumn::className(),
-                'template' => '{view} {delete}', // Define os botões de visualização e exclusão
                 'urlCreator' => function ($action, ReceitaMedica $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                }
+                 }
             ],
         ],
     ]); ?>

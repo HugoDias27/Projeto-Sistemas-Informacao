@@ -250,6 +250,9 @@ class RbacController extends Controller
         $auth->add($deleteCategorias);
 
 
+
+
+
         // adicionar as permissões ao cliente
         $cliente = $auth->createRole('cliente');
         $auth->add($cliente);
@@ -284,6 +287,8 @@ class RbacController extends Controller
         $auth->addChild($funcionario, $updateDespesa);
         $auth->addChild($funcionario, $deleteDespesa);
         $auth->addChild($funcionario, $createFatura);
+
+
         $auth->addChild($funcionario, $createServico);
         $auth->addChild($funcionario, $updateServico);
         $auth->addChild($funcionario, $viewIvas);

@@ -82,20 +82,19 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-            $query = Produto::find();
+        $query = Produto::find();
 
-            $paginacao = new Pagination([
-                'defaultPageSize' => 9,
-                'totalCount' => $query->count(),
-            ]);
+        $paginacao = new Pagination([
+            'defaultPageSize' => 9,
+            'totalCount' => $query->count(),
+        ]);
 
-            $produtos = $query->offset($paginacao->offset)
-                ->limit($paginacao->limit)
-                ->all();
+        $produtos = $query->offset($paginacao->offset)
+            ->limit($paginacao->limit)
+            ->all();
 
-        return $this->render('index', ['produtos' => $produtos, 'paginacao' => $paginacao]);
+        return $this->render('index', ['produtos' => $produtos, 'paginacao' => $paginacao,]);
     }
-
 
     /**
      * Logs in a user.

@@ -1,9 +1,9 @@
 <?php
 
-namespace common\models;
+namespace backend\models;
 
-use backend\models\Estabelecimento;
-use backend\models\ServicosEstabelecimento;
+use common\models\Iva;
+use Yii;
 
 /**
  * This is the model class for table "servicos".

@@ -18,7 +18,7 @@ use Yii;
  * @property string $posologia
  * @property int $user_id
  *
- * @property Fatura[] $faturas
+ * @property LinhaFatura[] $linhaFaturas
  * @property Profile $user
  */
 class ReceitaMedica extends \yii\db\ActiveRecord
@@ -42,7 +42,8 @@ class ReceitaMedica extends \yii\db\ActiveRecord
             [['data_validade'], 'safe'],
             [['local_prescricao', 'medico_prescricao'], 'string', 'max' => 45],
             [['posologia'], 'string', 'max' => 50],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Profile::class, 'targetAttribute' => ['user_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Profile::class, 'targetAttribute' => ['user_id' => 'user_id'], 'message' => 'O utilizador não tem o perfil criado.'],
+
         ];
     }
 
@@ -66,13 +67,13 @@ class ReceitaMedica extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Faturas]].
+     * Gets query for [[LinhaFaturas]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getFaturas()
+    public function getLinhaFaturas()
     {
-        return $this->hasMany(Fatura::class, ['receita_id' => 'id']);
+        return $this->hasMany(LinhaFatura::class, ['receitas_medica_id' => 'id']);
     }
 
     /**
@@ -82,6 +83,6 @@ class ReceitaMedica extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(User::class, ['id' => 'user_id']);
+        return $this->hasOne(Profile::class, ['user_id' => 'user_id']);
     }
 }
