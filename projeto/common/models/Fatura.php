@@ -10,10 +10,13 @@ use Yii;
  *
  * @property int $id
  * @property string $dta_emissao
+ * @property float $valortotal
+ * @property float $ivatotal
  * @property int $cliente_id
  * @property int|null $estabelecimento_id
- * @property int $emissor_id
+ * @property int|null $emissor_id
  *
+ * @property CarrinhoCompra[] $carrinhoCompras
  * @property Profile $cliente
  * @property Profile $emissor
  * @property Estabelecimento $estabelecimento
@@ -35,11 +38,12 @@ class Fatura extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['dta_emissao', 'cliente_id', 'emissor_id'], 'required'],
+            [['dta_emissao', 'valortotal', 'ivatotal', 'cliente_id'], 'required'],
             [['dta_emissao'], 'safe'],
+            [['valortotal', 'ivatotal'], 'number'],
             [['cliente_id', 'estabelecimento_id', 'emissor_id'], 'integer'],
             [['estabelecimento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Estabelecimento::class, 'targetAttribute' => ['estabelecimento_id' => 'id']],
-            [['cliente_id'], 'exist', 'skipOnError' => true, 'targetClass' => Profile::class, 'targetAttribute' => ['cliente_id' => 'user_id'], 'message' => 'O utilizador não tem o perfil criado.'],
+            [['cliente_id'], 'exist', 'skipOnError' => true, 'targetClass' => Profile::class, 'targetAttribute' => ['cliente_id' => 'user_id']],
             [['emissor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Profile::class, 'targetAttribute' => ['emissor_id' => 'user_id']],
         ];
     }
@@ -52,10 +56,22 @@ class Fatura extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'dta_emissao' => 'Dta Emissao',
+            'valortotal' => 'Valortotal',
+            'ivatotal' => 'Ivatotal',
             'cliente_id' => 'Cliente ID',
             'estabelecimento_id' => 'Estabelecimento ID',
             'emissor_id' => 'Emissor ID',
         ];
+    }
+
+    /**
+     * Gets query for [[CarrinhoCompras]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCarrinhoCompras()
+    {
+        return $this->hasMany(CarrinhoCompra::class, ['fatura_id' => 'id']);
     }
 
     /**

@@ -19,11 +19,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'dta_emissao') ?>
 
-    <?= $form->field($model, 'total_fatura') ?>
+    <?= $form->field($model, 'valortotal') ?>
+
+    <?= $form->field($model, 'ivatotal') ?>
 
     <?= $form->field($model, 'cliente_id') ?>
 
-    <?= $form->field($model, 'estabelecimento_id') ?>
+    <?php // echo $form->field($model, 'estabelecimento_id') ?>
 
     <?php // echo $form->field($model, 'emissor_id') ?>
 

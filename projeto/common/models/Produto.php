@@ -22,7 +22,6 @@ use Yii;
  * @property Fornecedor[] $fornecedors
  * @property Imagem[] $imagens
  * @property Iva $iva
- * @property LinhaFatura[] $linhaFaturas
  * @property LinhaCarrinho[] $linhasCarrinhos
  */
 class Produto extends \yii\db\ActiveRecord
@@ -91,7 +90,7 @@ class Produto extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getFornecedores()
+    public function getFornecedors()
     {
         return $this->hasMany(Fornecedor::class, ['id' => 'fornecedor_id'])->viaTable('fornecedores_produtos', ['produto_id' => 'id']);
     }
@@ -114,16 +113,6 @@ class Produto extends \yii\db\ActiveRecord
     public function getIva()
     {
         return $this->hasOne(Iva::class, ['id' => 'iva_id']);
-    }
-
-    /**
-     * Gets query for [[LinhaFaturas]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getLinhaFaturas()
-    {
-        return $this->hasMany(LinhaFatura::class, ['produto_id' => 'id']);
     }
 
     /**

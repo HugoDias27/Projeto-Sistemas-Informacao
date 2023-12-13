@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var common\models\LinhaFaturaSearch $model */
+/** @var common\models\CarrinhoCompraSearch $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
-<div class="linha-fatura-search">
+<div class="carrinho-compra-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
@@ -21,19 +21,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'quantidade') ?>
 
-    <?= $form->field($model, 'precounit') ?>
+    <?= $form->field($model, 'valortotal') ?>
 
-    <?= $form->field($model, 'valoriva') ?>
+    <?= $form->field($model, 'ivatotal') ?>
 
-    <?php // echo $form->field($model, 'valorcomiva') ?>
-
-    <?php // echo $form->field($model, 'subtotal') ?>
+    <?php // echo $form->field($model, 'cliente_id') ?>
 
     <?php // echo $form->field($model, 'fatura_id') ?>
-
-    <?php // echo $form->field($model, 'receita_medica_id') ?>
-
-    <?php // echo $form->field($model, 'servico_id') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

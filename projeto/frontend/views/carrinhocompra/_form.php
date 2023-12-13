@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var common\models\LinhaFatura $model */
+/** @var common\models\CarrinhoCompra $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
-<div class="linha-fatura-form">
+<div class="carrinho-compra-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
@@ -16,19 +16,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'quantidade')->textInput() ?>
 
-    <?= $form->field($model, 'precounit')->textInput() ?>
+    <?= $form->field($model, 'valortotal')->textInput() ?>
 
-    <?= $form->field($model, 'valoriva')->textInput() ?>
+    <?= $form->field($model, 'ivatotal')->textInput() ?>
 
-    <?= $form->field($model, 'valorcomiva')->textInput() ?>
-
-    <?= $form->field($model, 'subtotal')->textInput() ?>
+    <?= $form->field($model, 'cliente_id')->textInput() ?>
 
     <?= $form->field($model, 'fatura_id')->textInput() ?>
-
-    <?= $form->field($model, 'receita_medica_id')->textInput() ?>
-
-    <?= $form->field($model, 'servico_id')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

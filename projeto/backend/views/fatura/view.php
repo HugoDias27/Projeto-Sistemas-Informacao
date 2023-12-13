@@ -31,7 +31,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'dta_emissao',
-            'total_fatura',
+            'valortotal',
+            'ivatotal',
             'cliente_id',
             'estabelecimento_id',
             'emissor_id',

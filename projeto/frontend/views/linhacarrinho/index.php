@@ -1,24 +1,24 @@
 <?php
 
-use common\models\LinhaFatura;
+use common\models\LinhaCarrinho;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
 /** @var yii\web\View $this */
-/** @var common\models\LinhaFaturaSearch $searchModel */
+/** @var common\models\LinhaCarrinhoSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Linha Faturas';
+$this->title = 'Linha Carrinhos';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="linha-fatura-index">
+<div class="linha-carrinho-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Linha Fatura', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Linha Carrinho', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -30,18 +30,16 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'dta_venda',
             'quantidade',
             'precounit',
             'valoriva',
-            //'valorcomiva',
+            'valorcomiva',
             //'subtotal',
-            //'fatura_id',
-            //'receita_medica_id',
-            //'servico_id',
+            //'carrinho_compra_id',
+            //'produto_id',
             [
                 'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, LinhaFatura $model, $key, $index, $column) {
+                'urlCreator' => function ($action, LinhaCarrinho $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }
             ],

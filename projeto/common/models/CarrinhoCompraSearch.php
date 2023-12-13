@@ -4,12 +4,12 @@ namespace common\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Fatura;
+use common\models\CarrinhoCompra;
 
 /**
- * FaturaSearch represents the model behind the search form of `common\models\Fatura`.
+ * CarrinhoCompraSearch represents the model behind the search form of `common\models\CarrinhoCompra`.
  */
-class FaturaSearch extends Fatura
+class CarrinhoCompraSearch extends CarrinhoCompra
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class FaturaSearch extends Fatura
     public function rules()
     {
         return [
-            [['id', 'cliente_id', 'estabelecimento_id', 'emissor_id'], 'integer'],
-            [['dta_emissao'], 'safe'],
+            [['id', 'quantidade', 'cliente_id', 'fatura_id'], 'integer'],
+            [['dta_venda'], 'safe'],
             [['valortotal', 'ivatotal'], 'number'],
         ];
     }
@@ -41,7 +41,7 @@ class FaturaSearch extends Fatura
      */
     public function search($params)
     {
-        $query = Fatura::find();
+        $query = CarrinhoCompra::find();
 
         // add conditions that should always apply here
 
@@ -60,12 +60,12 @@ class FaturaSearch extends Fatura
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'dta_emissao' => $this->dta_emissao,
+            'dta_venda' => $this->dta_venda,
+            'quantidade' => $this->quantidade,
             'valortotal' => $this->valortotal,
             'ivatotal' => $this->ivatotal,
             'cliente_id' => $this->cliente_id,
-            'estabelecimento_id' => $this->estabelecimento_id,
-            'emissor_id' => $this->emissor_id,
+            'fatura_id' => $this->fatura_id,
         ]);
 
         return $dataProvider;
