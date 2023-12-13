@@ -23,14 +23,17 @@ $this->title = 'Categoria';
                 <?php foreach ($produtos as $produto): ?>
                     <div class="col-lg-4 col-md-6">
                         <div class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center">
-                            <div class="service-icon mb-4">
-                                <i class="fa fa-2x fa-user-md text-white"></i>
+                            <div class="mb-3">
+                                <?php if (isset($imagens[$produto->id])): ?>
+                                    <img src="<?= Yii::getAlias('@web') . '/uploads/' . $imagens[$produto->id]->filename ?>"
+                                         class="img-fluid" style="max-width: 200px; max-height: 200px;">
+                                <?php endif; ?>
+                                <h4 class="mb-3"><?= $produto->nome; ?></h4>
+                                <a class="btn btn-lg btn-primary rounded-pill"
+                                   href="<?= 'detalhes?id=' . $produto->id ?>">
+                                    <i class="bi bi-arrow-right"></i>
+                                </a>
                             </div>
-                            <h4 class="mb-3"><?= $produto->nome; ?></h4>
-                            <a class="btn btn-lg btn-primary rounded-pill"
-                               href="<?= '../produto/index?id=' . $produto->id ?>">
-                                <i class="bi bi-arrow-right"></i>
-                            </a>
                         </div>
                     </div>
                 <?php endforeach; ?>

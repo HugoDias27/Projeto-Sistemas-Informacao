@@ -47,7 +47,8 @@ $this->title = 'Produto';
             <div class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center">
                 <h5>Informações Técnicas</h5>
                 <hr>
-                <p>Categoria: <?= isset($produtoDetalhes->categoria->descricao) ? $produtoDetalhes->categoria->descricao : 'Não tem categoria associada' ?></p>
+                <p>
+                    Categoria: <?= isset($produtoDetalhes->categoria->descricao) ? $produtoDetalhes->categoria->descricao : 'Não tem categoria associada' ?></p>
                 <p>Iva: <?= $produtoDetalhes->iva->percentagem ?>%</p>
                 <p>Medicamento sujeito a receita médica: <b><?= $receitaMedica ?></b></p>
             </div>

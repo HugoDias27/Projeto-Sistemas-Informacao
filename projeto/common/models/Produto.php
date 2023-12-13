@@ -90,7 +90,7 @@ class Produto extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getFornecedors()
+    public function getFornecedores()
     {
         return $this->hasMany(Fornecedor::class, ['id' => 'fornecedor_id'])->viaTable('fornecedores_produtos', ['produto_id' => 'id']);
     }
