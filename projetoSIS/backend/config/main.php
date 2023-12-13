@@ -19,6 +19,9 @@ return [
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ]
         ],
         'user' => [
             'identityClass' => 'common\models\User',
@@ -49,25 +52,64 @@ return [
                     'class' => 'yii\rest\UrlRule', 'controller' => 'api/produto',
                     'extraPatterns' => [
                         'GET imagens' => 'imagens',
-                        'GET {nomecategoria}/categoria' => 'produtoporcategoria',
-                        'GET {nomeproduto}/fornecedor' => 'fornecedorproduto',
-                    ],
+                        'GET nomecategoria/{nomecategoria}' => 'produtoporcategoria',
+                        'GET receita/{valor}' => 'produtoreceita'],
                     'tokens' => [
                         '{id}' => '<id:\\d+>',
                         '{data}' => '<data:\d{4}-\d{2}-\d{2}>',
                         '{nomecategoria}' => '<nomecategoria:[\w\s]+>',
-                        '{nomeproduto}' => '<nomeproduto:[\w\s]+>'
+                        '{nomeproduto}' => '<nomeproduto:[\w\s]+>',
+                        '{valor}' => '<valor:[\w\s]+>',
                     ],
                 ],
                 [
                     'class' => 'yii\rest\UrlRule', 'controller' => 'api/fatura',
                     'extraPatterns' => [
-                        'GET fatura/{id}' => 'fatura',
+                        'GET faturacliente/{id}' => 'faturasporcliente',
                     ],
                     'tokens' => [
                         '{id}' => '<id:\\d+>',
                     ],
-                ]
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule', 'controller' => 'api/user',
+                    'extraPatterns' => [
+                        'GET clientes' => 'clientes',
+                        'GET funcionarios' => 'funcionarios',
+                    ],
+                    'tokens' => [
+                        '{id}' => '<id:\\d+>',
+                    ],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule', 'controller' => 'api/receitamedica',
+                    'extraPatterns' => [
+                        'GET receitacliente/{cliente_id}' => 'minhareceita',
+                        'GET receitasvalidas' => 'receitasvalidas',
+                    ],
+                    'tokens' => [
+                        '{cliente_id}' => '<id:\\d+>',
+                    ],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule', 'controller' => 'api/servico',
+                    'extraPatterns' => [
+                        'GET servicoestabelecimento/{nomeestabelecimento}' => 'servicosporestabelecimento',
+                    ],
+                    'tokens' => [
+                        '{nomeestabelecimento}' => '<nomeestabelecimento:[\w\s]+>',
+                    ],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule', 'controller' => 'api/despesa',
+                    'extraPatterns' => [
+                        'GET despesaestabelecimento/{precoMin}/{precoMax}' => 'despesasentreprecos',
+                        ],
+                    'tokens' => [
+                        '{precoMin}' => '<precoMin:\d+>',
+                        '{precoMax}' => '<precoMax:\d+>',
+                    ],
+                ],
             ],
         ],
     ],

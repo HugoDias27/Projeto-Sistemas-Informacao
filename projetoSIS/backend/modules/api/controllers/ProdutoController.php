@@ -4,7 +4,6 @@ namespace backend\modules\api\controllers;
 
 use backend\modules\api\components\CustomAuth;
 use Yii;
-use yii\data\ActiveDataProvider;
 use yii\rest\ActiveController;
 
 /**
@@ -55,25 +54,14 @@ class ProdutoController extends ActiveController
         $produtoModel = new $this->modelClass;
         $categoriaModel = new $this->modelCategoria;
 
-        if ($nomecategoria == 'medicamento_com_receita') {
-            $queryProdutos = $produtoModel::find()->where(['prescricao_medica' => 1]);
-            $produtosporCategoria = $queryProdutos->all();
+        $categoriaMedicamentos = $categoriaModel::findOne(['descricao' => $nomecategoria]);
+
+        if ($categoriaMedicamentos) {
+            $produtosporCategoria = $produtoModel::find()->where(['categoria_id' => $categoriaMedicamentos->id])->all();
+
             return $produtosporCategoria;
-
-        } else if ($nomecategoria == 'medicamento_sem_receita') {
-            $queryProdutos = $produtoModel::find()->where(['prescricao_medica' => 0]);
-            $produtosporCategoria = $queryProdutos->all();
-            return $produtosporCategoria;
-        } else {
-            $categoriaMedicamentos = $categoriaModel::findOne(['descricao' => $nomecategoria]);
-
-            if ($categoriaMedicamentos) {
-                $queryProdutos = $produtoModel::find()->where(['categoria_id' => $categoriaMedicamentos->id]);
-
-                $produtosporCategoria = $queryProdutos->all();
-                return $produtosporCategoria;
-            }
         }
+
         throw new \yii\web\NotFoundHttpException('Categoria não encontrada.');
     }
 
@@ -95,5 +83,20 @@ class ProdutoController extends ActiveController
         }
 
         throw new \yii\web\NotFoundHttpException('Produto não encontrado.');
+    }
+
+    public function actionProdutoreceita($valor)
+    {
+        $produtoModel = new $this->modelClass;
+
+        if ($valor == 'nao' || $valor == 'não' || $valor == 'Nao' || $valor == 'Não' || $valor == 'NAO' || $valor == 'NÃO') {
+            $produtosReceita = $produtoModel::find()->where(['prescricao_medica' => 0])->all();
+
+        } else if ($valor == 'sim' || $valor == 'Sim' || $valor == 'SIM') {
+            $produtosReceita = $produtoModel::find()->where(['prescricao_medica' => 1])->all();
+        }
+
+        return $produtosReceita;
+
     }
 }
