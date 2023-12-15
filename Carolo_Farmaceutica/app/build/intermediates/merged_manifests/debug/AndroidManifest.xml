@@ -8,6 +8,9 @@
         android:minSdkVersion="24"
         android:targetSdkVersion="34" />
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <permission
         android:name="pt.ipleiria.estg.dei.carolo_farmaceutica.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
         android:protectionLevel="signature" />
@@ -26,10 +29,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:testOnly="true"
-        android:theme="@style/Theme.Carolo_Farmaceutica" >
+        android:theme="@style/Theme.Carolo_Farmaceutica"
+        android:usesCleartextTraffic="true" >
         <activity
-            android:name="pt.ipleiria.estg.dei.carolo_farmaceutica.MainActivity"
-            android:exported="false" >
+            android:name="pt.ipleiria.estg.dei.carolo_farmaceutica.MenuMainActivty"
+            android:exported="false"
+            android:launchMode="singleTop" >
         </activity>
         <activity
             android:name="pt.ipleiria.estg.dei.carolo_farmaceutica.RegistarActivity"

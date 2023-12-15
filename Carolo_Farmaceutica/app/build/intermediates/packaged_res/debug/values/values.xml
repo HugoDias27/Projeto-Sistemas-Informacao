@@ -8,6 +8,7 @@
     <string name="btn_registar">Registar</string>
     <string name="buttondesconto">Aplicar</string>
     <string name="categoria">Categoria</string>
+    <string name="close">Close</string>
     <string name="criar_funcionario">Criar Funcionário</string>
     <string name="data">data</string>
     <string name="data_contratacao">Data contratação:</string>
@@ -30,6 +31,7 @@
     <string name="nome">Nome</string>
     <string name="nomeNavHeader">username</string>
     <string name="numero_utente">Número de utente</string>
+    <string name="open">Open</string>
     <string name="padraoNumero">1</string>
     <string name="password">Password:</string>
     <string name="preco">Preço</string>

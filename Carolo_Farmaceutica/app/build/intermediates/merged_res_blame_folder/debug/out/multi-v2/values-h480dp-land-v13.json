@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "pt.ipleiria.estg.dei.carolo_farmaceutica.app-mergeDebugResources-29:/values-h480dp-land-v13/values-h480dp-land-v13.xml",
+            "outputFile": "pt.ipleiria.estg.dei.carolo_farmaceutica.app-mergeDebugResources-30:/values-h480dp-land-v13/values-h480dp-land-v13.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\tsc20\\.gradle\\caches\\transforms-3\\99560dc8d0d2bb4d68d23467c9c0ca6f\\transformed\\material-1.10.0\\res\\values-h480dp-land-v13\\values-h480dp-land-v13.xml",
+                    "source": "C:\\Users\\este pc\\.gradle\\caches\\transforms-3\\da4a177b0a7812530ab961a7a7967b71\\transformed\\material-1.11.0\\res\\values-h480dp-land-v13\\values-h480dp-land-v13.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10",
                         "startColumns": "4,4,4,4,4,4,4,4,4",
