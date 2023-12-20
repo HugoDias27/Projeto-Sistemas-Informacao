@@ -42,7 +42,7 @@ class ReceitaMedica extends \yii\db\ActiveRecord
             [['data_validade'], 'safe'],
             [['local_prescricao', 'medico_prescricao'], 'string', 'max' => 45],
             [['posologia'], 'string', 'max' => 50],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Profile::class, 'targetAttribute' => ['user_id' => 'id'], 'message' => 'O utilizador não tem o perfil criado.'],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Profile::class, 'targetAttribute' => ['user_id' => 'user_id'], 'message' => 'O utilizador não tem o perfil criado.'],
         ];
     }
 

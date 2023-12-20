@@ -5,7 +5,9 @@ namespace backend\controllers;
 use backend\models\Estabelecimento;
 use common\models\Fatura;
 use common\models\FaturaSearch;
+use common\models\LinhaFatura;
 use common\models\Profile;
+use common\models\Servico;
 use common\models\User;
 use Yii;
 use yii\helpers\ArrayHelper;
@@ -46,11 +48,16 @@ class FaturaController extends Controller
         $searchModel = new FaturaSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
+        $dataProvider->query->joinWith('user');
+
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+
         ]);
     }
+
 
     /**
      * Displays a single Fatura model.
@@ -60,8 +67,30 @@ class FaturaController extends Controller
      */
     public function actionView($id)
     {
+        $fatura = $this->findModel($id);
+
+        $estabelecimento = Estabelecimento::find()->where(['id' => $fatura->estabelecimento_id])->one();
+
+        $cliente = User::find()->where(['id' => $fatura->cliente_id])->one();
+        $perfilCliente = $cliente->profiles;
+
+        $linhasFatura = LinhaFatura::find()->where(['fatura_id' => $id])->all();
+
+
+        $servicosids = ArrayHelper::getColumn($linhasFatura, 'servico_id');
+        $servicos = Servico::find()
+            ->where(['id' => $servicosids])
+            ->all();
+
+
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'fatura' => $fatura,
+            'estabelecimento' => $estabelecimento,
+            'cliente' => $cliente,
+            'perfilCliente' => $perfilCliente,
+            'linhasFatura' => $linhasFatura,
+            'servicos' => $servicos,
         ]);
     }
 
@@ -72,7 +101,7 @@ class FaturaController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Fatura();
+        $fatura = new Fatura();
         $estabelecimentos = Estabelecimento::find()->all();
         $estabelecimentosItems = ArrayHelper::map($estabelecimentos, 'id', 'nome');
 
@@ -91,22 +120,25 @@ class FaturaController extends Controller
                 Yii::$app->session->setFlash('error', 'O utilizador não tem o perfil criado.');
                 return $this->redirect('index');
             }
-            $model->dta_emissao = date('Y-m-d');
-            $model->emissor_id = Yii::$app->user->id;
-            $model->valortotal = 0;
-            $model->ivatotal = 0;
-            if ($model->load($this->request->post()) && $model->save()) {
 
-                return $this->redirect(['view', 'id' => $model->id]);
+            $fatura->dta_emissao = date('Y-m-d');
+            $fatura->emissor_id = Yii::$app->user->id;
+            $fatura->valortotal = 0;
+            $fatura->ivatotal = 0;
+
+            if ($fatura->load($this->request->post()) && $fatura->save()) {
+                $estabelecimento = $fatura->estabelecimento_id;
+                $cliente = $fatura->cliente_id;
+                return $this->redirect(['linhafatura/create', 'id_fatura' => $fatura->id, 'estabelecimento_id' => $estabelecimento, 'cliente' => $cliente]);
             }
         } else {
-            $model->loadDefaultValues();
+            $fatura->loadDefaultValues();
         }
 
         return $this->render('create', [
-            'model' => $model,
-            'estabelecimentos' => $estabelecimentosItems,
-            'clientes' => $clientesItems,
+            'fatura' => $fatura,
+            'estabelecimento' => $estabelecimentosItems,
+            'cliente' => $clientesItems,
         ]);
     }
 
@@ -119,15 +151,10 @@ class FaturaController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $fatura = Fatura::find()->where(['id' => $id])->one();
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+        $fatura->save();
+        return $this->redirect(['index']);
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 
 use common\models\Fatura;
+use common\models\User;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -34,18 +35,44 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
             'id',
             'dta_emissao',
-            'total_fatura',
-            'cliente_id',
-            'estabelecimento_id',
-            //'emissor_id',
+            'valortotal' => [
+                'attribute' => 'valortotal',
+                'value' => function (Fatura $model) {
+                    return $model->valortotal . '€';
+                }
+            ],
+            'ivatotal' => [
+                'attribute' => 'ivatotal',
+                'value' => function (Fatura $model) {
+                    return $model->ivatotal . '€';
+                }
+            ],
+            'cliente_id' => [
+                'attribute' => 'cliente_id',
+                'value' => function (Fatura $model) {
+                    return $model->user->username;
+                }
+            ],
+            'estabelecimento_id' => [
+                'attribute' => 'estabelecimento_id',
+                'value' => function (Fatura $model) {
+                    return $model->estabelecimento->nome;
+                }
+            ],
+            'emissor_id' => [
+                'attribute' => 'emissor_id',
+                'value' => function (Fatura $model) {
+                    return $model->emissor->user->username;
+                }
+            ],
+
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Fatura $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                }
             ],
         ],
     ]); ?>
