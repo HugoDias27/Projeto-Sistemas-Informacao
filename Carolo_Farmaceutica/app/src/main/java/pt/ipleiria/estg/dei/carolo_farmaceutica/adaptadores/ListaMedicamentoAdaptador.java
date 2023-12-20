@@ -73,13 +73,13 @@ public class ListaMedicamentoAdaptador extends BaseAdapter {
             tvIVA = view.findViewById(R.id.tvIVA);
         }
 
-       public void update(Medicamento medicamento) {
+        public void update(Medicamento medicamento) {
             tvNome.setText(medicamento.getNome());
-           tvPrescricao.setText(String.valueOf(medicamento.getPrescricao_medica()));
-           tvPreco.setText(String.valueOf(medicamento.getPreco()) + "€");
-           tvQuantidade.setText(String.valueOf(medicamento.getQuantidade()) + "");
-            tvCategoria.setText(medicamento.getCategoria_id());
-            tvIVA.setText(String.valueOf(medicamento.getIva_id()) + "");
+            tvPrescricao.setText(medicamento.getPrescricaoMedica());
+            tvPreco.setText(medicamento.getPreco() + "");
+            tvQuantidade.setText(medicamento.getQuantidade() + "");
+            tvCategoria.setText(medicamento.getCategoriaId());
+            tvIVA.setText(medicamento.getIvaId() + "");
         }
     }
 }

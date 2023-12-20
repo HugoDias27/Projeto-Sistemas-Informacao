@@ -53,7 +53,9 @@ return [
                     'extraPatterns' => [
                         'GET imagens' => 'imagens',
                         'GET nomecategoria/{nomecategoria}' => 'produtoporcategoria',
-                        'GET receita/{valor}' => 'produtoreceita'],
+                        'GET receita/{valor}' => 'produtoreceita',
+                        'GET medicamentos'  => 'medicamentos',
+                    ],
                     'tokens' => [
                         '{id}' => '<id:\\d+>',
                         '{data}' => '<data:\d{4}-\d{2}-\d{2}>',
@@ -76,6 +78,9 @@ return [
                     'extraPatterns' => [
                         'GET clientes' => 'clientes',
                         'GET funcionarios' => 'funcionarios',
+                        'GET estatisticas/{id}' => 'estatisticas',
+                        'GET estatisticas/contarcompras/{id}' => 'contarcompras',
+                        'POST criarusers' => 'criarusers',
                     ],
                     'tokens' => [
                         '{id}' => '<id:\\d+>',
@@ -84,11 +89,11 @@ return [
                 [
                     'class' => 'yii\rest\UrlRule', 'controller' => 'api/receitamedica',
                     'extraPatterns' => [
-                        'GET receitacliente/{cliente_id}' => 'minhareceita',
+                        'GET receitacliente/{clienteid}' => 'minhareceita',
                         'GET receitasvalidas' => 'receitasvalidas',
                     ],
                     'tokens' => [
-                        '{cliente_id}' => '<id:\\d+>',
+                        '{clienteid}' => '<clienteid:\\d+>',
                     ],
                 ],
                 [
@@ -104,10 +109,30 @@ return [
                     'class' => 'yii\rest\UrlRule', 'controller' => 'api/despesa',
                     'extraPatterns' => [
                         'GET despesaestabelecimento/{precoMin}/{precoMax}' => 'despesasentreprecos',
-                        ],
+                    ],
                     'tokens' => [
                         '{precoMin}' => '<precoMin:\d+>',
                         '{precoMax}' => '<precoMax:\d+>',
+                    ],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule', 'controller' => 'api/login',
+                    'extraPatterns' => [
+                        'POST loginuser' => 'login',
+                    ],
+                    'tokens' => [
+                        '{username}' => '<username:[\w\s]+>',
+                        '{password}' => '<password:[\w\s*.]+>'
+                    ],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule', 'controller' => 'api/carrinhocompra',
+                    'extraPatterns' => [
+                        'GET carrinhoatual/{id}' => 'carrinhocompra',
+                        'GET carrinhos/{id}' => 'carrinhos',
+                    ],
+                    'tokens' => [
+                        '{id}' => '<id:\\d+>',
                     ],
                 ],
             ],

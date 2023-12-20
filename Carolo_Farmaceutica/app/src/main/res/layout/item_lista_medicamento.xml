@@ -28,7 +28,7 @@
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nome"
+                android:text="@string/tvnomeMedicamento"
                 android:textStyle="bold" />
 
             <TextView
@@ -46,7 +46,7 @@
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Prescrição Médica"
+                android:text="@string/tv_prescricao"
                 android:textStyle="bold"/>
 
             <TextView
@@ -64,7 +64,7 @@
                 android:id="@+id/textView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Preco"
+                android:text="@string/tvpreco"
                 android:textStyle="bold"/>
 
             <TextView
@@ -82,7 +82,7 @@
                 android:id="@+id/textView8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Quantidade"
+                android:text="@string/tvquantidade"
                 android:textStyle="bold"/>
 
             <TextView
@@ -99,7 +99,7 @@
                 android:id="@+id/textView9"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Categoria"
+                android:text="@string/tvcategoria"
                 android:textStyle="bold"/>
 
             <TextView
@@ -116,7 +116,7 @@
                 android:id="@+id/textView10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="IVA"
+                android:text="@string/tviva"
                 android:textStyle="bold"/>
 
             <TextView

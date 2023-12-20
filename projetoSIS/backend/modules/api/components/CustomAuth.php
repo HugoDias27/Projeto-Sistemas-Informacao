@@ -13,7 +13,7 @@ class CustomAuth extends AuthMethod
 
     public function authenticate($user, $request, $response)
     {
-        $authToken = $request->getQueryParam('access-token');
+        $authToken = $request->getQueryParam('auth_key');
 
         if (empty($authToken)) {
             throw new \yii\web\ForbiddenHttpException('Token de acesso ausente ou inválido na URL');

@@ -6,5 +6,5 @@ import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.Medicamento;
 
 public interface MedicamentosListener {
 
-        void onRefreshListaMedicamento(ArrayList<Medicamento> listaMedicamentos);
+    void onRefreshListaMedicamento(ArrayList<Medicamento> listaMedicamentos);
 }

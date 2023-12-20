@@ -32,13 +32,26 @@
         android:theme="@style/Theme.Carolo_Farmaceutica"
         android:usesCleartextTraffic="true" >
         <activity
-            android:name="pt.ipleiria.estg.dei.carolo_farmaceutica.MenuMainActivty"
+            android:name="pt.ipleiria.estg.dei.carolo_farmaceutica.MenuMainActivity"
             android:exported="false"
             android:launchMode="singleTop" >
         </activity>
         <activity
+            android:name="pt.ipleiria.estg.dei.carolo_farmaceutica.ReceitaMedicaActivity"
+            android:exported="false" >
+        </activity>
+        <activity
+            android:name="pt.ipleiria.estg.dei.carolo_farmaceutica.DetalhesReceitaActivity"
+            android:exported="false"
+            android:parentActivityName="pt.ipleiria.estg.dei.carolo_farmaceutica.ReceitaMedicaActivity" />
+        <activity
+            android:name="pt.ipleiria.estg.dei.carolo_farmaceutica.DetalhesMedicamentoActivity"
+            android:exported="false"
+            android:parentActivityName="pt.ipleiria.estg.dei.carolo_farmaceutica.MenuMainActivity" />
+        <activity
             android:name="pt.ipleiria.estg.dei.carolo_farmaceutica.RegistarActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName="pt.ipleiria.estg.dei.carolo_farmaceutica.LoginActivity" />
         <activity
             android:name="pt.ipleiria.estg.dei.carolo_farmaceutica.LoginActivity"
             android:exported="true" >

@@ -28,9 +28,7 @@ class DespesaController extends ActiveController
     public function actionDespesasentreprecos($precoMin, $precoMax)
     {
         $despesaModel = new $this->modelClass;
-        $despesas = $despesaModel::find()
-            ->where(['between', 'preco', $precoMin, $precoMax])
-            ->all();
+        $despesas = $despesaModel::find()->where(['between', 'preco', $precoMin, $precoMax])->all();
 
         if ($despesas) {
             return $despesas;

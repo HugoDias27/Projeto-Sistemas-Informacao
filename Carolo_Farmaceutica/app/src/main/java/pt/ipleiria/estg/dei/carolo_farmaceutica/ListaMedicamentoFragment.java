@@ -44,7 +44,11 @@ public class ListaMedicamentoFragment extends Fragment implements MedicamentosLi
         lvMedicamentos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Toast.makeText(getContext(), medicamentos.get(position).getNome(), Toast.LENGTH_LONG).show();
+              //  Toast.makeText(getContext(), medicamentos.get(position).getNome(), Toast.LENGTH_LONG).show();
+
+                Intent intent = new Intent(getContext(), DetalhesMedicamentoActivity.class);
+                intent.putExtra(DetalhesMedicamentoActivity.ID_MEDICAMENTO, (int) id);
+                startActivity(intent);
             }
         });
         return view;

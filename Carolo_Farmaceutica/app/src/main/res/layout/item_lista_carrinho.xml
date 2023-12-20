@@ -43,9 +43,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/tvPreco"
-            />
-
+            android:id="@+id/tvPreco" />
 
     </LinearLayout>
 </LinearLayout>

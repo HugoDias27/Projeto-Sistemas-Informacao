@@ -23,7 +23,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.navigation.NavigationView;
 
-public class MenuMainActivty extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MenuMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private NavigationView navigationView;
     private DrawerLayout drawer;
@@ -100,6 +100,7 @@ public class MenuMainActivty extends AppCompatActivity implements NavigationView
             Toast.makeText(this, "Localização", Toast.LENGTH_SHORT).show();
         } else if (item.getItemId() == R.id.navReceitaMedica) {
             fragment = new ListaReceitaFragment();
+            setTitle(item.getTitle());
         } else if (item.getItemId() == R.id.navDesconto) {
             fragment = new DescontosFragment();
         }

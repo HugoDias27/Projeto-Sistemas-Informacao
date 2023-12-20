@@ -1,6 +1,10 @@
 package pt.ipleiria.estg.dei.carolo_farmaceutica.utils;
 
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -17,7 +21,7 @@ public class MedicamentosJsonParser {
                 JSONObject medicamentoJSON = (JSONObject) response.get(i);
                 int id = medicamentoJSON.getInt("id");
                 String nome = medicamentoJSON.getString("nome");
-                int prescricao_medica = medicamentoJSON.getInt("prescricao_medica");
+                String prescricao_medica = medicamentoJSON.getString("prescricao_medica");
                 double preco = medicamentoJSON.getDouble("preco");
                 int quantidade = medicamentoJSON.getInt("quantidade");
                 String categoria_id = medicamentoJSON.getString("categoria");
@@ -35,5 +39,10 @@ public class MedicamentosJsonParser {
         return listaMedicamentos;
     }
 
+    public static boolean isConnectionInternet(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo ni = cm.getActiveNetworkInfo();
+        return ni != null && ni.isConnected();
+    }
 
 }
