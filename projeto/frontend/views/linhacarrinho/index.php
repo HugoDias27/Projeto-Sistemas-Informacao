@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <hr>
 
     <?= $this->render('_form', [
-        'model' => $model, 'quantidadeDisponivel' => $quantidadeDisponivel
+        'linhaCarrinho' => $linhaCarrinho, 'quantidadeDisponivel' => $quantidadeDisponivel, 'produto' => $produto
     ]) ?>
 
 

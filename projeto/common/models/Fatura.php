@@ -75,13 +75,13 @@ class Fatura extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Cliente]].
+     * Gets query for [[User]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getCliente()
+    public function getUser()
     {
-        return $this->hasOne(Profile::class, ['user_id' => 'cliente_id']);
+        return $this->hasOne(User::class, ['id' => 'cliente_id']);
     }
 
     /**
@@ -112,5 +112,11 @@ class Fatura extends \yii\db\ActiveRecord
     public function getLinhaFaturas()
     {
         return $this->hasMany(LinhaFatura::class, ['fatura_id' => 'id']);
+    }
+
+    public function valoresCalculados()
+    {
+        // Verifica se valortotal e ivatotal são diferentes de zero
+        return ($this->valortotal != 0 || $this->ivatotal != 0);
     }
 }

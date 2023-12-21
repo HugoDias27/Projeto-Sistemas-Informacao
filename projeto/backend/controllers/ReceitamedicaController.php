@@ -69,6 +69,7 @@ class ReceitamedicaController extends Controller
     }
 
 
+
     /**
      * Displays a single ReceitaMedica model.
      * @param int $id ID
@@ -98,7 +99,7 @@ class ReceitamedicaController extends Controller
         $clientes = User::find()
             ->innerJoin('auth_assignment', 'auth_assignment.user_id = user.id')
             ->andWhere(['auth_assignment.item_name' => $clienteRole->name])
-            ->select(['user.id', 'user.username']) // Ajuste aqui para referenciar corretamente a tabela 'user'
+            ->select(['user.id', 'user.username'])
             ->asArray()
             ->all();
 

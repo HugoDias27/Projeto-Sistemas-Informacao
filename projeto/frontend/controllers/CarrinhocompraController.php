@@ -95,28 +95,33 @@ class CarrinhocompraController extends Controller
      */
     public function actionCreate($id)
     {
-        $userId = Yii::$app->user->id;
-        $carrinhoCompras = new CarrinhoCompra();
+        if (!Yii::$app->user->isGuest) {
+            $userId = Yii::$app->user->id;
+            $carrinhoCompras = new CarrinhoCompra();
 
 
-        $ultimoCarrinho = CarrinhoCompra::find()
-            ->where(['cliente_id' => $userId, 'fatura_id' => null])
-            ->orderBy(['dta_venda' => SORT_DESC])
-            ->one();
+            $ultimoCarrinho = CarrinhoCompra::find()
+                ->where(['cliente_id' => $userId, 'fatura_id' => null])
+                ->orderBy(['dta_venda' => SORT_DESC])
+                ->one();
 
-        if ($ultimoCarrinho === null) {
-            $carrinhoCompras->dta_venda = date('Y-m-d');
-            $carrinhoCompras->quantidade = 0;
-            $carrinhoCompras->valortotal = 0;
-            $carrinhoCompras->ivatotal = 0;
-            $carrinhoCompras->cliente_id = $userId;
+            if ($ultimoCarrinho === null) {
+                $carrinhoCompras->dta_venda = date('Y-m-d');
+                $carrinhoCompras->quantidade = 0;
+                $carrinhoCompras->valortotal = 0;
+                $carrinhoCompras->ivatotal = 0;
+                $carrinhoCompras->cliente_id = $userId;
 
-            if ($carrinhoCompras->save()) {
+                if ($carrinhoCompras->save()) {
+                    return $this->redirect(['linhacarrinho/index', 'id' => $id]);
+                }
+            } else {
                 return $this->redirect(['linhacarrinho/index', 'id' => $id]);
             }
         } else {
-            return $this->redirect(['linhacarrinho/index', 'id' => $id]);
+            return $this->redirect('..\site/login');
         }
+        return $this->redirect('..\site/index');
     }
 
 

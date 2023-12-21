@@ -17,7 +17,7 @@ use Yii;
  *
  * @property Profile $cliente
  * @property Fatura $fatura
- * @property LinhasCarrinho[] $linhasCarrinhos
+ * @property LinhaCarrinho[] $linhasCarrinhos
  */
 class CarrinhoCompra extends \yii\db\ActiveRecord
 {
@@ -87,6 +87,6 @@ class CarrinhoCompra extends \yii\db\ActiveRecord
      */
     public function getLinhasCarrinhos()
     {
-        return $this->hasMany(LinhasCarrinho::class, ['carrinho_compra_id' => 'id']);
+        return $this->hasMany(LinhaCarrinho::class, ['carrinho_compra_id' => 'id']);
     }
 }

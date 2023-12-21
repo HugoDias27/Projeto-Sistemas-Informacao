@@ -42,16 +42,19 @@ class LinhacarrinhoController extends Controller
      */
     public function actionIndex($id)
     {
-        $model = new LinhaCarrinhoSearch();
-        $dataProvider = $model->search($this->request->queryParams);
+        $linhaCarrinho = new LinhaCarrinhoSearch();
+        $dataProvider = $linhaCarrinho->search($this->request->queryParams);
 
         $quantidadeDisponivel = $this->actionQuantidade($id);
+        $produto = Produto::findOne($id);
 
         return $this->render('index', [
-            'model' => $model,
+            'linhaCarrinho' => $linhaCarrinho,
             'dataProvider' => $dataProvider,
+            'produto' => $produto,
             'quantidadeDisponivel' => $quantidadeDisponivel
         ]);
+
     }
 
     public function actionQuantidade($id)
@@ -89,6 +92,7 @@ class LinhacarrinhoController extends Controller
      */
     public function actionCreate($id)
     {
+
         $LinhaCarrinho = new LinhaCarrinho();
         $userId = Yii::$app->user->id;
 
@@ -97,21 +101,25 @@ class LinhacarrinhoController extends Controller
             ->orderBy(['dta_venda' => SORT_DESC])
             ->one();
 
-        $produto = Produto::find()->where(['id' => $id])->one();
+        $produto = Produto::findOne($id);
 
         $post = $this->request->post();
 
         if ($this->request->isPost) {
-            $LinhaCarrinho->quantidade = $post['LinhaCarrinho']['quantidade'];
+            $quantidade = $post['LinhaCarrinhoSearch']['quantidade'];
+            $LinhaCarrinho->quantidade = $quantidade;
             $LinhaCarrinho->precounit = $produto->preco;
             $LinhaCarrinho->valoriva = $produto->iva->percentagem;
-            $LinhaCarrinho->valorcomiva = ($produto->preco) + (($produto->preco) * ($produto->iva->percentagem / 100)) * $LinhaCarrinho->quantidade;
-            $LinhaCarrinho->subtotal = ($produto->preco) + (($produto->preco) * ($produto->iva->percentagem / 100)) * $LinhaCarrinho->quantidade;
+
+            $valorUnitarioComIVA = $produto->preco + ($produto->preco * ($produto->iva->percentagem / 100));
+            $LinhaCarrinho->valorcomiva = $valorUnitarioComIVA * $quantidade;
+            $LinhaCarrinho->subtotal = $produto->preco * $quantidade;
+
             $LinhaCarrinho->carrinho_compra_id = $ultimoCarrinho->id;
             $LinhaCarrinho->produto_id = $id;
-
-            if ($LinhaCarrinho->save()) {
-                return $this->redirect(['carrinhocompra']);
+            $produto->quantidade = $produto->quantidade - $quantidade;
+            if ($LinhaCarrinho->save() && $produto->save()) {
+                return $this->redirect('..\carrinhocompra/index');
             }
         }
     }
