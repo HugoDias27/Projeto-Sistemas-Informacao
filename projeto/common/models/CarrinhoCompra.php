@@ -8,16 +8,16 @@ use Yii;
  * This is the model class for table "carrinho_compras".
  *
  * @property int $id
- * @property string $dta_venda
- * @property int $quantidade
- * @property float $valortotal
- * @property float $ivatotal
+ * @property string|null $dta_venda
+ * @property int|null $quantidade
+ * @property float|null $valortotal
+ * @property float|null $ivatotal
  * @property int $cliente_id
- * @property int $fatura_id
+ * @property int|null $fatura_id
  *
  * @property Profile $cliente
  * @property Fatura $fatura
- * @property LinhaCarrinho[] $linhasCarrinhos
+ * @property LinhasCarrinho[] $linhasCarrinhos
  */
 class CarrinhoCompra extends \yii\db\ActiveRecord
 {
@@ -35,10 +35,10 @@ class CarrinhoCompra extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['dta_venda', 'quantidade', 'valortotal', 'ivatotal', 'cliente_id', 'fatura_id'], 'required'],
             [['dta_venda'], 'safe'],
             [['quantidade', 'cliente_id', 'fatura_id'], 'integer'],
             [['valortotal', 'ivatotal'], 'number'],
+            [['cliente_id'], 'required'],
             [['fatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => Fatura::class, 'targetAttribute' => ['fatura_id' => 'id']],
             [['cliente_id'], 'exist', 'skipOnError' => true, 'targetClass' => Profile::class, 'targetAttribute' => ['cliente_id' => 'user_id']],
         ];
@@ -87,6 +87,6 @@ class CarrinhoCompra extends \yii\db\ActiveRecord
      */
     public function getLinhasCarrinhos()
     {
-        return $this->hasMany(LinhaCarrinho::class, ['carrinho_compra_id' => 'id']);
+        return $this->hasMany(LinhasCarrinho::class, ['carrinho_compra_id' => 'id']);
     }
 }

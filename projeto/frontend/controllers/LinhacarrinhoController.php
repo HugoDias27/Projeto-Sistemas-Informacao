@@ -87,74 +87,35 @@ class LinhacarrinhoController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate($id, $quantidade)
+    public function actionCreate($id)
     {
         $LinhaCarrinho = new LinhaCarrinho();
-
         $userId = Yii::$app->user->id;
 
         $ultimoCarrinho = CarrinhoCompra::find()
-            ->where(['cliente_id' => $userId])
-            ->orderBy([SORT_DESC])
+            ->where(['cliente_id' => $userId, 'fatura_id' => null])
+            ->orderBy(['dta_venda' => SORT_DESC])
             ->one();
 
-        if ($ultimoCarrinho->fatura_id === null) {
+        $produto = Produto::find()->where(['id' => $id])->one();
 
-            if ($this->request->isPost) {
-                $LinhaCarrinho->load($this->request->post());
-                if ($LinhaCarrinho->save()) {
-                    $LinhaCarrinho->quantidade = $quantidade;
-                    $LinhaCarrinho->precounit = $id->preco;
-                    $LinhaCarrinho->valoriva = $id->iva->percentagem;
-                    $LinhaCarrinho->valorcomiva = ($id->preco) + (($id->preco) * ($id->iva->percentagem / 100)) * $quantidade;
-                    $LinhaCarrinho->subtotal = ($id->preco) + (($id->preco) * ($id->iva->percentagem / 100)) * $quantidade;
-                    $LinhaCarrinho->carrinho_compra_id = $ultimoCarrinho->id;
-                    $LinhaCarrinho->produto_id = $id;
-                    if ($LinhaCarrinho->save()) {
-                        return $this->redirect(['carrinhocompra']);
-                    }
+        $post = $this->request->post();
 
-                }
-            }
-        } else {
-            $NovoCarrinhoCompras = new CarrinhoCompra();
+        if ($this->request->isPost) {
+            $LinhaCarrinho->quantidade = $post['LinhaCarrinho']['quantidade'];
+            $LinhaCarrinho->precounit = $produto->preco;
+            $LinhaCarrinho->valoriva = $produto->iva->percentagem;
+            $LinhaCarrinho->valorcomiva = ($produto->preco) + (($produto->preco) * ($produto->iva->percentagem / 100)) * $LinhaCarrinho->quantidade;
+            $LinhaCarrinho->subtotal = ($produto->preco) + (($produto->preco) * ($produto->iva->percentagem / 100)) * $LinhaCarrinho->quantidade;
+            $LinhaCarrinho->carrinho_compra_id = $ultimoCarrinho->id;
+            $LinhaCarrinho->produto_id = $id;
 
-            $NovoCarrinhoCompras->quantidade = $quantidade;
-            $NovoCarrinhoCompras->valortotal = $id->preco;
-            $NovoCarrinhoCompras->ivatotal = $id->categoria->percentagem;
-            $NovoCarrinhoCompras->cliente_id = User::findOne(Yii::$app->user->id);
-
-            // Salvar o carrinho de compras
-            if ($NovoCarrinhoCompras->save()) {
-                //procurar o novo carrinho
-                $Carrinho = CarrinhoCompra::find()
-                    ->where(['cliente_id' => $userId])
-                    ->orderBy([SORT_DESC])
-                    ->one();
-
-                $LinhaCarrinho->produto_id = $id;
-
-                if ($this->request->isPost) {
-                    $LinhaCarrinho->load($this->request->post());
-                    if ($LinhaCarrinho->save()) {
-                        $LinhaCarrinho->quantidade = $quantidade;
-                        $LinhaCarrinho->precounit = $id->preco;
-                        $LinhaCarrinho->valoriva = $id->iva->percentagem;
-                        $LinhaCarrinho->valorcomiva = ($id->preco) + (($id->preco) * ($id->iva->percentagem / 100)) * $quantidade;
-                        $LinhaCarrinho->subtotal = ($id->preco) + (($id->preco) * ($id->iva->percentagem / 100)) * $quantidade;
-                        $LinhaCarrinho->carrinho_compra_id = $Carrinho->id;
-                        $LinhaCarrinho->produto_id = $id;
-                        if ($LinhaCarrinho->save()) {
-                            return $this->redirect(['carrinhocompra']);
-                        }
-
-                    }
-                }
+            if ($LinhaCarrinho->save()) {
+                return $this->redirect(['carrinhocompra']);
             }
         }
-
-        //return $this->render('create', ['model' => $model]);//, ['model' => $LinhaCarrinho]);
     }
+
 
     /**
      * Updates an existing LinhaCarrinho model.
