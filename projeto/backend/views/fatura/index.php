@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php endif; ?>
 
     <p>
-        <?= Html::a('Create Fatura', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Criar Fatura', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -38,30 +38,35 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'dta_emissao',
             'valortotal' => [
+                    'label' => 'Valor Total',
                 'attribute' => 'valortotal',
                 'value' => function (Fatura $model) {
                     return $model->valortotal . '€';
                 }
             ],
             'ivatotal' => [
+                    'label' => 'IVA Total',
                 'attribute' => 'ivatotal',
                 'value' => function (Fatura $model) {
                     return $model->ivatotal . '€';
                 }
             ],
             'cliente_id' => [
+                    'label' => 'Cliente',
                 'attribute' => 'cliente_id',
                 'value' => function (Fatura $model) {
                     return $model->user->username;
                 }
             ],
             'estabelecimento_id' => [
+                    'label' => 'Estabelecimento',
                 'attribute' => 'estabelecimento_id',
                 'value' => function (Fatura $model) {
                     return $model->estabelecimento->nome;
                 }
             ],
             'emissor_id' => [
+                    'label' => 'Emissor',
                 'attribute' => 'emissor_id',
                 'value' => function (Fatura $model) {
                     return $model->emissor->user->username;
@@ -70,10 +75,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => ActionColumn::className(),
+                'template' => '{view} {delete}', // Remove 'update' from the template
                 'urlCreator' => function ($action, Fatura $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                }
+                },
             ],
+
         ],
     ]); ?>
 

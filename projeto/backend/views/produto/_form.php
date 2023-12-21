@@ -32,7 +32,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($fornecedorProduto, 'fornecedor_id')->dropDownList($fornecedores, ['prompt' => 'Selecione...']) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Criar', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -74,7 +74,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 </tr>
                                 </thead>
                                 <tbody>
+
                                 <?php foreach ($totallinhas as $linhafatura) { ?>
+                                    <?php if($linhafatura->servico_id != null) {?>
                                 <?php foreach ($servicos as $servico) { ?>
                                 <tr>
                                     <?php if(isset($linhafatura)) {?>
@@ -104,6 +106,31 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <?php ActiveForm::end();} ?>
                                     </td>
                                 </tr>
+                                <?php } ?>
+                                <?php } elseif ($linhafatura->receita_medica_id != null)
+                                    {
+                                    foreach ($receitas as $receita) { ?>
+                                        <tr>
+                                            <?php if(isset($linhafatura)) {?>
+                                            <td><?= Html::encode($receita->codigo) ?></td>
+                                            <td>
+                                                <?= Html::encode($linhafatura->quantidade)?>
+                                            </td>
+
+                                            <td><?= Html::encode($linhafatura->precounit) ?></td>
+                                            <td><?= Html::encode($linhafatura->valoriva) ?></td>
+                                            <td><?= Html::encode($linhafatura->valorcomiva) ?></td>
+                                            <td><?= Html::encode($linhafatura->subtotal) ?></td>
+                                            <td>
+                                                <?php $form = ActiveForm::begin([
+                                                    'action' => ['deletereceita', 'id' => $linhafatura->id, 'fatura_id' => $linhafatura->fatura_id, 'estabelecimento' => $estabelecimento->id, 'cliente' => $cliente->id, 'servico_id' => $linhafatura->servico_id,],
+                                                    'method' => 'post',
+                                                ]); ?>
+                                                <?= Html::submitButton('Eliminar', ['class' => 'btn btn-danger']) ?>
+                                                <?php ActiveForm::end();} ?>
+                                            </td>
+                                        </tr>
+                                    <?php }?>
                                 <?php } ?>
                                 <?php } ?>
                                 <tr>

@@ -71,18 +71,43 @@ $this->params['breadcrumbs'][] = $this->title;
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php foreach ($linhasFatura as $linha) { ?>
-                                    <?php foreach ($servicos as $servico) { ?>
-                                        <tr>
-                                            <td><?= Html::encode($servico->nome) ?></td>
-                                            <td><?= Html::encode($linha->quantidade) ?></td>
-                                            <td><?= Html::encode($linha->precounit) ?></td>
-                                            <td><?= Html::encode($linha->valoriva) ?></td>
-                                            <td><?= Html::encode($linha->valorcomiva) ?></td>
-                                            <td><?= Html::encode($linha->subtotal) ?></td>
-                                        </tr>
+                                <?php foreach ($linhasFatura as $linhafatura) { ?>
+                                    <?php if($linhafatura->servico_id != null) {?>
+                                        <?php foreach ($servicos as $servico) { ?>
+                                            <tr>
+                                                <?php if(isset($linhafatura)) {?>
+                                                <td><?= Html::encode($servico->nome) ?></td>
+
+                                                <td><?= Html::encode($linhafatura->quantidade) ?></td>
+                                                <td><?= Html::encode($linhafatura->precounit) ?></td>
+                                                <td><?= Html::encode($linhafatura->valoriva) ?></td>
+                                                <td><?= Html::encode($linhafatura->valorcomiva) ?></td>
+                                                <td><?= Html::encode($linhafatura->subtotal) ?></td>
+
+                                            </tr>
+                                        <?php } ?>
+                                    <?php }}  else
+                                        if
+                                    ($linhafatura->receita_medica_id != null)
+                                    {
+                                        foreach ($receitas as $receita) { ?>
+                                            <tr>
+                                                <?php if(isset($linhafatura)) {?>
+                                                <td><?= Html::encode($receita->codigo) ?></td>
+                                                <td>
+                                                    <?= Html::encode($linhafatura->quantidade)?>
+                                                </td>
+
+                                                <td><?= Html::encode($linhafatura->precounit) ?></td>
+                                                <td><?= Html::encode($linhafatura->valoriva) ?></td>
+                                                <td><?= Html::encode($linhafatura->valorcomiva) ?></td>
+                                                <td><?= Html::encode($linhafatura->subtotal) ?></td>
+
+                                            </tr>
+                                        <?php }?>
                                     <?php } ?>
-                                <?php } ?>
+                                <?php }} ?>
+
                                 </tbody>
                             </table>
                         </div>

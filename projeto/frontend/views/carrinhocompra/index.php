@@ -1,6 +1,7 @@
 <?php
 
 use common\models\CarrinhoCompra;
+use common\models\LinhaCarrinho;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -15,35 +16,49 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="carrinho-compra-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Carrinho Compra', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <h1 align="center"><?= Html::encode($this->title) ?></h1>
+    <hr>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'dta_venda',
-            'quantidade',
-            'valortotal',
-            'ivatotal',
-            //'cliente_id',
-            //'fatura_id',
             [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, CarrinhoCompra $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                'attribute' => 'quantidade',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return Html::beginForm(['linhacarrinho/update', 'id' => $model->id], 'post')
+                        . Html::input('number', 'quantidade', $model->quantidade, ['class' => 'form-control', 'style' => 'width: 80px;'])
+                        . Html::submitButton('Atualizar', ['class' => 'btn btn-sm btn-primary'])
+                        . Html::endForm();
+                },
+            ],
+            'precounit',
+            'valoriva',
+            'valorcomiva',
+            'subtotal',
+            [
+                'attribute' => 'produto_id',
+                'label' => 'Produto',
+                'value' => function ($model) {
+                    return $model->produto->nome;
+                },
+            ],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{delete}',
+                'buttons' => [
+                    'delete' => function ($url, $model, $key) {
+                        return Html::a('<i class="fas fa-trash"></i>', ['linhacarrinho/delete', 'id' => $model->id], [
+                            'class' => 'btn btn-danger',
+                            'data' => [
+                                'confirm' => 'Tem certeza que deseja apagar este artigo?',
+                                'method' => 'post',
+                            ],
+                        ]);
+                    },
+                ],
             ],
         ],
     ]); ?>
-
 
 </div>

@@ -29,7 +29,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             'id',
-            'user.username',
+            'user_id' => [
+                    'label' => 'Cliente',
+                'attribute' => 'user_id',
+                'value' => function (ReceitaMedica $model) {
+                    return $model->user->username;
+                }
+            ],
             'codigo',
             'local_prescricao',
             'medico_prescricao',
@@ -45,7 +51,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     1 => 'Sim',
                 ],
             ],
-            'posologia',
+            'posologia' => [
+                'attribute' => 'posologia',
+                'value' => function (ReceitaMedica $model) {
+                    return $model->posologiaProduto->nome;
+                }
+            ],
             [
                 'class' => ActionColumn::className(),
                 'template' => '{view} {delete}', // Define os botões de visualização e exclusão

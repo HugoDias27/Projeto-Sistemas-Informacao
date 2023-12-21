@@ -12,9 +12,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($linhafatura, 'quantidade')->textInput(['type' => 'number']) ?>
-
-    <?= $form->field($linhafatura, 'servico_id')->dropDownList($servicosItems, ['prompt' => 'Selecione o servico']) ?>
+    <?= $form->field($linhafatura, 'receita_medica_id')->dropDownList($receitasItems, ['prompt' => 'Selecione a receita medica']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

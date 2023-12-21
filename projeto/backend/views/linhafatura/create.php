@@ -13,8 +13,20 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= $this->render('_form', [
-        'linhafatura' => $linhafatura, 'receitasItems' => $receitasItems, 'servicosItems' => $servicosItems,
-    ]) ?>
+    <!-- First Form -->
+    <div class="first-form">
+        <?= $this->render('_form', [
+            'linhafatura' => $linhafatura,
+            'servicosItems' => $servicosItems,
+        ]) ?>
+    </div>
+
+    <!-- Second Form -->
+    <div class="second-form">
+        <?= $this->render('_formreceita', [
+            'linhafatura' => $linhafatura,
+            'receitasItems' => $receitasItems,
+        ]) ?>
+    </div>
 
 </div>

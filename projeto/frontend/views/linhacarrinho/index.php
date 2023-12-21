@@ -10,41 +10,18 @@ use yii\grid\GridView;
 /** @var common\models\LinhaCarrinhoSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Linha Carrinhos';
+$this->title = 'Adicionar Produto ao Carrinho';
+$this->params['breadcrumbs'][] = ['label' => 'Linha Carrinhos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="linha-carrinho-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1 align="center"><?= Html::encode($this->title) ?></h1>
+    <hr>
 
-    <p>
-        <?= Html::a('Create Linha Carrinho', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'quantidade',
-            'precounit',
-            'valoriva',
-            'valorcomiva',
-            //'subtotal',
-            //'carrinho_compra_id',
-            //'produto_id',
-            [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, LinhaCarrinho $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
-            ],
-        ],
-    ]); ?>
+    <?= $this->render('_form', [
+        'linhaCarrinho' => $linhaCarrinho, 'quantidadeDisponivel' => $quantidadeDisponivel, 'produto' => $produto
+    ]) ?>
 
 
 </div>

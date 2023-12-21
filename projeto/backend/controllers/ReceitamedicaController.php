@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\Produto;
 use common\models\Profile;
 use common\models\ReceitaMedica;
 use common\models\ReceitaMedicaSearch;
@@ -62,6 +63,8 @@ class ReceitamedicaController extends Controller
         $searchModel = new ReceitaMedicaSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
+
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -105,6 +108,9 @@ class ReceitamedicaController extends Controller
 
         $clientesItems = ArrayHelper::map($clientes, 'id', 'username');
 
+        $produtos = Produto::find()->where(['prescricao_medica' => 1])->all();
+        $produtosItems = ArrayHelper::map($produtos, 'id', 'nome');
+
 
         if ($this->request->isPost) {
             if ($receita->load($this->request->post()) && $receita->save()) {
@@ -117,6 +123,7 @@ class ReceitamedicaController extends Controller
         return $this->render('create', [
             'receita' => $receita,
             'clientes' => $clientesItems,
+            'produtos' => $produtosItems,
         ]);
     }
 

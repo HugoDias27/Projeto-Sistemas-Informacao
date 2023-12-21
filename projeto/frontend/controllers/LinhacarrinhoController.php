@@ -2,8 +2,12 @@
 
 namespace frontend\controllers;
 
+use common\models\CarrinhoCompra;
 use common\models\LinhaCarrinho;
 use common\models\LinhaCarrinhoSearch;
+use common\models\Produto;
+use common\models\User;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -36,15 +40,36 @@ class LinhacarrinhoController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex($id)
     {
-        $searchModel = new LinhaCarrinhoSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $linhaCarrinho = new LinhaCarrinhoSearch();
+        $dataProvider = $linhaCarrinho->search($this->request->queryParams);
+
+        $quantidadeDisponivel = $this->actionQuantidade($id);
+        $produto = Produto::findOne($id);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
+            'linhaCarrinho' => $linhaCarrinho,
             'dataProvider' => $dataProvider,
+            'produto' => $produto,
+            'quantidadeDisponivel' => $quantidadeDisponivel
         ]);
+
+    }
+
+    public function actionQuantidade($id)
+    {
+        $produto = Produto::findOne($id);
+
+
+        $quantidadeDisponivel = $produto->quantidade;
+
+        if ($quantidadeDisponivel > 0) {
+            return ($quantidadeDisponivel);
+        } else {
+            return 0;
+        }
+
     }
 
     /**
@@ -65,22 +90,40 @@ class LinhacarrinhoController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate()
+    public function actionCreate($id)
     {
-        $model = new LinhaCarrinho();
+
+        $LinhaCarrinho = new LinhaCarrinho();
+        $userId = Yii::$app->user->id;
+
+        $ultimoCarrinho = CarrinhoCompra::find()
+            ->where(['cliente_id' => $userId, 'fatura_id' => null])
+            ->orderBy(['dta_venda' => SORT_DESC])
+            ->one();
+
+        $produto = Produto::findOne($id);
+
+        $post = $this->request->post();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        } else {
-            $model->loadDefaultValues();
-        }
+            $quantidade = $post['LinhaCarrinhoSearch']['quantidade'];
+            $LinhaCarrinho->quantidade = $quantidade;
+            $LinhaCarrinho->precounit = $produto->preco;
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+            $LinhaCarrinho->valoriva = $produto->preco * ($produto->iva->percentagem / 100);
+            $LinhaCarrinho->valorcomiva = $LinhaCarrinho->valoriva + $LinhaCarrinho->precounit;
+            $LinhaCarrinho->subtotal = $LinhaCarrinho->valorcomiva * $quantidade;
+
+            $LinhaCarrinho->carrinho_compra_id = $ultimoCarrinho->id;
+            $LinhaCarrinho->produto_id = $id;
+            $produto->quantidade = $produto->quantidade - $quantidade;
+
+            if ($LinhaCarrinho->save() && $produto->save()) {
+                return $this->redirect('..\carrinhocompra/index');
+            }
+        }
     }
+
 
     /**
      * Updates an existing LinhaCarrinho model.
@@ -91,15 +134,28 @@ class LinhacarrinhoController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $LinhaCarrinho = $this->findModel($id);
+        $produto = $LinhaCarrinho->produto;
+        $quantidadeBd = $LinhaCarrinho->quantidade;
+        $post = $this->request->post();
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost) {
+            $quantidade = $post['quantidade'];
+            $quantidadeFinal = $quantidade - $quantidadeBd;
+            $LinhaCarrinho->quantidade = $quantidade;
+            $LinhaCarrinho->precounit = $produto->preco;
+
+            $LinhaCarrinho->valoriva = $produto->preco * ($produto->iva->percentagem / 100);
+            $LinhaCarrinho->valorcomiva = $LinhaCarrinho->valoriva + $LinhaCarrinho->precounit;
+            $LinhaCarrinho->subtotal = $LinhaCarrinho->valorcomiva * $quantidade;
+
+            $produto->quantidade = $produto->quantidade - $quantidadeFinal;
+
+            if ($LinhaCarrinho->save() && $produto->save()) {
+                return $this->redirect(['carrinhocompra/index']);
+            }
         }
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
     }
 
     /**
@@ -113,7 +169,7 @@ class LinhacarrinhoController extends Controller
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['carrinhocompra/index']);
     }
 
     /**
@@ -123,7 +179,8 @@ class LinhacarrinhoController extends Controller
      * @return LinhaCarrinho the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected
+    function findModel($id)
     {
         if (($model = LinhaCarrinho::findOne(['id' => $id])) !== null) {
             return $model;

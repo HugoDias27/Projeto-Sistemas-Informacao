@@ -4,6 +4,9 @@ namespace frontend\controllers;
 
 use common\models\CarrinhoCompra;
 use common\models\CarrinhoCompraSearch;
+use common\models\LinhaCarrinho;
+use common\models\User;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -38,14 +41,29 @@ class CarrinhocompraController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new CarrinhoCompraSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $userId = Yii::$app->user->id;
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        $carrinho = CarrinhoCompra::find()->where(['cliente_id' => $userId, 'fatura_id' => null])
+        ->orderBy(['id' => SORT_DESC]) // Ordenando pelo ID de forma descendente
+        ->one();
+
+        if ($carrinho !== null) {
+            $linhasCarrinho = LinhaCarrinho::find()
+                ->where(['carrinho_compra_id' => $carrinho->id]);
+
+            $dataProvider = new \yii\data\ActiveDataProvider([
+                'query' => $linhasCarrinho,
+            ]);
+
+            return $this->render('index', [
+                'dataProvider' => $dataProvider,
+            ]);
+        }
+
+        // Caso não exista carrinho válido
+        throw new NotFoundHttpException('Não foi encontrado um carrinho de compras válido para o usuário logado.');
     }
+
 
     /**
      * Displays a single CarrinhoCompra model.
@@ -65,22 +83,37 @@ class CarrinhocompraController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate()
+    public function actionCreate($id)
     {
-        $model = new CarrinhoCompra();
+        if (!Yii::$app->user->isGuest) {
+            $userId = Yii::$app->user->id;
+            $carrinhoCompras = new CarrinhoCompra();
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+
+            $ultimoCarrinho = CarrinhoCompra::find()
+                ->where(['cliente_id' => $userId, 'fatura_id' => null])
+                ->orderBy(['dta_venda' => SORT_DESC])
+                ->one();
+
+            if ($ultimoCarrinho === null) {
+                $carrinhoCompras->dta_venda = date('Y-m-d');
+                $carrinhoCompras->quantidade = 0;
+                $carrinhoCompras->valortotal = 0;
+                $carrinhoCompras->ivatotal = 0;
+                $carrinhoCompras->cliente_id = $userId;
+
+                if ($carrinhoCompras->save()) {
+                    return $this->redirect(['linhacarrinho/index', 'id' => $id]);
+                }
+            } else {
+                return $this->redirect(['linhacarrinho/index', 'id' => $id]);
             }
         } else {
-            $model->loadDefaultValues();
+            return $this->redirect('..\site/login');
         }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        return $this->redirect('..\site/index');
     }
+
 
     /**
      * Updates an existing CarrinhoCompra model.
@@ -89,7 +122,8 @@ class CarrinhocompraController extends Controller
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public
+    function actionUpdate($id)
     {
         $model = $this->findModel($id);
 
@@ -109,7 +143,8 @@ class CarrinhocompraController extends Controller
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public
+    function actionDelete($id)
     {
         $this->findModel($id)->delete();
 
@@ -123,7 +158,8 @@ class CarrinhocompraController extends Controller
      * @return CarrinhoCompra the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected
+    function findModel($id)
     {
         if (($model = CarrinhoCompra::findOne(['id' => $id])) !== null) {
             return $model;

@@ -6,6 +6,7 @@ use backend\models\Estabelecimento;
 use backend\models\ServicoEstabelecimento;
 use backend\models\ServicoEstabelecimentoSearch;
 use common\models\Servico;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
@@ -29,7 +30,23 @@ class ServicoestabelecimentoController extends Controller
                     'actions' => [
                         'delete' => ['POST'],
                     ],
+
                 ],
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'rules' => [
+                        [
+                            'actions' => ['index', 'view', 'create', 'update'],
+                            'allow' => true,
+                            'roles' => ['admin', 'funcionario'],
+                        ],
+                        [
+                            'actions' => ['delete'],
+                            'allow' => true,
+                            'roles' => ['admin'],
+                        ],
+                    ]
+                ]
             ]
         );
     }

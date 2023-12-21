@@ -3,14 +3,17 @@
 namespace backend\controllers;
 
 use backend\models\Estabelecimento;
+use backend\models\ServicoEstabelecimento;
 use common\models\Fatura;
 use common\models\Iva;
 use common\models\LinhaFatura;
 use common\models\LinhaFaturaSearch;
+use common\models\Produto;
 use common\models\ReceitaMedica;
 use common\models\Servico;
 use common\models\User;
 use Yii;
+use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -35,6 +38,16 @@ class LinhafaturaController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'rules' => [
+                        [
+                            'actions' => ['index', 'view', 'create', 'update', 'deletereceita', 'delete'],
+                            'allow' => true,
+                            'roles' => ['admin', 'funcionario'],
+                        ],
+                    ],
+                ]
             ]
         );
     }
@@ -70,6 +83,16 @@ class LinhafaturaController extends Controller
             ->where(['id' => $servicosids])
             ->all();
 
+        $totallinhasreceita = LinhaFatura::find()
+            ->with('receitaMedica') // Eager loading the 'receitaMedica' relation
+            ->where(['fatura_id' => $fatura_id])
+            ->all();
+
+        $receitasids = ArrayHelper::getColumn($totallinhas, 'receita_medica_id');
+        $receitas = ReceitaMedica::find()
+            ->where(['id' => $receitasids])
+            ->all();
+
         $perfilCliente = $clientefind->profiles;
         $estabelecimentofind = Estabelecimento::find()->where(['id' => $estabelecimento])->one();
 
@@ -94,6 +117,7 @@ class LinhafaturaController extends Controller
             'servicos' => $servicos,
             'totallinhas' => $totallinhas,
             'fatura' => $fatura,
+            'receitas' => $receitas,
 
         ]);
     }
@@ -124,7 +148,11 @@ class LinhafaturaController extends Controller
         $receitas = ReceitaMedica::find()->all();
         $receitasItems = ArrayHelper::map($receitas, 'id', 'codigo');
 
-        $servicos = Servico::find()->all();
+        $servicosestabelecimento = ServicoEstabelecimento::find()->where(['estabelecimento_id' => $estabelecimento_id])->all();
+        $servicosids = ArrayHelper::getColumn($servicosestabelecimento, 'servico_id');
+        $servicos = Servico::find()
+            ->where(['id' => $servicosids])
+            ->all();
         $servicosItems = ArrayHelper::map($servicos, 'id', 'nome');
 
         $fatura = Fatura::find()->where(['id' => $id_fatura])->one();
@@ -133,6 +161,7 @@ class LinhafaturaController extends Controller
 
         $fatura->valortotal = 0;
         $fatura->ivatotal = 0;
+
 
         $cliente_id = $fatura->cliente_id;
 
@@ -143,19 +172,36 @@ class LinhafaturaController extends Controller
             $percentservico = $iva->percentagem;
         }
 
-        $linhafatura->precounit = $servicoPreco;
-        $linhafatura->valoriva = $servicoPreco * ($percentservico / 100);
-        $linhafatura->valorcomiva = $servicoPreco + $linhafatura->valoriva;
-        $linhafatura->dta_venda = date('Y-m-d');
-
-        // Calcula os totais com base nas linhas de fatura existentes
-        foreach ($linhasFaturaExistente as $linha) {
-            $fatura->valortotal += $linha->subtotal;
-            $fatura->ivatotal += $linha->valoriva * $linha->quantidade;
+        foreach ($receitas as $item) {
+            $receitaProduto = $item->posologia;
+            $produto = Produto::find()->where(['id' => $receitaProduto])->one();
+            $receitaIva = $produto->iva_id;
+            $receitaPreco = $produto->preco;
+            $iva = Iva::find()->where(['id' => $receitaIva])->one();
+            $percentreceita = $iva->percentagem;
+            $quantidadereceita = $item->dosagem;
         }
+
 
         if ($this->request->isPost && $linhafatura->load(Yii::$app->request->post())) {
 
+            if (!empty($linhafatura->servico_id)) {
+                $linhafatura->precounit = $servicoPreco;
+                $linhafatura->valoriva = $servicoPreco * ($percentservico / 100);
+                $linhafatura->valorcomiva = $servicoPreco + $linhafatura->valoriva;
+                $linhafatura->dta_venda = date('Y-m-d');
+            } else if(!empty($linhafatura->receita_medica_id)) {
+                $linhafatura->precounit = $receitaPreco;
+                $linhafatura->valoriva = $receitaPreco * ($percentreceita / 100);
+                $linhafatura->valorcomiva = $receitaPreco + $linhafatura->valoriva;
+                $linhafatura->dta_venda = date('Y-m-d');
+                $linhafatura->quantidade = $quantidadereceita;
+            }
+            // Calcula os totais com base nas linhas de fatura existentes
+            foreach ($linhasFaturaExistente as $linha) {
+                $fatura->valortotal += $linha->subtotal;
+                $fatura->ivatotal += $linha->valoriva * $linha->quantidade;
+            }
             // Calcula o subtotal da nova linha antes de salvar
             $linhafatura->subtotal = $linhafatura->quantidade * $linhafatura->valorcomiva;
             $linhafatura->fatura_id = $id_fatura;
@@ -190,27 +236,28 @@ class LinhafaturaController extends Controller
         $fatura = Fatura::findOne($linhafatura->fatura_id);
         $cliente = $fatura->cliente_id;
         $estabelecimento = $fatura->estabelecimento_id;
-        $fatura->valortotal = 0;
-        $fatura->ivatotal = 0;
+        $quantidade = $linhafatura->quantidade;
+
 
         $linhasfaturas = LinhaFatura::find()->where(['fatura_id' => $linhafatura->fatura_id])->all();
         $linhafatura->quantidade = $this->request->post('quantidade');
-        $linhafatura->subtotal = $linhafatura->quantidade * $linhafatura->valorcomiva;
+        $quantidadenova = $linhafatura->quantidade - $quantidade;
 
-            $fatura->valortotal += $linhafatura->subtotal;
-            $fatura->ivatotal += $linhafatura->valoriva * $linhafatura->quantidade;
+        $linhafatura->subtotal = $linhafatura->valorcomiva * $linhafatura->quantidade;
+
+        $fatura->valortotal += $linhafatura->valorcomiva * $quantidadenova;
+        $fatura->ivatotal += $linhafatura->valoriva * $quantidadenova;
 
         $linhafatura->save();
         $fatura->save();
-            return $this->redirect(['index',
-                'id' => $linhafatura->id,
-                'fatura_id' => $linhafatura->fatura_id,
-                'estabelecimento' => $estabelecimento,
-                'cliente' => $cliente,
-            ]);
+        return $this->redirect(['index',
+            'id' => $linhafatura->id,
+            'fatura_id' => $linhafatura->fatura_id,
+            'estabelecimento' => $estabelecimento,
+            'cliente' => $cliente,
+        ]);
 
     }
-
 
 
     /**
@@ -234,6 +281,22 @@ class LinhafaturaController extends Controller
         $fatura->save();
         $this->findModel($id)->delete();
         return $this->redirect(['index', 'id' => $id, 'fatura_id' => $fatura_id, 'estabelecimento' => $estabelecimento, 'cliente' => $cliente, 'servico_id' => $servico_id,]);
+    }
+
+    public
+    function actionDeletereceita($id, $fatura_id, $estabelecimento, $cliente)
+    {
+
+        $fatura = Fatura::find()->where(['id' => $fatura_id])->one();
+        $linhafatura = LinhaFatura::find()->where(['id' => $id])->one();
+        $fatura->valortotal -= $linhafatura->subtotal;
+        if ($fatura->ivatotal < 0)
+            $fatura->ivatotal = 0;
+        else
+            $fatura->ivatotal -= $linhafatura->valoriva * $linhafatura->quantidade;
+        $fatura->save();
+        $this->findModel($id)->delete();
+        return $this->redirect(['index', 'id' => $id, 'fatura_id' => $fatura_id, 'estabelecimento' => $estabelecimento, 'cliente' => $cliente]);
     }
 
     /**
