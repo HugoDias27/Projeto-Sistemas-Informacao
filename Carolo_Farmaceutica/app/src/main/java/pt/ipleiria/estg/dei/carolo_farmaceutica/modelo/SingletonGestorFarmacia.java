@@ -43,10 +43,13 @@ public class SingletonGestorFarmacia {
     private MedicamentosListener medicamentosListener;
     private ReceitaMedicaListener receitaMedicaListener;
     private RegistarListener registarListener;
-    private static final String mURLAPIMedicamentos = "http://10.0.2.2/projetoSIS/backend/web/api/produtos/medicamentos";
-    private static final String mURLAPILogin = "http://10.0.2.2/projetoSIS/backend/web/api/logins/loginuser";
-    private static final String mURLAPIReceitaMedica = "http://10.0.2.2/projetoSIS/backend/web/api/receitamedicas/receitacliente";
-    private static final String mURLAPIRegistar = "http://10.0.2.2/projetoSIS/backend/web/api/users/criarusers";
+    private  String ipAddress;
+    private String mURLAPIMedicamentos;
+    private  String mURLAPILogin;
+    private  String mURLAPIReceitaMedica;
+    private  String mURLAPIRegistar;
+
+
 
     public static synchronized SingletonGestorFarmacia getInstance(Context context) {
         if (instance == null) {
@@ -57,8 +60,23 @@ public class SingletonGestorFarmacia {
     }
 
     public SingletonGestorFarmacia(Context context) {
+
         medicamentos = new ArrayList<>();
         receitaMedicas = new ArrayList<>();
+    }
+
+    public String getIpAddress() {
+
+        return ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress) {
+
+        this.ipAddress = ipAddress;
+        mURLAPIMedicamentos = "http://" + ipAddress + "/projetoSIS/backend/web/api/produtos/medicamentos";
+        mURLAPILogin = "http://" + ipAddress + "/projetoSIS/backend/web/api/logins/loginuser";
+        mURLAPIReceitaMedica = "http://" + ipAddress + "/projetoSIS/backend/web/api/receitamedicas/receitacliente";
+        mURLAPIRegistar = "http://" + ipAddress + "/projetoSIS/backend/web/api/users/criarusers";
     }
 
     public void setLoginListener(LoginListener loginListener) {

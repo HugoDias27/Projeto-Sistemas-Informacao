@@ -25,6 +25,7 @@ drawable ic_search_foreground
 drawable logo
 drawable medicamento_stock
 id appbar
+id btMudarIp
 id btRemover
 id btnBack
 id btnLogin
@@ -32,6 +33,7 @@ id button2
 id contentFragment
 id drawerLayout
 id etEmail
+id etIp
 id etPassword
 id etUsername
 id fabAdicionarProdutoCarrinho
@@ -48,6 +50,7 @@ id navDesconto
 id navLocalizacao
 id navProduto
 id navReceitaMedica
+id navSettings
 id navView
 id textView
 id textView10
@@ -69,6 +72,7 @@ id tvDataValidade
 id tvDesconto
 id tvDosagem
 id tvIVA
+id tvIp
 id tvIvaMedicamento
 id tvLocalPrescricao
 id tvMedicoPrescricao
@@ -94,11 +98,13 @@ layout activity_medicamento
 layout activity_menu_main
 layout activity_receita_medica
 layout activity_registar
+layout activity_settings
 layout app_bar_main
 layout fragment_carrinho
 layout fragment_descontos
 layout fragment_lista_medicamento
 layout fragment_lista_receita
+layout fragment_settings
 layout item_lista_carrinho
 layout item_lista_descontos
 layout item_lista_medicamento
@@ -128,17 +134,22 @@ string close
 string data
 string data_contratacao
 string data_da_despesa
+string definicoes
 string desconto
 string descricao
 string despesas
 string dosagem
 string email
 string estabelecimento
+string exemplo_ip
+string inserir_ip
+string ip
 string iva
 string lista_receita_codigo
 string medicamentos
 string menuPesquisa
 string morada
+string mudar_ip
 string ndClose
 string ndOpen
 string nif
@@ -152,6 +163,7 @@ string preco
 string prescicao_medica
 string quantidade
 string receita_medica
+string settings
 string telefone
 string tv_prescricao
 string tvcategoria

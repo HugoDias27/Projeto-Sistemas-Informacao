@@ -3188,6 +3188,7 @@ id bounce
 id bounceBoth
 id bounceEnd
 id bounceStart
+id btMudarIp
 id btRemover
 id btnBack
 id btnLogin
@@ -3275,6 +3276,7 @@ id endToStart
 id enterAlways
 id enterAlwaysCollapsed
 id etEmail
+id etIp
 id etPassword
 id etUsername
 id exitUntilCollapsed
@@ -3412,6 +3414,7 @@ id navDesconto
 id navLocalizacao
 id navProduto
 id navReceitaMedica
+id navSettings
 id navView
 id navigation_bar_item_active_indicator_view
 id navigation_bar_item_icon_container
@@ -3606,6 +3609,7 @@ id tvDataValidade
 id tvDesconto
 id tvDosagem
 id tvIVA
+id tvIp
 id tvIvaMedicamento
 id tvLocalPrescricao
 id tvMedicoPrescricao
@@ -3768,6 +3772,7 @@ layout activity_medicamento
 layout activity_menu_main
 layout activity_receita_medica
 layout activity_registar
+layout activity_settings
 layout app_bar_main
 layout custom_dialog
 layout design_bottom_navigation_item
@@ -3789,6 +3794,7 @@ layout fragment_carrinho
 layout fragment_descontos
 layout fragment_lista_medicamento
 layout fragment_lista_receita
+layout fragment_settings
 layout item_lista_carrinho
 layout item_lista_descontos
 layout item_lista_medicamento
@@ -3919,6 +3925,7 @@ string close
 string data
 string data_contratacao
 string data_da_despesa
+string definicoes
 string desconto
 string descricao
 string despesas
@@ -3927,11 +3934,14 @@ string email
 string error_a11y_label
 string error_icon_content_description
 string estabelecimento
+string exemplo_ip
 string exposed_dropdown_menu_content_description
 string fab_transformation_scrim_behavior
 string fab_transformation_sheet_behavior
 string hide_bottom_view_on_scroll_behavior
 string icon_content_description
+string inserir_ip
+string ip
 string item_view_role_description
 string iva
 string lista_receita_codigo
@@ -4038,6 +4048,7 @@ string mtrl_switch_track_decoration_path
 string mtrl_switch_track_path
 string mtrl_timepicker_cancel
 string mtrl_timepicker_confirm
+string mudar_ip
 string ndClose
 string ndOpen
 string nif
@@ -4060,6 +4071,7 @@ string search_menu_title
 string searchbar_scrolling_view_behavior
 string searchview_clear_text_content_description
 string searchview_navigation_content_description
+string settings
 string side_sheet_accessibility_pane_title
 string side_sheet_behavior
 string status_bar_notification_info_overflow

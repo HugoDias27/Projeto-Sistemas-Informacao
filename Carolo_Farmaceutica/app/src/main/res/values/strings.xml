@@ -57,4 +57,10 @@
     <string name="Txt_Medico_prescricao">Médico Prescrição</string>
     <string name="txt_valido">Válido:</string>
     <string name="txt_posologia">Posologia:</string>
+    <string name="definicoes">Definições:</string>
+    <string name="settings">Escreva o IP: </string>
+    <string name="mudar_ip">Mudar IP</string>
+    <string name="ip">Escreva o ip</string>
+    <string name="inserir_ip">Insere o IP :</string>
+    <string name="exemplo_ip">ex.:, 192.168.1.1</string>
 </resources>

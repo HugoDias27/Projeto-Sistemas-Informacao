@@ -20,6 +20,9 @@
         <item
             android:id="@+id/navDesconto"
             android:title="@string/txt_menu_descontos" />
+        <item
+            android:id="@+id/navSettings"
+            android:title="@string/definicoes" />
     </group>
 
 </menu>
