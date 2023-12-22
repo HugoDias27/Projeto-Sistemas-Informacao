@@ -1,6 +1,8 @@
 package pt.ipleiria.estg.dei.carolo_farmaceutica;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,7 +20,6 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
     private EditText etUsername, etPassword;
 
     public static final String USERNAME = "USERNAME";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +62,10 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
             String username=etUsername.getText().toString();
             Intent intent= new Intent(getApplicationContext(), MenuMainActivity.class);
             intent.putExtra(USERNAME, username);
+            SharedPreferences sharedAuthKey = getSharedPreferences("LOGIN", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedAuthKey.edit();
+            editor.putString("USERNAME", username);
+            editor.apply();
             startActivity(intent);
             finish();
         }

@@ -46,7 +46,7 @@ class FaturaController extends Controller
                             'roles' => ['admin', 'funcionario', 'cliente'],
                         ],
                         [
-                            'actions' => ['index','create', 'update', 'delete'],
+                            'actions' => ['index', 'create', 'update', 'delete'],
                             'allow' => true,
                             'roles' => ['admin', 'funcionario'],
                         ],
@@ -104,7 +104,6 @@ class FaturaController extends Controller
         $receitas = ReceitaMedica::find()
             ->where(['id' => $receitasids])
             ->all();
-
 
 
         return $this->render('view', [
@@ -177,19 +176,15 @@ class FaturaController extends Controller
     {
         $fatura = Fatura::find()->where(['id' => $id])->one();
 
-        $linhaFatura = LinhaFatura::find()->where(['fatura_id' => $id])->all();
-        foreach ($linhaFatura as $linha){
-        $receita = ReceitaMedica::find()->where(['id' => $linha->receita_medica_id])->all();
-        foreach ($receita as $receitas) {
-            $produto = Produto::find()->where(['id' => $receitas->posologia])->one();
+        $linhafatura = LinhaFatura::find()->where(['fatura_id' => $id])->one();
+        $receitaMedicaid = $linhafatura->receita_medica_id;
 
-            $produto->quantidade = $produto->quantidade - $receitas->dosagem;
-            $produto->save();
-        }
-        }
+        $receitaMedica = ReceitaMedica::find()->where(['id' => $receitaMedicaid])->one();
 
+        $receitaMedica->valido = 0;
 
         $fatura->save();
+        $receitaMedica->save();
         return $this->redirect(['index']);
     }
 

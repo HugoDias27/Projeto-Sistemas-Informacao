@@ -45,8 +45,7 @@ class ReceitamedicaController extends ActiveController
 
     }
 
-    public
-    function actionReceitasvalidas()
+    public function actionReceitasvalidas()
     {
         $receitaModel = new $this->modelClass;
         $data = date('Y-m-d');

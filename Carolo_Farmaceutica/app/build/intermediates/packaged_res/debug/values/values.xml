@@ -43,6 +43,7 @@
     <string name="preco">Preço:</string>
     <string name="prescicao_medica">Prescrição Médica:</string>
     <string name="quantidade">Quantidade:</string>
+    <string name="quantidade_carrinho">Quantidade a adicionar ao carrinho:\n</string>
     <string name="receita_medica">Receita Médica</string>
     <string name="settings">Escreva o IP: </string>
     <string name="telefone">Telefone:</string>

@@ -4,12 +4,15 @@ namespace backend\modules\api\controllers;
 
 use backend\modules\api\components\CustomAuth;
 use Yii;
+use yii\helpers\Url;
 use yii\rest\ActiveController;
 
 class CarrinhocompraController extends ActiveController
 {
 
     public $modelClass = 'common\models\CarrinhoCompra';
+    public $modelClassUser = 'common\models\User';
+
 
     public function behaviors()
     {
@@ -27,34 +30,34 @@ class CarrinhocompraController extends ActiveController
     }
 
 
-    public function actionCarrinhocompra($id)
+    public function actionCarrinhocompra($userid)
     {
-        $carrinhoModel = new $this->modelClass;
-        $carrinho = $carrinhoModel::find()->where(['cliente_id' => $id])->orderBy(['dta_venda' => SORT_DESC])->one();
+        $userModel = new $this->modelClassUser;
+        $user = $userModel::findOne(['id' => $userid]);
+        $authKey = $user->getAuthKey();
 
-        if($carrinho)
-        {
-            return $carrinho;
-        }
-        else
-        {
-            throw new \yii\web\NotFoundHttpException('Dados não encontrados.');
+        $request = Yii::$app->request;
+        $produtoid = $request->getBodyParam('produto');
+        $quantidade = $request->getBodyParam('quantidade');
+
+        $carrinhoModel = new $this->modelClass;
+        $ultimoCarrinho = $carrinhoModel::find()->where(['cliente_id' => $userid, 'fatura_id' => null])->orderBy(['dta_venda' => SORT_DESC])->one();
+
+        if ($ultimoCarrinho === null) {
+            $carrinhoModel->dta_venda = date('Y-m-d');
+            $carrinhoModel->quantidade = 0;
+            $carrinhoModel->valortotal = 0;
+            $carrinhoModel->ivatotal = 0;
+            $carrinhoModel->cliente_id = $userid;
+
+            if ($carrinhoModel->save()) {
+                return $this->redirect(['linhacarrinho/createcarrinho', 'produtoid' => $produtoid, 'quantidade' => $quantidade, 'userid' => $userid, 'auth_key' => $authKey]);
+
+            } else {
+                throw new \yii\web\NotFoundHttpException('Carrinho não criado.');
+            }
+        } else {
+            return $this->redirect(['linhacarrinho/createcarrinho', 'produtoid' => $produtoid, 'quantidade' => $quantidade, 'userid' => $userid, 'auth_key' => $authKey]);
         }
     }
-
-    public function actionCarrinhos($id)
-    {
-        $carrinhoModel = new $this->modelClass;
-        $carrinho = $carrinhoModel::find()->where(['cliente_id' => $id])->all();
-
-        if($carrinho)
-        {
-            return $carrinho;
-        }
-        else
-        {
-            throw new \yii\web\NotFoundHttpException('Dados não encontrados.');
-        }
-    }
-
 }

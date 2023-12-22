@@ -4,7 +4,9 @@ namespace frontend\controllers;
 
 use common\models\CarrinhoCompra;
 use common\models\CarrinhoCompraSearch;
+use common\models\Fatura;
 use common\models\LinhaCarrinho;
+use common\models\Produto;
 use common\models\User;
 use Yii;
 use yii\web\Controller;
@@ -44,8 +46,8 @@ class CarrinhocompraController extends Controller
         $userId = Yii::$app->user->id;
 
         $carrinho = CarrinhoCompra::find()->where(['cliente_id' => $userId, 'fatura_id' => null])
-        ->orderBy(['id' => SORT_DESC]) // Ordenando pelo ID de forma descendente
-        ->one();
+            ->orderBy(['id' => SORT_DESC]) // Ordenando pelo ID de forma descendente
+            ->one();
 
         if ($carrinho !== null) {
             $linhasCarrinho = LinhaCarrinho::find()
@@ -88,30 +90,86 @@ class CarrinhocompraController extends Controller
         if (!Yii::$app->user->isGuest) {
             $userId = Yii::$app->user->id;
             $carrinhoCompras = new CarrinhoCompra();
+            $produto = Produto::findOne($id);
 
+            if ($produto !== null) {
+                $prescricao_medica = $produto->prescricao_medica;
 
-            $ultimoCarrinho = CarrinhoCompra::find()
-                ->where(['cliente_id' => $userId, 'fatura_id' => null])
-                ->orderBy(['dta_venda' => SORT_DESC])
-                ->one();
+                if ($prescricao_medica == 0) {
+                    $ultimoCarrinho = CarrinhoCompra::find()
+                        ->where(['cliente_id' => $userId, 'fatura_id' => null])
+                        ->orderBy(['dta_venda' => SORT_DESC])
+                        ->one();
 
-            if ($ultimoCarrinho === null) {
-                $carrinhoCompras->dta_venda = date('Y-m-d');
-                $carrinhoCompras->quantidade = 0;
-                $carrinhoCompras->valortotal = 0;
-                $carrinhoCompras->ivatotal = 0;
-                $carrinhoCompras->cliente_id = $userId;
+                    if ($ultimoCarrinho === null) {
+                        $carrinhoCompras->dta_venda = date('Y-m-d');
+                        $carrinhoCompras->quantidade = 0;
+                        $carrinhoCompras->valortotal = 0;
+                        $carrinhoCompras->ivatotal = 0;
+                        $carrinhoCompras->cliente_id = $userId;
 
-                if ($carrinhoCompras->save()) {
-                    return $this->redirect(['linhacarrinho/index', 'id' => $id]);
+                        if ($carrinhoCompras->save()) {
+                            return $this->redirect(['linhacarrinho/index', 'id' => $id]);
+                        }
+                    } else {
+                        return $this->redirect(['linhacarrinho/index', 'id' => $id]);
+                    }
+                } else {
+                    return $this->redirect(['receitamedica/verificar', 'produtoid' => $produto->id]);
                 }
             } else {
-                return $this->redirect(['linhacarrinho/index', 'id' => $id]);
+                return $this->redirect(['site/index']);
             }
         } else {
-            return $this->redirect('..\site/login');
+            return $this->redirect(['site/login']);
         }
-        return $this->redirect('..\site/index');
+        return $this->redirect(['site/index']);
+    }
+
+    public function actionConcluir()
+    {
+        $userid = Yii::$app->user->id;
+
+
+        $ultimoCarrinho = CarrinhoCompra::find()
+            ->where(['cliente_id' => $userid, 'fatura_id' => null])
+            ->orderBy(['dta_venda' => SORT_DESC])
+            ->one();
+
+        if ($ultimoCarrinho !== null) {
+            $linhasCarrinho = LinhaCarrinho::find()
+                ->where(['carrinho_compra_id' => $ultimoCarrinho->id])
+                ->all();
+
+            $quantidadeTotal = 0;
+            $valorTotal = 0;
+            $ivaTotal = 0;
+
+            foreach ($linhasCarrinho as $linha) {
+                $quantidadeTotal += $linha->quantidade;
+                $valorTotal += $linha->subtotal;
+                $ivaTotal += $linha->valoriva;
+            }
+
+            $ultimoCarrinho->dta_venda = date('Y-m-d');
+            $ultimoCarrinho->quantidade = $quantidadeTotal;
+            $ultimoCarrinho->valortotal = $valorTotal;
+            $ultimoCarrinho->ivatotal = $ivaTotal;
+
+            $fatura = new Fatura();
+            $fatura->valortotal = $valorTotal;
+            $fatura->ivatotal = $ivaTotal;
+            $fatura->dta_emissao = date('Y-m-d');
+            $fatura->cliente_id = $ultimoCarrinho->cliente_id;
+            $ultimoCarrinho->fatura_id = $fatura->id;
+
+            if ($fatura->save()) {
+                $ultimoCarrinho->fatura_id = $fatura->id;
+                if ($ultimoCarrinho->save()) {
+                    return $this->redirect(['site/index']);
+                }
+            }
+        }
     }
 
 

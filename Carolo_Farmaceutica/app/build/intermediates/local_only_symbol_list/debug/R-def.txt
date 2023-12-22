@@ -35,6 +35,7 @@ id drawerLayout
 id etEmail
 id etIp
 id etPassword
+id etQuantidadeCarrinho
 id etUsername
 id fabAdicionarProdutoCarrinho
 id imageView
@@ -84,6 +85,7 @@ id tvPrescricao
 id tvPrescricaoMedica
 id tvProduto
 id tvQuantidade
+id tvQuantidadeCarrinho
 id tvQuantidadeMedicamento
 id tvTelefone
 id tvUsername
@@ -162,6 +164,7 @@ string password
 string preco
 string prescicao_medica
 string quantidade
+string quantidade_carrinho
 string receita_medica
 string settings
 string telefone

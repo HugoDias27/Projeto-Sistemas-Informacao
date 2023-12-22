@@ -92,7 +92,6 @@ class LinhacarrinhoController extends Controller
      */
     public function actionCreate($id)
     {
-
         $LinhaCarrinho = new LinhaCarrinho();
         $userId = Yii::$app->user->id;
 
@@ -104,22 +103,47 @@ class LinhacarrinhoController extends Controller
         $produto = Produto::findOne($id);
 
         $post = $this->request->post();
+        $quantidade = $post['LinhaCarrinhoSearch']['quantidade'];
+
 
         if ($this->request->isPost) {
-            $quantidade = $post['LinhaCarrinhoSearch']['quantidade'];
-            $LinhaCarrinho->quantidade = $quantidade;
-            $LinhaCarrinho->precounit = $produto->preco;
+            $verificaProdutoLinha = LinhaCarrinho::find()
+                ->where(['carrinho_compra_id' => $ultimoCarrinho->id, 'produto_id' => $id])
+                ->one();
 
-            $LinhaCarrinho->valoriva = $produto->preco * ($produto->iva->percentagem / 100);
-            $LinhaCarrinho->valorcomiva = $LinhaCarrinho->valoriva + $LinhaCarrinho->precounit;
-            $LinhaCarrinho->subtotal = $LinhaCarrinho->valorcomiva * $quantidade;
+            if ($verificaProdutoLinha) {
+                $quantidadeBd = $verificaProdutoLinha->quantidade; // Usar $verificaProdutoLinha aqui
 
-            $LinhaCarrinho->carrinho_compra_id = $ultimoCarrinho->id;
-            $LinhaCarrinho->produto_id = $id;
-            $produto->quantidade = $produto->quantidade - $quantidade;
+                $quantidadeFinal = $quantidade + $quantidadeBd;
+                $verificaProdutoLinha->quantidade = $quantidadeFinal;
+                $verificaProdutoLinha->precounit = $produto->preco;
 
-            if ($LinhaCarrinho->save() && $produto->save()) {
-                return $this->redirect('..\carrinhocompra/index');
+                $verificaProdutoLinha->valoriva = $produto->preco * ($produto->iva->percentagem / 100);
+                $verificaProdutoLinha->valorcomiva = $verificaProdutoLinha->valoriva + $verificaProdutoLinha->precounit;
+                $verificaProdutoLinha->subtotal = $verificaProdutoLinha->valorcomiva * $quantidade;
+
+                $produto->quantidade = $produto->quantidade - $quantidade;
+
+                if ($verificaProdutoLinha->save() && $produto->save()) {
+                    return $this->redirect('..\carrinhocompra/index');
+                }
+
+
+            } else {
+                $LinhaCarrinho->quantidade = $quantidade;
+                $LinhaCarrinho->precounit = $produto->preco;
+
+                $LinhaCarrinho->valoriva = $produto->preco * ($produto->iva->percentagem / 100);
+                $LinhaCarrinho->valorcomiva = $LinhaCarrinho->valoriva + $LinhaCarrinho->precounit;
+                $LinhaCarrinho->subtotal = $LinhaCarrinho->valorcomiva * $quantidade;
+
+                $LinhaCarrinho->carrinho_compra_id = $ultimoCarrinho->id;
+                $LinhaCarrinho->produto_id = $id;
+                $produto->quantidade = $produto->quantidade - $quantidade;
+
+                if ($LinhaCarrinho->save() && $produto->save()) {
+                    return $this->redirect('..\carrinhocompra/index');
+                }
             }
         }
     }
@@ -155,7 +179,6 @@ class LinhacarrinhoController extends Controller
                 return $this->redirect(['carrinhocompra/index']);
             }
         }
-
     }
 
     /**
@@ -167,9 +190,19 @@ class LinhacarrinhoController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $linhaCarrinho = $this->findModel($id);
 
-        return $this->redirect(['carrinhocompra/index']);
+        $quantidadeLinhaCarrinho = $linhaCarrinho->quantidade;
+        $produto = $linhaCarrinho->produto;
+
+        if ($linhaCarrinho->delete()) {
+            if ($produto) {
+                $produto->quantidade += $quantidadeLinhaCarrinho;
+                $produto->save();
+            }
+
+            return $this->redirect(['carrinhocompra/index']);
+        }
     }
 
     /**

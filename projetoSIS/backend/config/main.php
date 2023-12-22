@@ -128,12 +128,16 @@ return [
                 [
                     'class' => 'yii\rest\UrlRule', 'controller' => 'api/carrinhocompra',
                     'extraPatterns' => [
-                        'GET carrinhoatual/{id}' => 'carrinhocompra',
-                        'GET carrinhos/{id}' => 'carrinhos',
+                        'POST carrinho/{userid}' => 'carrinhocompra',
+                        'POST carrinhos/{userid}' => 'carrinhos',
                     ],
                     'tokens' => [
-                        '{id}' => '<id:\\d+>',
+                        '{userid}' => '<userid:\\d+>',
                     ],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule', 'controller' => 'api/linhacarrinho',
+
                 ],
             ],
         ],

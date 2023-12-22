@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +19,8 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import android.widget.Button;
+
 
 
 import com.google.android.material.navigation.NavigationView;
@@ -43,8 +44,6 @@ public class MenuMainActivity extends AppCompatActivity implements NavigationVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_main);
 
-
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -63,10 +62,9 @@ public class MenuMainActivity extends AppCompatActivity implements NavigationVie
         fragmentManager = getSupportFragmentManager();
         carregarFragmentoInicial();
 
-
     }
 
-    private void openSettingsFragment() {
+      private void openSettingsFragment() {
         getSupportFragmentManager().beginTransaction().replace(R.id.contentFragment, new SettingsFragment()).addToBackStack(null).commit();
     }
 
@@ -111,7 +109,7 @@ public class MenuMainActivity extends AppCompatActivity implements NavigationVie
         } else if (item.getItemId() == R.id.navDesconto) {
             fragment = new DescontosFragment();
         }
-        else if (item.getItemId() == R.id.navSettings){
+          else if (item.getItemId() == R.id.navSettings){
             fragment = new SettingsFragment();
         }
 

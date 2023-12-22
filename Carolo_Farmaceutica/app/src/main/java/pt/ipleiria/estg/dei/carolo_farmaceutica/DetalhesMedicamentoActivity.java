@@ -1,8 +1,11 @@
 package pt.ipleiria.estg.dei.carolo_farmaceutica;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -11,16 +14,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.CarrinhoListener;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.Medicamento;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.SingletonGestorFarmacia;
 
-public class DetalhesMedicamentoActivity extends AppCompatActivity {
+public class DetalhesMedicamentoActivity extends AppCompatActivity implements CarrinhoListener {
 
     public static final String ID_MEDICAMENTO = "id";
     private TextView tvNomeMedicamento, tvPrescricaoMedica, tvPreco, tvQuantidadeMedicamento, tvCategoriaMedicamento, tvIvaMedicamento;
+    private EditText etQuantidadeCarrinho;
     private Medicamento medicamento;
     private FloatingActionButton fabAdicionarProdutoCarrinho;
-    final Context context = this; // Armazena a referência da atividade na variável context
+    public static final String USERNAME = "USERNAME";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +40,9 @@ public class DetalhesMedicamentoActivity extends AppCompatActivity {
         tvCategoriaMedicamento = findViewById(R.id.tvCategoriaMedicamento);
         tvIvaMedicamento = findViewById(R.id.tvIvaMedicamento);
         fabAdicionarProdutoCarrinho = findViewById(R.id.fabAdicionarProdutoCarrinho);
+        etQuantidadeCarrinho = findViewById(R.id.etQuantidadeCarrinho);
 
-        // SingletonGestorFarmacia.getInstance(getApplicationContext()).setMedicamentosListener(this);
+        SingletonGestorFarmacia.getInstance(getApplicationContext()).setCarrinhoCompraListener(this);
 
         int id = getIntent().getIntExtra(ID_MEDICAMENTO, 0);
         if (id != 0) {
@@ -49,10 +56,10 @@ public class DetalhesMedicamentoActivity extends AppCompatActivity {
         fabAdicionarProdutoCarrinho.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               // if (medicamento != null) {
-                    // SingletonGestorFarmacia.getInstance(getApplicationContext()).adicionarProdutoCarrinho(medicamento);
-                    Toast.makeText(context, "Botao adicionar ao carrinho.", Toast.LENGTH_SHORT).show();
-               // }
+                if (medicamento != null) {
+                    int quantidade = Integer.parseInt(etQuantidadeCarrinho.getText().toString());
+                    SingletonGestorFarmacia.getInstance(getApplicationContext()).adicionarProdutoCarrinho(medicamento.getId(), quantidade, getApplicationContext());
+                }
             }
         });
     }
@@ -64,5 +71,18 @@ public class DetalhesMedicamentoActivity extends AppCompatActivity {
         tvQuantidadeMedicamento.setText(medicamento.getQuantidade() + "");
         tvCategoriaMedicamento.setText(medicamento.getCategoriaId());
         tvIvaMedicamento.setText(medicamento.getIvaId() + "");
+    }
+
+    @Override
+    public void onRefreshCarrinho(boolean resposta) {
+        if (resposta) {
+            SharedPreferences preferences = getSharedPreferences("LOGIN", Context.MODE_PRIVATE);
+            String username = preferences.getString("USERNAME", "");
+            Toast.makeText(this, "Produto adicionado ao carrinho com sucesso!.", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getApplicationContext(), MenuMainActivity.class);
+            intent.putExtra(USERNAME, username);
+            startActivity(intent);
+            finish();
+        }
     }
 }

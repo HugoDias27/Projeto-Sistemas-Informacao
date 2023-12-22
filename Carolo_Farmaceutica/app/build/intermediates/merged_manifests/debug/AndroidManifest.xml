@@ -43,10 +43,12 @@
         <activity
             android:name="pt.ipleiria.estg.dei.carolo_farmaceutica.MenuMainActivity"
             android:exported="false"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop" >
+        </activity>
         <activity
             android:name="pt.ipleiria.estg.dei.carolo_farmaceutica.ReceitaMedicaActivity"
-            android:exported="false" />
+            android:exported="false" >
+        </activity>
         <activity
             android:name="pt.ipleiria.estg.dei.carolo_farmaceutica.DetalhesReceitaActivity"
             android:exported="false"
@@ -61,7 +63,8 @@
             android:parentActivityName="pt.ipleiria.estg.dei.carolo_farmaceutica.LoginActivity" />
         <activity
             android:name="pt.ipleiria.estg.dei.carolo_farmaceutica.LoginActivity"
-            android:exported="true" />
+            android:exported="false" >
+        </activity>
 
         <provider
             android:name="androidx.startup.InitializationProvider"

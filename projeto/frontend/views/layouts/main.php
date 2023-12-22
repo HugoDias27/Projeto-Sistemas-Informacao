@@ -72,7 +72,7 @@ AppAsset::register($this);
                     ['label' => 'Saúde Oral', 'url' => ['produto/categoriasaudeoral']],
                     ['label' => 'Bens de beleza', 'url' => ['produto/categoriabensbeleza']],
                     ['label' => 'Higiene', 'url' => ['produto/categoriahigiene']],
-                    ['label' => 'Serviços', 'url' => ['produto/categoriaservicos']],
+                    ['label' => 'Serviços', 'url' => ['servico/index']],
                     ['label' => 'Encontrar farmácia', 'url' => ['site/search']]
                 ],
             ],
@@ -83,8 +83,8 @@ AppAsset::register($this);
                 'label' => '<i class="fa fa-user"></i>',
                 'items' => [
                     ['label' => 'Definições do perfil', 'url' => ['profile/view', 'id' => Yii::$app->user->identity->getId()]],
-                    ['label' => 'Editar perfil', 'url' => ['/profile/update', 'id' => Yii::$app->user->identity->getId()]],
-                    ['label' => 'Receita médica', 'url' => ['site/search', 'id' => Yii::$app->user->identity->getId()]],
+                    ['label' => 'Editar perfil', 'url' => ['profile/update', 'id' => Yii::$app->user->identity->getId()]],
+                    ['label' => 'Receita médica', 'url' => ['receitamedica/index', 'id' => Yii::$app->user->identity->getId()]],
                 ],
                 'encode' => false,
             ];

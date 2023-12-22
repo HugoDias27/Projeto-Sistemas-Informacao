@@ -145,8 +145,10 @@ class LinhafaturaController extends Controller
     public function actionCreate($id_fatura, $estabelecimento_id)
     {
         $linhafatura = new LinhaFatura();
-        $receitas = ReceitaMedica::find()->all();
+        $receitas = ReceitaMedica::find()->where(['valido' => 1])->all();
+
         $receitasItems = ArrayHelper::map($receitas, 'id', 'codigo');
+
 
         $servicosestabelecimento = ServicoEstabelecimento::find()->where(['estabelecimento_id' => $estabelecimento_id])->all();
         $servicosids = ArrayHelper::getColumn($servicosestabelecimento, 'servico_id');
@@ -190,12 +192,16 @@ class LinhafaturaController extends Controller
                 $linhafatura->valoriva = $servicoPreco * ($percentservico / 100);
                 $linhafatura->valorcomiva = $servicoPreco + $linhafatura->valoriva;
                 $linhafatura->dta_venda = date('Y-m-d');
-            } else if(!empty($linhafatura->receita_medica_id)) {
+            } else if (!empty($linhafatura->receita_medica_id)) {
                 $linhafatura->precounit = $receitaPreco;
                 $linhafatura->valoriva = $receitaPreco * ($percentreceita / 100);
                 $linhafatura->valorcomiva = $receitaPreco + $linhafatura->valoriva;
                 $linhafatura->dta_venda = date('Y-m-d');
                 $linhafatura->quantidade = $quantidadereceita;
+                $receitaMedicamento = ReceitaMedica::find()->where(['id' => $linhafatura->receita_medica_id])->one();
+                $produtoreceita = Produto::find()->where(['id' => $receitaMedicamento->posologia])->one();
+                $produtoreceita->quantidade -= $linhafatura->quantidade;
+                $produtoreceita->save();
             }
             // Calcula os totais com base nas linhas de fatura existentes
             foreach ($linhasFaturaExistente as $linha) {
@@ -238,8 +244,6 @@ class LinhafaturaController extends Controller
         $estabelecimento = $fatura->estabelecimento_id;
         $quantidade = $linhafatura->quantidade;
 
-
-        $linhasfaturas = LinhaFatura::find()->where(['fatura_id' => $linhafatura->fatura_id])->all();
         $linhafatura->quantidade = $this->request->post('quantidade');
         $quantidadenova = $linhafatura->quantidade - $quantidade;
 
@@ -267,10 +271,8 @@ class LinhafaturaController extends Controller
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public
-    function actionDelete($id, $fatura_id, $estabelecimento, $cliente, $servico_id)
+    public function actionDelete($id, $fatura_id, $estabelecimento, $cliente, $servico_id)
     {
-
         $fatura = Fatura::find()->where(['id' => $fatura_id])->one();
         $linhafatura = LinhaFatura::find()->where(['id' => $id])->one();
         $fatura->valortotal -= $linhafatura->subtotal;
@@ -283,19 +285,31 @@ class LinhafaturaController extends Controller
         return $this->redirect(['index', 'id' => $id, 'fatura_id' => $fatura_id, 'estabelecimento' => $estabelecimento, 'cliente' => $cliente, 'servico_id' => $servico_id,]);
     }
 
-    public
-    function actionDeletereceita($id, $fatura_id, $estabelecimento, $cliente)
+    public function actionDeletereceita($id, $fatura_id, $estabelecimento, $cliente)
     {
-
         $fatura = Fatura::find()->where(['id' => $fatura_id])->one();
         $linhafatura = LinhaFatura::find()->where(['id' => $id])->one();
+        $receitaMedicaid = $linhafatura->receita_medica_id;
+        $quantidade = $linhafatura->quantidade;
         $fatura->valortotal -= $linhafatura->subtotal;
+
+        $receita = ReceitaMedica::findOne($receitaMedicaid); // Encontrar a receita pelo ID
+        $posologia = $receita->posologia; // Obtém o valor do campo posologia (nome do produto ou identificador)
+
+        $produto = Produto::find()->where(['id' => $posologia])->one();
+
         if ($fatura->ivatotal < 0)
             $fatura->ivatotal = 0;
         else
             $fatura->ivatotal -= $linhafatura->valoriva * $linhafatura->quantidade;
         $fatura->save();
-        $this->findModel($id)->delete();
+
+        if ($produto) {
+            $this->findModel($id)->delete();
+            $produto->quantidade += $quantidade;
+            $produto->save();
+        }
+
         return $this->redirect(['index', 'id' => $id, 'fatura_id' => $fatura_id, 'estabelecimento' => $estabelecimento, 'cliente' => $cliente]);
     }
 

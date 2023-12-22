@@ -2,6 +2,7 @@ package pt.ipleiria.estg.dei.carolo_farmaceutica.modelo;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.view.View;
 import android.widget.Toast;
 
 
@@ -21,10 +22,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.CarrinhoListener;
+import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.LinhaCarrinhoListener;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.LoginListener;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.MedicamentosListener;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.ReceitaMedicaListener;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.RegistarListener;
+import pt.ipleiria.estg.dei.carolo_farmaceutica.utils.CarrinhoJsonParser;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.utils.LoginJsonParser;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.utils.MedicamentosJsonParser;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.utils.ReceitaMedicaJsonParser;
@@ -37,19 +41,21 @@ public class SingletonGestorFarmacia {
     private boolean user;
     private ArrayList<Medicamento> medicamentos;
     private ArrayList<ReceitaMedica> receitaMedicas;
+    private boolean CarrinhoCompras;
     private static SingletonGestorFarmacia instance = null;
     private static RequestQueue volleyQueue = null;
     private LoginListener loginListener;
     private MedicamentosListener medicamentosListener;
     private ReceitaMedicaListener receitaMedicaListener;
     private RegistarListener registarListener;
+    private CarrinhoListener carrinhoListener;
+    private LinhaCarrinhoListener linhaCarrinhoListener;
     private  String ipAddress;
-    private String mURLAPIMedicamentos;
+    private  String mURLAPIMedicamentos;
     private  String mURLAPILogin;
     private  String mURLAPIReceitaMedica;
     private  String mURLAPIRegistar;
-
-
+    private  String mURLAPICarrinho;
 
     public static synchronized SingletonGestorFarmacia getInstance(Context context) {
         if (instance == null) {
@@ -60,12 +66,11 @@ public class SingletonGestorFarmacia {
     }
 
     public SingletonGestorFarmacia(Context context) {
-
         medicamentos = new ArrayList<>();
         receitaMedicas = new ArrayList<>();
     }
 
-    public String getIpAddress() {
+      public String getIpAddress() {
 
         return ipAddress;
     }
@@ -77,6 +82,7 @@ public class SingletonGestorFarmacia {
         mURLAPILogin = "http://" + ipAddress + "/projetoSIS/backend/web/api/logins/loginuser";
         mURLAPIReceitaMedica = "http://" + ipAddress + "/projetoSIS/backend/web/api/receitamedicas/receitacliente";
         mURLAPIRegistar = "http://" + ipAddress + "/projetoSIS/backend/web/api/users/criarusers";
+        mURLAPICarrinho = "http://" + ipAddress + "/projetoSIS/backend/web/api/carrinhocompras/carrinho";
     }
 
     public void setLoginListener(LoginListener loginListener) {
@@ -94,6 +100,15 @@ public class SingletonGestorFarmacia {
 
     public void setRegistarListener(RegistarListener registarListener) {
         this.registarListener = registarListener;
+    }
+
+    public void setCarrinhoCompraListener(CarrinhoListener carrinhoListener) {
+        this.carrinhoListener = carrinhoListener;
+    }
+
+    public void setLinhaCarrinhoCompraListener(LinhaCarrinhoListener linhaCarrinhoListener) {
+        this.linhaCarrinhoListener = linhaCarrinhoListener;
+
     }
 
     public Medicamento getMedicamento(int id) {
@@ -218,10 +233,10 @@ public class SingletonGestorFarmacia {
         StringRequest request = new StringRequest(Request.Method.POST, mURLAPIRegistar, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                    user = RegistarJsonParser.parserJsonRegistar(response);
-                    if (registarListener != null) {
-                        registarListener.onRefreshRegistar(user);
-                    }
+                user = RegistarJsonParser.parserJsonRegistar(response);
+                if (registarListener != null) {
+                    registarListener.onRefreshRegistar(user);
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -240,5 +255,47 @@ public class SingletonGestorFarmacia {
         };
         volleyQueue.add(request);
     }
+
+    public void adicionarProdutoCarrinho(int id, int quantidade, final Context context) {
+        if (!CarrinhoJsonParser.isConnectionInternet(context)) {
+            Toast.makeText(context, "Não tem ligação à internet", Toast.LENGTH_SHORT).show();
+        } else {
+            SharedPreferences preferences = context.getSharedPreferences("DADOS_PESQUISA", Context.MODE_PRIVATE);
+            String authKey = preferences.getString("authKey", "");
+            int idUser = preferences.getInt("id", 0);
+
+            String mURLAPICarrinhoFinal = mURLAPICarrinho + "/" + idUser + "?auth_key=" + authKey;
+            StringRequest request = new StringRequest(Request.Method.POST, mURLAPICarrinhoFinal, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    CarrinhoCompras = CarrinhoJsonParser.parserJsonCarrinho(response);
+                   if (carrinhoListener != null) {
+                        carrinhoListener.onRefreshCarrinho(CarrinhoCompras);
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(context, "Erro ao registar.", Toast.LENGTH_SHORT).show();
+                }
+            }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("produto", id + "");
+                    params.put("quantidade", quantidade + "");
+                    return params;
+                }
+            };
+
+            volleyQueue.add(request);
+        }
+    }
+
+
+    public void getLinhasCarrinho(final Context context) {
+    }
+
+
 }
 

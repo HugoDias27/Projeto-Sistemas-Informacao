@@ -62,3 +62,10 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 
 </div>
+<div class="carrinho-compra-index">
+
+    <?= Html::beginForm(['carrinhocompra/concluir'], 'post') ?>
+    <?= Html::submitButton('Concluir Carrinho', ['class' => 'btn btn-success']) ?>
+    <?= Html::endForm() ?>
+
+</div>

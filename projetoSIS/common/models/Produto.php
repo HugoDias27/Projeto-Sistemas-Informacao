@@ -2,6 +2,8 @@
 
 namespace common\models;
 
+use common\models\Fornecedor;
+use common\models\FornecedorProduto;
 use Yii;
 
 /**
@@ -12,7 +14,7 @@ use Yii;
  * @property int $prescricao_medica
  * @property float $preco
  * @property int $quantidade
- * @property int $categoria_id
+ * @property int|null $categoria_id
  * @property int $iva_id
  *
  * @property Categoria $categoria
@@ -20,7 +22,6 @@ use Yii;
  * @property Fornecedor[] $fornecedors
  * @property Imagem[] $imagens
  * @property Iva $iva
- * @property LinhaFatura[] $linhaFaturas
  * @property LinhaCarrinho[] $linhasCarrinhos
  */
 class Produto extends \yii\db\ActiveRecord
@@ -39,7 +40,7 @@ class Produto extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nome', 'prescricao_medica', 'preco', 'quantidade', 'categoria_id', 'iva_id'], 'required'],
+            [['nome', 'prescricao_medica', 'preco', 'quantidade', 'iva_id'], 'required'],
             [['prescricao_medica', 'quantidade', 'categoria_id', 'iva_id'], 'integer'],
             [['preco'], 'number'],
             [['nome'], 'string', 'max' => 45],
@@ -89,7 +90,7 @@ class Produto extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getFornecedors()
+    public function getFornecedores()
     {
         return $this->hasMany(Fornecedor::class, ['id' => 'fornecedor_id'])->viaTable('fornecedores_produtos', ['produto_id' => 'id']);
     }
@@ -112,16 +113,6 @@ class Produto extends \yii\db\ActiveRecord
     public function getIva()
     {
         return $this->hasOne(Iva::class, ['id' => 'iva_id']);
-    }
-
-    /**
-     * Gets query for [[LinhaFaturas]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getLinhaFaturas()
-    {
-        return $this->hasMany(LinhaFatura::class, ['produto_id' => 'id']);
     }
 
     /**

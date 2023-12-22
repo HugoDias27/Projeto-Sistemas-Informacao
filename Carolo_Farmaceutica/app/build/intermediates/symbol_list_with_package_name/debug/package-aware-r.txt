@@ -3278,6 +3278,7 @@ id enterAlwaysCollapsed
 id etEmail
 id etIp
 id etPassword
+id etQuantidadeCarrinho
 id etUsername
 id exitUntilCollapsed
 id expand_activities_button
@@ -3621,6 +3622,7 @@ id tvPrescricao
 id tvPrescricaoMedica
 id tvProduto
 id tvQuantidade
+id tvQuantidadeCarrinho
 id tvQuantidadeMedicamento
 id tvTelefone
 id tvUsername
@@ -4066,6 +4068,7 @@ string path_password_strike_through
 string preco
 string prescicao_medica
 string quantidade
+string quantidade_carrinho
 string receita_medica
 string search_menu_title
 string searchbar_scrolling_view_behavior

@@ -57,6 +57,7 @@
     <string name="Txt_Medico_prescricao">Médico Prescrição</string>
     <string name="txt_valido">Válido:</string>
     <string name="txt_posologia">Posologia:</string>
+    <string name="quantidade_carrinho">Quantidade a adicionar ao carrinho:\n</string>
     <string name="definicoes">Definições:</string>
     <string name="settings">Escreva o IP: </string>
     <string name="mudar_ip">Mudar IP</string>
