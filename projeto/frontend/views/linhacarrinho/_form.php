@@ -15,10 +15,11 @@ use yii\widgets\ActiveForm;
 
     <?php if ($quantidadeDisponivel): ?>
         <?= $form->field($linhaCarrinho, 'quantidade')->dropDownList(
-            range(0, $quantidadeDisponivel),
+            array_combine(range(1, $quantidadeDisponivel), range(1, $quantidadeDisponivel)), // Modificado para começar em 1
             [
-                'prompt' => 'Selecione a quantidade', // Adiciona uma opção de prompt
-                'class' => 'form-control custom-class', // Adiciona uma classe CSS personalizada
+                'prompt' => 'Selecione a quantidade',
+                'class' => 'form-control custom-class',
+                'required' => true,
             ]
         ) ?>
         <div class="form-group">
