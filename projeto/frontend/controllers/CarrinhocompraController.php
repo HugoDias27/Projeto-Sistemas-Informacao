@@ -63,7 +63,7 @@ class CarrinhocompraController extends Controller
         }
 
         // Caso não exista carrinho válido
-        throw new NotFoundHttpException('Não foi encontrado um carrinho de compras válido para o usuário logado.');
+        throw new NotFoundHttpException('De momento, não tem nenhum carrinho de compras.');
     }
 
 
@@ -118,18 +118,52 @@ class CarrinhocompraController extends Controller
                     return $this->redirect(['receitamedica/verificar', 'produtoid' => $produto->id]);
                 }
             } else {
-                return $this->redirect(['site/index']);
+                return $this->redirect(Yii::$app->getHomeUrl());
             }
         } else {
-            return $this->redirect(['site/login']);
+            return $this->redirect(['/site/login']);
         }
-        return $this->redirect(['site/index']);
+        return $this->redirect(Yii::$app->getHomeUrl());
+    }
+
+    public function actionCreatecomreceita($id)
+    {
+        if (!Yii::$app->user->isGuest) {
+            $userId = Yii::$app->user->id;
+            $carrinhoCompras = new CarrinhoCompra();
+            $produto = Produto::findOne($id);
+
+            if ($produto !== null) {
+                $ultimoCarrinho = CarrinhoCompra::find()
+                    ->where(['cliente_id' => $userId, 'fatura_id' => null])
+                    ->orderBy(['dta_venda' => SORT_DESC])
+                    ->one();
+
+                if ($ultimoCarrinho === null) {
+                    $carrinhoCompras->dta_venda = date('Y-m-d');
+                    $carrinhoCompras->quantidade = 0;
+                    $carrinhoCompras->valortotal = 0;
+                    $carrinhoCompras->ivatotal = 0;
+                    $carrinhoCompras->cliente_id = $userId;
+
+                    if ($carrinhoCompras->save()) {
+                        return $this->redirect(['linhacarrinho/index', 'id' => $id]);
+                    }
+                } else {
+                    return $this->redirect(['linhacarrinho/index', 'id' => $id]);
+                }
+            } else {
+                return $this->redirect(Yii::$app->getHomeUrl());
+            }
+        } else {
+            return $this->redirect(['/site/login']);
+        }
+        return $this->redirect(Yii::$app->getHomeUrl());
     }
 
     public function actionConcluir()
     {
         $userid = Yii::$app->user->id;
-
 
         $ultimoCarrinho = CarrinhoCompra::find()
             ->where(['cliente_id' => $userid, 'fatura_id' => null])
@@ -166,7 +200,7 @@ class CarrinhocompraController extends Controller
             if ($fatura->save()) {
                 $ultimoCarrinho->fatura_id = $fatura->id;
                 if ($ultimoCarrinho->save()) {
-                    return $this->redirect(['site/index']);
+                    return $this->redirect(Yii::$app->getHomeUrl());
                 }
             }
         }
@@ -180,8 +214,7 @@ class CarrinhocompraController extends Controller
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public
-    function actionUpdate($id)
+    public function actionUpdate($id)
     {
         $model = $this->findModel($id);
 

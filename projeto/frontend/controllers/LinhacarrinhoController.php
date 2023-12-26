@@ -118,8 +118,8 @@ class LinhacarrinhoController extends Controller
                 $verificaProdutoLinha->quantidade = $quantidadeFinal;
                 $verificaProdutoLinha->precounit = $produto->preco;
 
-                $verificaProdutoLinha->valoriva = $produto->preco * ($produto->iva->percentagem / 100);
-                $verificaProdutoLinha->valorcomiva = $verificaProdutoLinha->valoriva + $verificaProdutoLinha->precounit;
+                $verificaProdutoLinha->valoriva = number_format($produto->preco * ($produto->iva->percentagem / 100), 2, '.');
+                $verificaProdutoLinha->valorcomiva = number_format($verificaProdutoLinha->valoriva + $verificaProdutoLinha->precounit, 2, '.');
                 $verificaProdutoLinha->subtotal = $verificaProdutoLinha->valorcomiva * $quantidade;
 
                 $produto->quantidade = $produto->quantidade - $quantidade;
@@ -133,8 +133,8 @@ class LinhacarrinhoController extends Controller
                 $LinhaCarrinho->quantidade = $quantidade;
                 $LinhaCarrinho->precounit = $produto->preco;
 
-                $LinhaCarrinho->valoriva = $produto->preco * ($produto->iva->percentagem / 100);
-                $LinhaCarrinho->valorcomiva = $LinhaCarrinho->valoriva + $LinhaCarrinho->precounit;
+                $LinhaCarrinho->valoriva = number_format($produto->preco * ($produto->iva->percentagem / 100), 2, '.');
+                $LinhaCarrinho->valorcomiva = number_format($LinhaCarrinho->valoriva + $LinhaCarrinho->precounit, 2, '.');
                 $LinhaCarrinho->subtotal = $LinhaCarrinho->valorcomiva * $quantidade;
 
                 $LinhaCarrinho->carrinho_compra_id = $ultimoCarrinho->id;
@@ -169,8 +169,8 @@ class LinhacarrinhoController extends Controller
             $LinhaCarrinho->quantidade = $quantidade;
             $LinhaCarrinho->precounit = $produto->preco;
 
-            $LinhaCarrinho->valoriva = $produto->preco * ($produto->iva->percentagem / 100);
-            $LinhaCarrinho->valorcomiva = $LinhaCarrinho->valoriva + $LinhaCarrinho->precounit;
+            $LinhaCarrinho->valoriva = number_format($produto->preco * ($produto->iva->percentagem / 100), 2, '.');
+            $LinhaCarrinho->valorcomiva = number_format($LinhaCarrinho->valoriva + $LinhaCarrinho->precounit, 2, '.');
             $LinhaCarrinho->subtotal = $LinhaCarrinho->valorcomiva * $quantidade;
 
             $produto->quantidade = $produto->quantidade - $quantidadeFinal;
