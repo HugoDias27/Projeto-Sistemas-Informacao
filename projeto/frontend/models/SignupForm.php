@@ -57,7 +57,6 @@ class SignupForm extends Model
             $clienteRole = $auth->getRole('cliente');
             $auth->assign($clienteRole, $user->getId());
 
-
             return $user;
         }
 

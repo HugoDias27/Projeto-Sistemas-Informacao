@@ -67,11 +67,8 @@ class ProdutoController extends Controller
         $searchModel = new ProdutoSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
-        foreach ($dataProvider->models as $model) {
-            $model->iva_id = $model->iva->percentagem . '%' ;
-            $model->categoria_id = $model->categoria->descricao;
-        }
-        $dataProvider->query->with('fornecedoresprodutos');
+
+        $dataProvider->query->with('fornecedoresProdutos');
         $dataProvider->query->with('fornecedores');
 
         return $this->render('index', [

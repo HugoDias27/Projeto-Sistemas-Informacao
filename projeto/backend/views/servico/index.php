@@ -10,7 +10,7 @@ use yii\helpers\Url;
 /** @var \common\models\ServicoSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Servicos';
+$this->title = 'Serviços';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="servico-index">
@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Servico', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Criar Serviço', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -28,7 +28,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
             'id',
             'nome',
             'duracao',
@@ -41,8 +40,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Servico $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                },
             ],
+
+
         ],
     ]); ?>
 

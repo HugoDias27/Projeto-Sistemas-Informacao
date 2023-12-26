@@ -4,12 +4,12 @@ namespace common\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Servico_Estabelecimento;
+use common\models\CarrinhoCompra;
 
 /**
- * Servico_EstabelecimentoSearch represents the model behind the search form of `common\models\Servico_Estabelecimento`.
+ * CarrinhoCompraSearch represents the model behind the search form of `common\models\CarrinhoCompra`.
  */
-class ServicoEstabelecimentoSearch extends ServicoEstabelecimento
+class CarrinhoCompraSearch extends CarrinhoCompra
 {
     /**
      * {@inheritdoc}
@@ -17,7 +17,9 @@ class ServicoEstabelecimentoSearch extends ServicoEstabelecimento
     public function rules()
     {
         return [
-            [['estabelecimento_id', 'servico_id'], 'integer'],
+            [['id', 'quantidade', 'cliente_id', 'fatura_id'], 'integer'],
+            [['dta_venda'], 'safe'],
+            [['valortotal', 'ivatotal'], 'number'],
         ];
     }
 
@@ -39,7 +41,7 @@ class ServicoEstabelecimentoSearch extends ServicoEstabelecimento
      */
     public function search($params)
     {
-        $query = Servico_Estabelecimento::find();
+        $query = CarrinhoCompra::find();
 
         // add conditions that should always apply here
 
@@ -57,8 +59,13 @@ class ServicoEstabelecimentoSearch extends ServicoEstabelecimento
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'estabelecimento_id' => $this->estabelecimento_id,
-            'servico_id' => $this->servico_id,
+            'id' => $this->id,
+            'dta_venda' => $this->dta_venda,
+            'quantidade' => $this->quantidade,
+            'valortotal' => $this->valortotal,
+            'ivatotal' => $this->ivatotal,
+            'cliente_id' => $this->cliente_id,
+            'fatura_id' => $this->fatura_id,
         ]);
 
         return $dataProvider;

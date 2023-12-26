@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\Imagem;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
@@ -82,18 +83,26 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-            $query = Produto::find();
+        $query = Produto::find();
 
-            $paginacao = new Pagination([
-                'defaultPageSize' => 9,
-                'totalCount' => $query->count(),
-            ]);
+        $paginacao = new Pagination([
+            'defaultPageSize' => 9,
+            'totalCount' => $query->count(),
+        ]);
 
-            $produtos = $query->offset($paginacao->offset)
-                ->limit($paginacao->limit)
-                ->all();
+        $produtos = $query->offset($paginacao->offset)
+            ->limit($paginacao->limit)
+            ->all();
 
-        return $this->render('index', ['produtos' => $produtos, 'paginacao' => $paginacao]);
+        $imagens = [];
+        foreach ($produtos as $produto) {
+            $primeiraImagem = $produto->getImagens()->orderBy(['id' => SORT_ASC])->one();
+            if ($primeiraImagem) {
+                $imagens[$produto->id] = $primeiraImagem;
+            }
+        }
+
+        return $this->render('index', ['produtos' => $produtos, 'paginacao' => $paginacao, 'imagens' => $imagens]);
     }
 
 

@@ -40,9 +40,10 @@ class ProdutoController extends Controller
      *
      * @return string
      */
-    public function actionIndex($id)
+
+    public function actionDetalhes($id)
     {
-        //Obter os detalhes do produto pelo ID
+        // Obter os detalhes do produto pelo ID
         $produtoDetalhes = Produto::findOne($id);
 
         if ($produtoDetalhes) {
@@ -62,34 +63,49 @@ class ProdutoController extends Controller
                 $imagemArray[] = $imagem->filename;
             }
 
-
-            //Apresenta na página de detalhes os dados pretendidos para o utilizador, consoante os campos selecionados no index
-            return $this->render('index', ['produtoDetalhes' => $produtoDetalhes, 'receitaMedica' => $receitaMedica, 'precoFinal' => $precoFinal, 'imagemArray' => $imagemArray]);
+            // Apresenta na página de detalhes os dados pretendidos para o utilizador
+            return $this->render('detalhes', [
+                'produtoDetalhes' => $produtoDetalhes,
+                'receitaMedica' => $receitaMedica,
+                'precoFinal' => $precoFinal,
+                'imagemArray' => $imagemArray,
+            ]);
         }
     }
 
+
     public function actionCategoriamedicamentossemreceita()
     {
-            //Procurar na categoria dos Medicamentos
-            $categoriaMedicamentos = Produto::find()->where(['prescricao_medica' => 0]);
+        //Procurar na categoria dos Medicamentos
+        $categoriaMedicamentos = Produto::find()->where(['prescricao_medica' => 0]);
 
-            if ($categoriaMedicamentos) {
+        if ($categoriaMedicamentos) {
 
-                $paginacao = new Pagination([
-                    'defaultPageSize' => 20,
-                    'totalCount' => $categoriaMedicamentos->count(),
-                ]);
+            $paginacao = new Pagination([
+                'defaultPageSize' => 20,
+                'totalCount' => $categoriaMedicamentos->count(),
+            ]);
 
-                $produtos = $categoriaMedicamentos->offset($paginacao->offset)
-                    ->limit($paginacao->limit)
-                    ->all();
+            $produtos = $categoriaMedicamentos->offset($paginacao->offset)
+                ->limit($paginacao->limit)
+                ->all();
 
-                return $this->render('medicamentos', [
-                    'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
-                    'paginacao' => $paginacao
-                ]);
+            $imagens = [];
+            foreach ($produtos as $produto) {
+                $primeiraImagem = $produto->getImagens()->orderBy(['id' => SORT_ASC])->one();
+                if ($primeiraImagem) {
+                    $imagens[$produto->id] = $primeiraImagem;
+                }
             }
+
+            return $this->render('medicamentos', [
+                'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
+                'paginacao' => $paginacao,
+                'imagens' => $imagens
+            ]);
+        }
     }
+
 
     public function actionCategoriamedicamentoscomreceita()
     {
@@ -107,9 +123,18 @@ class ProdutoController extends Controller
                 ->limit($paginacao->limit)
                 ->all();
 
+            $imagens = [];
+            foreach ($produtos as $produto) {
+                $primeiraImagem = $produto->getImagens()->orderBy(['id' => SORT_ASC])->one();
+                if ($primeiraImagem) {
+                    $imagens[$produto->id] = $primeiraImagem;
+                }
+            }
+
             return $this->render('medicamentos', [
                 'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
-                'paginacao' => $paginacao
+                'paginacao' => $paginacao,
+                'imagens' => $imagens
             ]);
         }
     }
@@ -135,9 +160,18 @@ class ProdutoController extends Controller
                     ->limit($paginacao->limit)
                     ->all();
 
+                $imagens = [];
+                foreach ($produtos as $produto) {
+                    $primeiraImagem = $produto->getImagens()->orderBy(['id' => SORT_ASC])->one();
+                    if ($primeiraImagem) {
+                        $imagens[$produto->id] = $primeiraImagem;
+                    }
+                }
+
                 return $this->render('medicamentos', [
                     'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
-                    'paginacao' => $paginacao
+                    'paginacao' => $paginacao,
+                    'imagens' => $imagens
                 ]);
             }
         } else {
@@ -167,9 +201,18 @@ class ProdutoController extends Controller
                     ->limit($paginacao->limit)
                     ->all();
 
+                $imagens = [];
+                foreach ($produtos as $produto) {
+                    $primeiraImagem = $produto->getImagens()->orderBy(['id' => SORT_ASC])->one();
+                    if ($primeiraImagem) {
+                        $imagens[$produto->id] = $primeiraImagem;
+                    }
+                }
+
                 return $this->render('medicamentos', [
                     'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
-                    'paginacao' => $paginacao
+                    'paginacao' => $paginacao,
+                    'imagens' => $imagens
                 ]);
             }
         } else {
@@ -198,9 +241,18 @@ class ProdutoController extends Controller
                     ->limit($paginacao->limit)
                     ->all();
 
+                $imagens = [];
+                foreach ($produtos as $produto) {
+                    $primeiraImagem = $produto->getImagens()->orderBy(['id' => SORT_ASC])->one();
+                    if ($primeiraImagem) {
+                        $imagens[$produto->id] = $primeiraImagem;
+                    }
+                }
+
                 return $this->render('medicamentos', [
                     'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
-                    'paginacao' => $paginacao
+                    'paginacao' => $paginacao,
+                    'imagens' => $imagens
                 ]);
             }
         } else {
@@ -229,9 +281,18 @@ class ProdutoController extends Controller
                     ->limit($paginacao->limit)
                     ->all();
 
+                $imagens = [];
+                foreach ($produtos as $produto) {
+                    $primeiraImagem = $produto->getImagens()->orderBy(['id' => SORT_ASC])->one();
+                    if ($primeiraImagem) {
+                        $imagens[$produto->id] = $primeiraImagem;
+                    }
+                }
+
                 return $this->render('medicamentos', [
                     'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
-                    'paginacao' => $paginacao
+                    'paginacao' => $paginacao,
+                    'imagens' => $imagens
                 ]);
             }
         } else {

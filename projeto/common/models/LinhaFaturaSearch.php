@@ -17,9 +17,9 @@ class LinhaFaturaSearch extends LinhaFatura
     public function rules()
     {
         return [
-            [['id', 'quantidade', 'fatura_id', 'produto_id'], 'integer'],
+            [['id', 'quantidade', 'fatura_id', 'receita_medica_id', 'servico_id'], 'integer'],
             [['dta_venda'], 'safe'],
-            [['preco'], 'number'],
+            [['precounit', 'valoriva', 'valorcomiva', 'subtotal'], 'number'],
         ];
     }
 
@@ -62,9 +62,13 @@ class LinhaFaturaSearch extends LinhaFatura
             'id' => $this->id,
             'dta_venda' => $this->dta_venda,
             'quantidade' => $this->quantidade,
-            'preco' => $this->preco,
+            'precounit' => $this->precounit,
+            'valoriva' => $this->valoriva,
+            'valorcomiva' => $this->valorcomiva,
+            'subtotal' => $this->subtotal,
             'fatura_id' => $this->fatura_id,
-            'produto_id' => $this->produto_id,
+            'receita_medica_id' => $this->receita_medica_id,
+            'servico_id' => $this->servico_id,
         ]);
 
         return $dataProvider;

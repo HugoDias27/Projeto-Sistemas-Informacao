@@ -1,8 +1,10 @@
 <?php
 
-namespace common\models;
+namespace backend\models;
 
-use Yii;
+use backend\models\Estabelecimento;
+use common\models\Fatura;
+use common\models\Servico;
 
 /**
  * This is the model class for table "servicos_estabelecimentos".

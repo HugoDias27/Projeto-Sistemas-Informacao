@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\Produto;
 use common\models\Profile;
 use common\models\ReceitaMedica;
 use common\models\ReceitaMedicaSearch;
@@ -16,7 +17,7 @@ use yii\filters\VerbFilter;
 /**
  * ReceitaController implements the CRUD actions for ReceitaMedica model.
  */
-class ReceitaController extends Controller
+class ReceitamedicaController extends Controller
 {
     /**
      * @inheritDoc
@@ -62,11 +63,14 @@ class ReceitaController extends Controller
         $searchModel = new ReceitaMedicaSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
+
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
+
 
 
     /**
@@ -98,11 +102,15 @@ class ReceitaController extends Controller
         $clientes = User::find()
             ->innerJoin('auth_assignment', 'auth_assignment.user_id = user.id')
             ->andWhere(['auth_assignment.item_name' => $clienteRole->name])
-            ->select(['id', 'username'])
+            ->select(['user.id', 'user.username'])
             ->asArray()
             ->all();
 
         $clientesItems = ArrayHelper::map($clientes, 'id', 'username');
+
+        $produtos = Produto::find()->where(['prescricao_medica' => 1])->all();
+        $produtosItems = ArrayHelper::map($produtos, 'id', 'nome');
+
 
         if ($this->request->isPost) {
             if ($receita->load($this->request->post()) && $receita->save()) {
@@ -115,6 +123,7 @@ class ReceitaController extends Controller
         return $this->render('create', [
             'receita' => $receita,
             'clientes' => $clientesItems,
+            'produtos' => $produtosItems,
         ]);
     }
 

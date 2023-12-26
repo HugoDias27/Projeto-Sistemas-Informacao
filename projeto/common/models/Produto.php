@@ -14,7 +14,7 @@ use Yii;
  * @property int $prescricao_medica
  * @property float $preco
  * @property int $quantidade
- * @property int $categoria_id
+ * @property int|null $categoria_id
  * @property int $iva_id
  *
  * @property Categoria $categoria
@@ -22,13 +22,10 @@ use Yii;
  * @property Fornecedor[] $fornecedors
  * @property Imagem[] $imagens
  * @property Iva $iva
- * @property LinhaFatura[] $linhaFaturas
  * @property LinhaCarrinho[] $linhasCarrinhos
  */
 class Produto extends \yii\db\ActiveRecord
 {
-
-    public $imagem;
     /**
      * {@inheritdoc}
      */
@@ -43,13 +40,12 @@ class Produto extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nome', 'prescricao_medica', 'preco', 'quantidade', 'categoria_id', 'iva_id'], 'required'],
+            [['nome', 'prescricao_medica', 'preco', 'quantidade', 'iva_id'], 'required'],
             [['prescricao_medica', 'quantidade', 'categoria_id', 'iva_id'], 'integer'],
             [['preco'], 'number'],
             [['nome'], 'string', 'max' => 45],
             [['categoria_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categoria::class, 'targetAttribute' => ['categoria_id' => 'id']],
             [['iva_id'], 'exist', 'skipOnError' => true, 'targetClass' => Iva::class, 'targetAttribute' => ['iva_id' => 'id']],
-
         ];
     }
 
@@ -120,22 +116,12 @@ class Produto extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[LinhaFaturas]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getLinhaFaturas()
-    {
-        return $this->hasMany(LinhaFatura::class, ['produto_id' => 'id']);
-    }
-
-    /**
      * Gets query for [[LinhasCarrinhos]].
      *
      * @return \yii\db\ActiveQuery
      */
     public function getLinhasCarrinhos()
     {
-        return $this->hasMany(LinhasCarrinho::class, ['produto_id' => 'id']);
+        return $this->hasMany(LinhaCarrinho::class, ['produto_id' => 'id']);
     }
 }

@@ -17,11 +17,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $produto->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $produto->id], [
+        <?= Html::a('Atualizar', ['update', 'id' => $produto->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Eliminar', ['delete', 'id' => $produto->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Queres eliminar este produto?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -32,11 +32,57 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'nome',
-            'prescricao_medica',
-            'preco',
+            'prescricao_medica' => [
+                'attribute' => 'prescricao_medica',
+                'value' => function ($model) {
+                    return $model->prescricao_medica ? 'Sim' : 'Não';
+                },
+                'filter' => [
+                    0 => 'Não',
+                    1 => 'Sim',
+                ],
+            ],
+            'preco' => [
+                'attribute' => 'preco',
+                'value' => function ($model) {
+                    return $model->preco . '€';
+                },
+            ],
+            [
+                'label' => 'Nome Fornecedor',
+                'value' => function ($model) {
+                    $fornecedores = '';
+                    foreach ($model->fornecedores as $fornecedor) {
+                        $fornecedores .= $fornecedor->nome ;
+                    }
+                    return $fornecedores;
+                },
+            ],
+            [
+                'label' => 'Data de Importação',
+                'value' => function ($model) {
+                    $fornecedores = '';
+                    foreach ($model->fornecedoresProdutos as $fornecedor) {
+                        $fornecedores .= $fornecedor->data_importacao ;
+                    }
+                    return $fornecedores;
+                },
+            ],
+            [
+                'attribute' => 'categoria_id',
+                'label' => 'Categoria',
+                'value' => function ($model) {
+                    return isset($model->categoria) ? $model->categoria->descricao : '';
+                },
+            ],
+            [
+                'attribute' => 'iva_id',
+                'label' => 'IVA',
+                'value' => function ($model) {
+                    return isset($model->iva) ? $model->iva->percentagem . '%' : '';
+                },
+            ],
             'quantidade',
-            'categoria_id',
-            'iva_id',
         ],
     ]) ?>
     <h2>Detalhes dos Fornecedores:</h2>

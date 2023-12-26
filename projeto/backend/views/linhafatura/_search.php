@@ -21,11 +21,19 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'quantidade') ?>
 
-    <?= $form->field($model, 'preco') ?>
+    <?= $form->field($model, 'precounit') ?>
 
-    <?= $form->field($model, 'fatura_id') ?>
+    <?= $form->field($model, 'valoriva') ?>
 
-    <?php // echo $form->field($model, 'produto_id') ?>
+    <?php // echo $form->field($model, 'valorcomiva') ?>
+
+    <?php // echo $form->field($model, 'subtotal') ?>
+
+    <?php // echo $form->field($model, 'fatura_id') ?>
+
+    <?php // echo $form->field($model, 'receita_medica_id') ?>
+
+    <?php // echo $form->field($model, 'servico_id') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

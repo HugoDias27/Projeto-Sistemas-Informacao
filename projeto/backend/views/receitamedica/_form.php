@@ -28,10 +28,10 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($receita, 'valido')->dropDownList([1 => 'Sim', 0=> 'Não']) ?>
 
-    <?= $form->field($receita, 'posologia')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($receita, 'posologia')->dropDownList($produtos, ['prompt' => 'Selecione...']) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -10,12 +10,17 @@ use Yii;
  * @property int $id
  * @property string $dta_venda
  * @property int $quantidade
- * @property float $preco
+ * @property float $precounit
+ * @property float $valoriva
+ * @property float $valorcomiva
+ * @property float $subtotal
  * @property int $fatura_id
- * @property int $produto_id
+ * @property int|null $receita_medica_id
+ * @property int|null $servico_id
  *
  * @property Fatura $fatura
- * @property Produto $produto
+ * @property ReceitaMedica $receitaMedica
+ * @property Servico $servico
  */
 class LinhaFatura extends \yii\db\ActiveRecord
 {
@@ -33,12 +38,13 @@ class LinhaFatura extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['dta_venda', 'quantidade', 'preco', 'fatura_id', 'produto_id'], 'required'],
+            [['dta_venda', 'quantidade', 'precounit', 'valoriva', 'valorcomiva', 'subtotal', 'fatura_id'], 'required'],
             [['dta_venda'], 'safe'],
-            [['quantidade', 'fatura_id', 'produto_id'], 'integer'],
-            [['preco'], 'number'],
+            [['quantidade', 'fatura_id', 'receita_medica_id', 'servico_id'], 'integer'],
+            [['precounit', 'valoriva', 'valorcomiva', 'subtotal'], 'number'],
             [['fatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => Fatura::class, 'targetAttribute' => ['fatura_id' => 'id']],
-            [['produto_id'], 'exist', 'skipOnError' => true, 'targetClass' => Produto::class, 'targetAttribute' => ['produto_id' => 'id']],
+            [['receita_medica_id'], 'exist', 'skipOnError' => true, 'targetClass' => ReceitaMedica::class, 'targetAttribute' => ['receita_medica_id' => 'id']],
+            [['servico_id'], 'exist', 'skipOnError' => true, 'targetClass' => Servico::class, 'targetAttribute' => ['servico_id' => 'id']],
         ];
     }
 
@@ -51,9 +57,13 @@ class LinhaFatura extends \yii\db\ActiveRecord
             'id' => 'ID',
             'dta_venda' => 'Dta Venda',
             'quantidade' => 'Quantidade',
-            'preco' => 'Preco',
+            'precounit' => 'Precounit',
+            'valoriva' => 'Valoriva',
+            'valorcomiva' => 'Valorcomiva',
+            'subtotal' => 'Subtotal',
             'fatura_id' => 'Fatura ID',
-            'produto_id' => 'Produto ID',
+            'receita_medica_id' => 'Receita Medica ID',
+            'servico_id' => 'Servico ID',
         ];
     }
 
@@ -68,12 +78,22 @@ class LinhaFatura extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Produto]].
+     * Gets query for [[ReceitaMedica]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getProduto()
+    public function getReceitaMedica()
     {
-        return $this->hasOne(Produto::class, ['id' => 'produto_id']);
+        return $this->hasOne(ReceitaMedica::class, ['id' => 'receita_medica_id']);
+    }
+
+    /**
+     * Gets query for [[Servico]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getServico()
+    {
+        return $this->hasOne(Servico::class, ['id' => 'servico_id']);
     }
 }

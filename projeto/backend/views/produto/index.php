@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Produto', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Criar Produto', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -47,11 +47,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             [
-                'label' => 'Nome Fornecedor',
+                'attribute' => 'fornecedor_id',
+                'label' => 'Nome do fornecedor',
                 'value' => function ($model) {
                     $fornecedores = '';
                     foreach ($model->fornecedores as $fornecedor) {
-                        $fornecedores .= $fornecedor->nome ;
+                        $fornecedores = $fornecedor->nome ;
                     }
                     return $fornecedores;
                 },
@@ -67,13 +68,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             [
-                'label' => 'Hora de Importação',
+                'attribute' => 'categoria_id',
+                'label' => 'Categoria',
                 'value' => function ($model) {
-                    $fornecedores = '';
-                    foreach ($model->fornecedoresProdutos as $fornecedor) {
-                        $fornecedores .= $fornecedor->hora_importacao ;
-                    }
-                    return $fornecedores;
+                    return isset($model->categoria) ? $model->categoria->descricao : '';
                 },
             ],
             'quantidade',

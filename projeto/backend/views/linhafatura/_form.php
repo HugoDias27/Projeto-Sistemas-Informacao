@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var common\models\LinhaFatura $model */
+/** @var common\models\LinhaFatura $linhafatura */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
@@ -12,15 +12,9 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'dta_venda')->textInput() ?>
+    <?= $form->field($linhafatura, 'quantidade')->textInput(['type' => 'number']) ?>
 
-    <?= $form->field($model, 'quantidade')->textInput() ?>
-
-    <?= $form->field($model, 'preco')->textInput() ?>
-
-    <?= $form->field($model, 'fatura_id')->textInput() ?>
-
-    <?= $form->field($model, 'produto_id')->textInput() ?>
+    <?= $form->field($linhafatura, 'servico_id')->dropDownList($servicosItems, ['prompt' => 'Selecione o servico']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

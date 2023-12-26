@@ -17,9 +17,9 @@ class FaturaSearch extends Fatura
     public function rules()
     {
         return [
-            [['id', 'cliente_id', 'receita_id', 'estabelecimento_id', 'servico_id'], 'integer'],
-            [['dta_emissao', 'emissor'], 'safe'],
-            [['total_fatura'], 'number'],
+            [['id', 'cliente_id', 'estabelecimento_id', 'emissor_id'], 'integer'],
+            [['dta_emissao'], 'safe'],
+            [['valortotal', 'ivatotal'], 'number'],
         ];
     }
 
@@ -61,14 +61,12 @@ class FaturaSearch extends Fatura
         $query->andFilterWhere([
             'id' => $this->id,
             'dta_emissao' => $this->dta_emissao,
-            'total_fatura' => $this->total_fatura,
+            'valortotal' => $this->valortotal,
+            'ivatotal' => $this->ivatotal,
             'cliente_id' => $this->cliente_id,
-            'receita_id' => $this->receita_id,
             'estabelecimento_id' => $this->estabelecimento_id,
-            'servico_id' => $this->servico_id,
+            'emissor_id' => $this->emissor_id,
         ]);
-
-        $query->andFilterWhere(['like', 'emissor', $this->emissor]);
 
         return $dataProvider;
     }

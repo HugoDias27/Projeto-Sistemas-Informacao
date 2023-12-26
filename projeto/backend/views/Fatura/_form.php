@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var common\models\Fatura $model */
+/** @var common\models\Fatura $fatura */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
@@ -12,22 +12,13 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'dta_emissao')->textInput() ?>
+    <?= $form->field($fatura, 'cliente_id')->dropDownList($cliente, ['prompt' => 'Selecione o cliente']) ?>
 
-    <?= $form->field($model, 'emissor')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($fatura, 'estabelecimento_id')->dropDownList($estabelecimento, ['prompt' => 'Selecione a loja']) ?>
 
-    <?= $form->field($model, 'total_fatura')->textInput() ?>
-
-    <?= $form->field($model, 'cliente_id')->textInput() ?>
-
-    <?= $form->field($model, 'receita_id')->textInput() ?>
-
-    <?= $form->field($model, 'estabelecimento_id')->textInput() ?>
-
-    <?= $form->field($model, 'servico_id')->textInput() ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
