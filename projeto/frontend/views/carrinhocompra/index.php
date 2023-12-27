@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'value' => function ($model) {
                     return Html::beginForm(['linhacarrinho/update', 'id' => $model->id], 'post')
-                        . Html::input('number', 'quantidade', $model->quantidade, ['class' => 'form-control', 'style' => 'width: 80px;'])
+                        . Html::input('number', 'quantidade', $model->quantidade, ['class' => 'form-control', 'style' => 'width: 80px;', 'min' => 1])
                         . Html::submitButton('Atualizar', ['class' => 'btn btn-sm btn-primary'])
                         . Html::endForm();
                 },

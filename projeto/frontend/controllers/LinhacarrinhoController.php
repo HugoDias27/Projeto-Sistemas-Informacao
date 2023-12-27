@@ -161,22 +161,28 @@ class LinhacarrinhoController extends Controller
         $LinhaCarrinho = $this->findModel($id);
         $produto = $LinhaCarrinho->produto;
         $quantidadeBd = $LinhaCarrinho->quantidade;
-        $post = $this->request->post();
 
         if ($this->request->isPost) {
+            $post = $this->request->post();
             $quantidade = $post['quantidade'];
-            $quantidadeFinal = $quantidade - $quantidadeBd;
-            $LinhaCarrinho->quantidade = $quantidade;
-            $LinhaCarrinho->precounit = $produto->preco;
 
-            $LinhaCarrinho->valoriva = number_format($produto->preco * ($produto->iva->percentagem / 100), 2, '.');
-            $LinhaCarrinho->valorcomiva = number_format($LinhaCarrinho->valoriva + $LinhaCarrinho->precounit, 2, '.');
-            $LinhaCarrinho->subtotal = $LinhaCarrinho->valorcomiva * $quantidade;
-
-            $produto->quantidade = $produto->quantidade - $quantidadeFinal;
-
-            if ($LinhaCarrinho->save() && $produto->save()) {
+            if ($quantidade > $produto->quantidade) {
+                Yii::$app->session->setFlash('error', 'Não dispomos de artigos em quantidade suficiente para satisfazer o seu pedido.');
                 return $this->redirect(['carrinhocompra/index']);
+            } else {
+                $quantidadeFinal = $quantidade - $quantidadeBd;
+                $LinhaCarrinho->quantidade = $quantidade;
+                $LinhaCarrinho->precounit = $produto->preco;
+
+                $LinhaCarrinho->valoriva = number_format($produto->preco * ($produto->iva->percentagem / 100), 2, '.');
+                $LinhaCarrinho->valorcomiva = number_format($LinhaCarrinho->valoriva + $LinhaCarrinho->precounit, 2, '.');
+                $LinhaCarrinho->subtotal = $LinhaCarrinho->valorcomiva * $quantidade;
+
+                $produto->quantidade = $produto->quantidade - $quantidadeFinal;
+
+                if ($LinhaCarrinho->save() && $produto->save()) {
+                    return $this->redirect(['carrinhocompra/index']);
+                }
             }
         }
     }
