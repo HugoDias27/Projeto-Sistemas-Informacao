@@ -12,7 +12,8 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="profile-view">
 
-    <h1><?= Html::encode($model->user->username) ?></h1>
+    <h1 align="center"><?= Html::encode($model->user->username) ?></h1>
+    <hr>
 
     <p>
         <?= Html::a('Editar perfil', ['update', 'id' => $model->user_id], ['class' => 'btn btn-primary']) ?>

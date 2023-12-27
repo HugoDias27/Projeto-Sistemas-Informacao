@@ -66,6 +66,11 @@ class CarrinhocompraController extends Controller
         throw new NotFoundHttpException('De momento, não tem nenhum carrinho de compras.');
     }
 
+    public function actionDadosentrega()
+    {
+        return $this->redirect(Yii::$app->getHomeUrl());
+    }
+
 
     /**
      * Displays a single CarrinhoCompra model.
@@ -200,7 +205,9 @@ class CarrinhocompraController extends Controller
             if ($fatura->save()) {
                 $ultimoCarrinho->fatura_id = $fatura->id;
                 if ($ultimoCarrinho->save()) {
-                    return $this->redirect(Yii::$app->getHomeUrl());
+                    //return $this->redirect(Yii::$app->getHomeUrl());
+                    //return $this->redirect(['/carrinhocompra/dadosEntrega']);
+                    return $this->render('dadosEntrega');
                 }
             }
         }

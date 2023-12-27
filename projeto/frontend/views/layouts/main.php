@@ -85,6 +85,7 @@ AppAsset::register($this);
                     ['label' => 'Definições do perfil', 'url' => ['profile/view', 'id' => Yii::$app->user->identity->getId()]],
                     ['label' => 'Editar perfil', 'url' => ['profile/update', 'id' => Yii::$app->user->identity->getId()]],
                     ['label' => 'Receita médica', 'url' => ['receitamedica/index', 'id' => Yii::$app->user->identity->getId()]],
+                    ['label' => 'Faturas', 'url' => ['fatura/index', 'id' => Yii::$app->user->identity->getId()]],
                 ],
                 'encode' => false,
             ];
