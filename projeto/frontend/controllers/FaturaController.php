@@ -2,8 +2,19 @@
 
 namespace frontend\controllers;
 
+use common\models\CarrinhoCompra;
 use common\models\Fatura;
 use common\models\FaturaSearch;
+use common\models\LinhaCarrinho;
+use common\models\LinhaFatura;
+use common\models\Produto;
+use common\models\ReceitaMedica;
+use common\models\Servico;
+use common\models\User;
+use Mpdf\Mpdf;
+use Yii;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -57,10 +68,57 @@ class FaturaController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        $fatura = $this->findModel($id);
+
+        $cliente = User::find()->where(['id' => $fatura->cliente_id])->one();
+        $perfilCliente = $cliente->profiles;
+
+        $linhasFatura = LinhaFatura::find()->where(['fatura_id' => $id])->all();
+
+        $carrinho = CarrinhoCompra::find()->where(['fatura_id' => $id])->one();
+
+        $servicosids = ArrayHelper::getColumn($linhasFatura, 'servico_id');
+        $servicos = Servico::find()->where(['id' => $servicosids])->all();
+
+        $receitasids = ArrayHelper::getColumn($linhasFatura, 'receita_medica_id');
+        $receitas = ReceitaMedica::find()->where(['id' => $receitasids])->all();
+
+        if ($carrinho !== null) {
+            $carrinhoId = $carrinho->id;
+            $linhasCarrinho = LinhaCarrinho::find()->where(['carrinho_compra_id' => $carrinhoId])->all();
+
+            $produtos = [];
+            foreach ($linhasCarrinho as $linhaCarrinho) {
+                $produto = Produto::find()->where(['id' => $linhaCarrinho->produto_id])->one();
+                if ($produto) {
+                    $produtos[] = $produto;
+                }
+            }
+
+            return $this->render('view', [
+                'fatura' => $fatura,
+                'cliente' => $cliente,
+                'perfilCliente' => $perfilCliente,
+                'linhasFatura' => $linhasFatura,
+                'servicos' => $servicos,
+                'receitas' => $receitas,
+                'linhasCarrinho' => $linhasCarrinho,
+                'produtos' => $produtos,
+            ]);
+        }
+        else
+        {
+            return $this->render('view', [
+                'fatura' => $fatura,
+                'cliente' => $cliente,
+                'perfilCliente' => $perfilCliente,
+                'linhasFatura' => $linhasFatura,
+                'servicos' => $servicos,
+                'receitas' => $receitas,
+            ]);
+        }
     }
+
 
     /**
      * Finds the Fatura model based on its primary key value.
@@ -76,5 +134,64 @@ class FaturaController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionImprimir($id) // Ação para gerar o PDF da fatura
+    {
+        $fatura = $this->findModel($id);
+
+        $cliente = User::find()->where(['id' => $fatura->cliente_id])->one();
+        $perfilCliente = $cliente->profiles;
+
+        $linhasFatura = LinhaFatura::find()->where(['fatura_id' => $id])->all();
+
+        $carrinho = CarrinhoCompra::find()->where(['fatura_id' => $id])->one();
+
+        $servicosids = ArrayHelper::getColumn($linhasFatura, 'servico_id');
+        $servicos = Servico::find()->where(['id' => $servicosids])->all();
+
+        $receitasids = ArrayHelper::getColumn($linhasFatura, 'receita_medica_id');
+        $receitas = ReceitaMedica::find()->where(['id' => $receitasids])->all();
+
+        if ($carrinho !== null) {
+            $carrinhoId = $carrinho->id;
+            $linhasCarrinho = LinhaCarrinho::find()->where(['carrinho_compra_id' => $carrinhoId])->all();
+
+            $produtos = [];
+            foreach ($linhasCarrinho as $linhaCarrinho) {
+                $produto = Produto::find()->where(['id' => $linhaCarrinho->produto_id])->one();
+                if ($produto) {
+                    $produtos[] = $produto;
+                }
+            }
+
+            $content = $this->renderPartial('impressao', [
+                'fatura' => $fatura,
+                'cliente' => $cliente,
+                'perfilCliente' => $perfilCliente,
+                'linhasFatura' => $linhasFatura,
+                'servicos' => $servicos,
+                'receitas' => $receitas,
+                'linhasCarrinho' => $linhasCarrinho,
+                'produtos' => $produtos
+            ]);
+
+        }
+        else
+        {
+            $content = $this->renderPartial('impressao', [
+                'fatura' => $fatura,
+                'cliente' => $cliente,
+                'perfilCliente' => $perfilCliente,
+                'linhasFatura' => $linhasFatura,
+                'servicos' => $servicos,
+                'receitas' => $receitas
+            ]);
+        }
+        $content = "<link rel='stylesheet' href='" . Yii::$app->request->baseUrl . "/estilos.css'> <div class='table-container'>" . $content . "</div>";
+        $mpdf = new Mpdf();
+        $mpdf->WriteHTML($content);
+        $mpdf->Output('Fatura ' . $id . '.pdf', 'D');
+
     }
 }

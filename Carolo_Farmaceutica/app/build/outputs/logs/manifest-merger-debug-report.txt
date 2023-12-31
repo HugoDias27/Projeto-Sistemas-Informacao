@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:2:1-55:12
-INJECTED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:2:1-55:12
-INJECTED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:2:1-55:12
-INJECTED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:2:1-55:12
+ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:2:1-58:12
+INJECTED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:2:1-58:12
+INJECTED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:2:1-58:12
+INJECTED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:2:1-58:12
 MERGED from [com.google.android.material:material:1.11.0] C:\Users\tsc20\.gradle\caches\transforms-3\da4a177b0a7812530ab961a7a7967b71\transformed\material-1.11.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\tsc20\.gradle\caches\transforms-3\5acf9a84f6874f66961cd7fc314b86a2\transformed\constraintlayout-2.1.4\AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.appcompat:appcompat-resources:1.6.1] C:\Users\tsc20\.gradle\caches\transforms-3\04a0f34cf908c682d73fc22f94c08cc8\transformed\appcompat-resources-1.6.1\AndroidManifest.xml:17:1-22:12
@@ -68,8 +68,8 @@ ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica
 	android:name
 		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:6:22-64
 application
-ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:8:5-53:19
-INJECTED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:8:5-53:19
+ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:8:5-56:19
+INJECTED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:8:5-56:19
 MERGED from [com.google.android.material:material:1.11.0] C:\Users\tsc20\.gradle\caches\transforms-3\da4a177b0a7812530ab961a7a7967b71\transformed\material-1.11.0\AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.11.0] C:\Users\tsc20\.gradle\caches\transforms-3\da4a177b0a7812530ab961a7a7967b71\transformed\material-1.11.0\AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\tsc20\.gradle\caches\transforms-3\5acf9a84f6874f66961cd7fc314b86a2\transformed\constraintlayout-2.1.4\AndroidManifest.xml:9:5-20
@@ -127,49 +127,53 @@ ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica
 	android:name
 		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:25:27-74
 activity#pt.ipleiria.estg.dei.carolo_farmaceutica.MenuMainActivity
-ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:28:9-32:20
-	android:launchMode
-		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:31:13-43
+ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:28:9-31:20
 	android:exported
 		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:30:13-37
 	android:name
 		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:29:13-45
+activity#pt.ipleiria.estg.dei.carolo_farmaceutica.CarrinhoActivity
+ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:32:9-35:20
+	android:exported
+		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:34:13-37
+	android:name
+		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:33:13-45
 activity#pt.ipleiria.estg.dei.carolo_farmaceutica.ReceitaMedicaActivity
-ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:33:9-36:20
+ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:36:9-39:20
 	android:exported
-		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:35:13-37
+		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:38:13-37
 	android:name
-		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:34:13-50
+		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:37:13-50
 activity#pt.ipleiria.estg.dei.carolo_farmaceutica.DetalhesReceitaActivity
-ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:37:9-40:66
+ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:40:9-43:66
 	android:parentActivityName
-		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:40:13-64
+		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:43:13-64
 	android:exported
-		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:39:13-37
+		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:42:13-37
 	android:name
-		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:38:13-52
+		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:41:13-52
 activity#pt.ipleiria.estg.dei.carolo_farmaceutica.DetalhesMedicamentoActivity
-ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:41:9-44:61
+ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:44:9-47:61
 	android:parentActivityName
-		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:44:13-59
+		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:47:13-59
 	android:exported
-		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:43:13-37
+		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:46:13-37
 	android:name
-		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:42:13-56
+		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:45:13-56
 activity#pt.ipleiria.estg.dei.carolo_farmaceutica.RegistarActivity
-ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:45:9-48:58
+ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:48:9-51:58
 	android:parentActivityName
-		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:48:13-56
+		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:51:13-56
 	android:exported
-		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:47:13-37
+		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:50:13-37
 	android:name
-		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:46:13-45
+		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:49:13-45
 activity#pt.ipleiria.estg.dei.carolo_farmaceutica.LoginActivity
-ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:49:9-52:20
+ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:52:9-55:20
 	android:exported
-		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:51:13-37
+		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:54:13-37
 	android:name
-		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:50:13-42
+		ADDED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml:53:13-42
 uses-sdk
 INJECTED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\tsc20\OneDrive\Documents\IPL\AcessoMovel\Carolo_Farmaceutica\app\src\main\AndroidManifest.xml

@@ -7,7 +7,7 @@ public class ReceitaMedica {
     private int id, codigo, user_id, dosagem, telefone;
     private String local_prescricao, valido, medico_prescicao, posologia, data_validade;
 
-    public ReceitaMedica(int id, int codigo, String valido, int user_id, int dosagem, int telefone, String local_prescricao, String medico_prescicao, String posologia, String data_validade) {
+    public ReceitaMedica(int id, int codigo, String local_prescricao, String medico_prescicao, int dosagem, String data_validade, int telefone, String valido, String posologia, int user_id) {
         this.id = id;
         this.codigo = codigo;
         this.valido = valido;

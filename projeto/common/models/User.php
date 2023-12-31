@@ -250,4 +250,19 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->hasOne(Profile::class, ['user_id' => 'id']);
     }
 
+    public function setUsername($username)
+    {
+        $this->username = $username;
+    }
+
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
 }

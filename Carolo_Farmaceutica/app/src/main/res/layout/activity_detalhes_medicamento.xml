@@ -138,6 +138,7 @@
         android:clickable="true"
         android:focusable="true"
         android:src="@drawable/carrinho"
-        app:tint="@android:color/white" />
+        app:tint="@android:color/white"
+        android:contentDescription="@string/adicionar_carrinho" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

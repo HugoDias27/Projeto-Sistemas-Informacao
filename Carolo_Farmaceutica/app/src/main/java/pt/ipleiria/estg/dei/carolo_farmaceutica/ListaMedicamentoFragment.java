@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -25,7 +26,6 @@ public class ListaMedicamentoFragment extends Fragment implements MedicamentosLi
 
 
     private ListView lvMedicamentos;
-    private ArrayList<Medicamento> medicamentos;
     private SearchView searchView;
     public ListaMedicamentoFragment() {
         // Required empty public constructor
@@ -44,8 +44,6 @@ public class ListaMedicamentoFragment extends Fragment implements MedicamentosLi
         lvMedicamentos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-              //  Toast.makeText(getContext(), medicamentos.get(position).getNome(), Toast.LENGTH_LONG).show();
-
                 Intent intent = new Intent(getContext(), DetalhesMedicamentoActivity.class);
                 intent.putExtra(DetalhesMedicamentoActivity.ID_MEDICAMENTO, (int) id);
                 startActivity(intent);
@@ -53,6 +51,33 @@ public class ListaMedicamentoFragment extends Fragment implements MedicamentosLi
         });
         return view;
     }
+
+    @Override
+    public void onCreateOptionsMenu(android.view.Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_pesquisa, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+        searchView = (SearchView) menu.findItem(R.id.itemPesquisa).getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String newText) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                ArrayList<Medicamento> listaMedicamentos = new ArrayList<>();
+                for (Medicamento medicamento : SingletonGestorFarmacia.getInstance(getContext()).getMedicamentosBD()) {
+                    if (medicamento.getNome().toLowerCase().contains(newText.toLowerCase())) {
+                        listaMedicamentos.add(medicamento);
+                    }
+                }
+                lvMedicamentos.setAdapter(new ListaMedicamentoAdaptador(getContext(), listaMedicamentos));
+                return true;
+            }
+        });
+
+    }
+
     @Override
     public void onRefreshListaMedicamento(ArrayList<Medicamento> listaMedicamentos) {
         if(listaMedicamentos != null) {

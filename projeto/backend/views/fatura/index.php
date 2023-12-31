@@ -24,9 +24,11 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     <?php endif; ?>
 
+
     <p>
-        <?= Html::a('Criar Fatura', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Criar fatura', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -52,27 +54,26 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'cliente_id' => [
-                    'label' => 'Cliente',
+                'label' => 'Cliente',
                 'attribute' => 'cliente_id',
                 'value' => function (Fatura $model) {
-                    return $model->user->username;
+                    return $model->user ? $model->user->username : 'N/A';
                 }
             ],
             'estabelecimento_id' => [
-                    'label' => 'Estabelecimento',
+                'label' => 'Estabelecimento',
                 'attribute' => 'estabelecimento_id',
                 'value' => function (Fatura $model) {
-                    return $model->estabelecimento->nome;
+                    return $model->estabelecimento ? $model->estabelecimento->nome : 'N/A';
                 }
             ],
             'emissor_id' => [
-                    'label' => 'Emissor',
+                'label' => 'Emissor',
                 'attribute' => 'emissor_id',
                 'value' => function (Fatura $model) {
-                    return $model->emissor->user->username;
+                    return $model->emissor && $model->emissor->user ? $model->emissor->user->username : 'N/A';
                 }
             ],
-
             [
                 'class' => ActionColumn::className(),
                 'template' => '{view} {delete}', // Remove 'update' from the template

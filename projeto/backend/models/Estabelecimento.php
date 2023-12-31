@@ -15,7 +15,7 @@ use common\models\Servico;
  *
  * @property Despesa[] $despesas
  * @property Servico[] $servicos
- * @property ServicosEstabelecimento[] $servicosEstabelecimentos
+ * @property ServicoEstabelecimento[] $servicosEstabelecimentos
  */
 class Estabelecimento extends \yii\db\ActiveRecord
 {
@@ -82,6 +82,27 @@ class Estabelecimento extends \yii\db\ActiveRecord
      */
     public function getServicosEstabelecimentos()
     {
-        return $this->hasMany(ServicosEstabelecimento::class, ['estabelecimento_id' => 'id']);
+        return $this->hasMany(ServicoEstabelecimento::class, ['estabelecimento_id' => 'id']);
+    }
+
+    public function setNome($nome)
+    {
+        $this->nome = $nome;
+    }
+
+
+    public function setMorada($morada)
+    {
+        $this->morada = $morada;
+    }
+
+    public function setTelefone($telefone)
+    {
+        $this->telefone = $telefone;
+    }
+
+    public function setEmail($email)
+    {
+        $this->email = $email;
     }
 }

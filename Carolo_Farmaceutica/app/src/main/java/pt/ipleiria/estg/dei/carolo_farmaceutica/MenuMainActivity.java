@@ -112,6 +112,10 @@ public class MenuMainActivity extends AppCompatActivity implements NavigationVie
           else if (item.getItemId() == R.id.navSettings){
             fragment = new SettingsFragment();
         }
+          else if (item.getItemId() == R.id.navCarrinho){
+            fragment = new LinhaCarrinhoFragment();
+            setTitle(item.getTitle());
+        }
 
         if (fragment != null)
             fragmentManager.beginTransaction().replace(R.id.contentFragment, fragment).commit();

@@ -9,6 +9,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.CheckoutListener;
+import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.SingletonGestorFarmacia;
+
 
 public class CarrinhoActivity extends AppCompatActivity {
 
@@ -26,10 +29,14 @@ public class CarrinhoActivity extends AppCompatActivity {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.lvCarrinho, linhacarrinhoFragment);
+
+        // Only replace the fragmentContainer with LinhaCarrinhoFragment
+        fragmentTransaction.replace(R.id.fragmentContainer, linhacarrinhoFragment);
+
+        // Remove the line below, as it's unnecessary and might be causing the issue
+        // fragmentTransaction.replace(R.id.lvCarrinho, linhacarrinhoFragment);
+
         fragmentTransaction.commit();
     }
-
-
 
 }

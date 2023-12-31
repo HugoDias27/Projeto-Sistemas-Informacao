@@ -15,24 +15,26 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.CarrinhoListener;
+import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.LinhaCarrinhoCompra;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.Medicamento;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.SingletonGestorFarmacia;
+import pt.ipleiria.estg.dei.carolo_farmaceutica.utils.ReceitaMedicaJsonParser;
 
 public class DetalhesMedicamentoActivity extends AppCompatActivity implements CarrinhoListener {
 
     public static final String ID_MEDICAMENTO = "id";
-    private TextView tvNomeMedicamento, tvPrescricaoMedica, tvPreco, tvQuantidadeMedicamento, tvCategoriaMedicamento, tvIvaMedicamento;
+    private TextView tvNomeMedicamento, tvPrescricaoMedica, tvPreco, tvQuantidadeMedicamento, tvCategoriaMedicamento, tvIvaMedicamento, tvQuantidadeCarrinho;
     private EditText etQuantidadeCarrinho;
     private Medicamento medicamento;
     private FloatingActionButton fabAdicionarProdutoCarrinho;
     public static final String USERNAME = "USERNAME";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhes_medicamento);
 
+        tvQuantidadeCarrinho = findViewById(R.id.tvQuantidadeCarrinho);
         tvNomeMedicamento = findViewById(R.id.tvNomeMedicamento);
         tvPrescricaoMedica = findViewById(R.id.tvPrescricaoMedica);
         tvPreco = findViewById(R.id.tvPreco);
@@ -53,15 +55,24 @@ public class DetalhesMedicamentoActivity extends AppCompatActivity implements Ca
                 finish();
         }
 
-        fabAdicionarProdutoCarrinho.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (medicamento != null) {
-                    int quantidade = Integer.parseInt(etQuantidadeCarrinho.getText().toString());
-                    SingletonGestorFarmacia.getInstance(getApplicationContext()).adicionarProdutoCarrinho(medicamento.getId(), quantidade, getApplicationContext());
+        if (ReceitaMedicaJsonParser.isConnectionInternet(getApplicationContext())) {
+            fabAdicionarProdutoCarrinho.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (medicamento != null) {
+                        int quantidade = Integer.parseInt(etQuantidadeCarrinho.getText().toString());
+                        SingletonGestorFarmacia.getInstance(getApplicationContext()).adicionarProdutoCarrinho(medicamento.getId(), quantidade, getApplicationContext());
+                    }
                 }
-            }
-        });
+            });
+        }
+        else
+        {
+            fabAdicionarProdutoCarrinho.hide();
+            etQuantidadeCarrinho.setVisibility(View.INVISIBLE);
+            tvQuantidadeCarrinho.setVisibility(View.INVISIBLE);
+            Toast.makeText(this, "Não tem ligação à internet. Ligue-se à internet para realizar compras", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void carregarMedicamento() {
@@ -76,13 +87,12 @@ public class DetalhesMedicamentoActivity extends AppCompatActivity implements Ca
     @Override
     public void onRefreshCarrinho(boolean resposta) {
         if (resposta) {
+            Toast.makeText(this, "Produto adicionado ao carrinho com sucesso!.", Toast.LENGTH_SHORT).show();
             SharedPreferences preferences = getSharedPreferences("LOGIN", Context.MODE_PRIVATE);
             String username = preferences.getString("USERNAME", "");
-            Toast.makeText(this, "Produto adicionado ao carrinho com sucesso!.", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(getApplicationContext(), MenuMainActivity.class);
             intent.putExtra(USERNAME, username);
             startActivity(intent);
-            finish();
         }
     }
 }

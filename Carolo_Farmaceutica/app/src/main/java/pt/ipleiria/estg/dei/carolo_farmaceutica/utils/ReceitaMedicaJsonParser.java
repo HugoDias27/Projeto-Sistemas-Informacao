@@ -30,7 +30,7 @@ public class ReceitaMedicaJsonParser {
                 String posologia = receitaMedicaJSON.getString("posologia");
                 String data_validade = receitaMedicaJSON.getString("data_validade");
 
-                ReceitaMedica receita = new ReceitaMedica(id, codigo, valido, user_id, dosagem, telefone, local_prescricao, medico_prescicao, posologia, data_validade);
+                ReceitaMedica receita = new ReceitaMedica(id, codigo, local_prescricao, medico_prescicao, dosagem, data_validade, telefone, valido, posologia, user_id);
                 listareceitaMedica.add(receita);
             }
         } catch (Exception e) {

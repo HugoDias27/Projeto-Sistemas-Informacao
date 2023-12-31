@@ -4,11 +4,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.ReceitaMedica;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.SingletonGestorFarmacia;
@@ -18,6 +21,7 @@ public class DetalhesReceitaActivity extends AppCompatActivity {
     public static final String ID_RECEITA = "id";
     private TextView tvCodigo, tvLocalPrescricao, tvMedicoPrescricao, tvDosagem, tvDataValidade, tvTelefone, tvValido, tvPosologia;
     private ReceitaMedica receitaMedica;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +46,6 @@ public class DetalhesReceitaActivity extends AppCompatActivity {
             } else
                 finish();
         }
-
     }
 
     private void carregarReceitaMedica() {

@@ -42,8 +42,11 @@
         </activity>
         <activity
             android:name="pt.ipleiria.estg.dei.carolo_farmaceutica.MenuMainActivity"
-            android:exported="false"
-            android:launchMode="singleTop" >
+            android:exported="false" >
+        </activity>
+        <activity
+            android:name="pt.ipleiria.estg.dei.carolo_farmaceutica.CarrinhoActivity"
+            android:exported="false" >
         </activity>
         <activity
             android:name="pt.ipleiria.estg.dei.carolo_farmaceutica.ReceitaMedicaActivity"

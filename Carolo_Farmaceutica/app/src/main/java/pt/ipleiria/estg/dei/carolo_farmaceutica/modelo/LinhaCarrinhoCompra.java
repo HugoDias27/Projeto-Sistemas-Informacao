@@ -2,10 +2,11 @@ package pt.ipleiria.estg.dei.carolo_farmaceutica.modelo;
 
 public class LinhaCarrinhoCompra {
 
-    private int id, quantidade, carrinho_compra_id, produto_id;
+    private int id, quantidade, carrinho_compra_id;
+    private String produto_id;
     private double precounit, valoriva, valorcomiva, subtotal;
 
-    public LinhaCarrinhoCompra(int id, int quantidade, double precounit, double valoriva, double valorcomiva, double subtotal, int carrinho_compra_id, int produto_id) {
+    public LinhaCarrinhoCompra(int id, int quantidade, double precounit, double valoriva, double valorcomiva, double subtotal, int carrinho_compra_id, String produto_id) {
         this.id = id;
         this.quantidade = quantidade;
         this.precounit = precounit;
@@ -40,11 +41,11 @@ public class LinhaCarrinhoCompra {
         this.carrinho_compra_id = carrinho_compra_id;
     }
 
-    public int getProduto_id() {
+    public String getProduto_id() {
         return produto_id;
     }
 
-    public void setProduto_id(int produto_id) {
+    public void setProduto_id(String produto_id) {
         this.produto_id = produto_id;
     }
 
@@ -79,4 +80,7 @@ public class LinhaCarrinhoCompra {
     public void setSubtotal(double subtotal) {
         this.subtotal = subtotal;
     }
+
+
+
 }

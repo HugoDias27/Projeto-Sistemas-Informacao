@@ -5,7 +5,7 @@
     <item
         android:id="@+id/itemRemover"
         android:icon="@drawable/ic_action_remove"
-        android:title="Remover"
+        android:title="@string/remover"
         app:showAsAction="always"
         />
 </menu>

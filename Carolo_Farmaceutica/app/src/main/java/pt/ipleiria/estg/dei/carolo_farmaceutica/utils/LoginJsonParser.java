@@ -4,7 +4,13 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.LinhaCarrinhoCompra;
+import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.User;
 
 public class LoginJsonParser {
 
@@ -25,4 +31,22 @@ public class LoginJsonParser {
         NetworkInfo ni = cm.getActiveNetworkInfo();
         return ni != null && ni.isConnected();
     }
+
+    public static User parserJsonDadosLogin(String response) {
+        User user = null;
+        try {
+            JSONObject userData = new JSONObject(response);
+
+            int id = userData.getInt("id");
+            String username = userData.getString("username");
+            String email = userData.getString("email");
+
+
+            user = new User(id, username, email );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
 }

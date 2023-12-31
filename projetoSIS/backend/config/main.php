@@ -54,7 +54,7 @@ return [
                         'GET imagens' => 'imagens',
                         'GET nomecategoria/{nomecategoria}' => 'produtoporcategoria',
                         'GET receita/{valor}' => 'produtoreceita',
-                        'GET medicamentos'  => 'medicamentos',
+                        'GET medicamentos' => 'medicamentos',
                     ],
                     'tokens' => [
                         '{id}' => '<id:\\d+>',
@@ -68,9 +68,11 @@ return [
                     'class' => 'yii\rest\UrlRule', 'controller' => 'api/fatura',
                     'extraPatterns' => [
                         'GET faturacliente/{id}' => 'faturasporcliente',
+                        'POST carrinhofatura/{userid}' => 'carrinhofatura',
                     ],
                     'tokens' => [
                         '{id}' => '<id:\\d+>',
+                        '{userid}' => '<userid:\\d+>',
                     ],
                 ],
                 [
@@ -137,7 +139,16 @@ return [
                 ],
                 [
                     'class' => 'yii\rest\UrlRule', 'controller' => 'api/linhacarrinho',
-
+                    'extraPatterns' => [
+                        'GET ultimocarrinho/{userid}' => 'ultimocarrinho',
+                        'PUT updatequantidade/{idlinha}' => 'updatequantidade',
+                        'DELETE removerlinhacarrinho/{idlinha}' => 'removerlinhacarrinho',
+                        'GET quantidadeproduto/{idlinha}' => 'quantidadeproduto',
+                    ],
+                    'tokens' => [
+                        '{userid}' => '<userid:\\d+>',
+                        '{idlinha}' => '<idlinha:\\d+>',
+                    ],
                 ],
             ],
         ],

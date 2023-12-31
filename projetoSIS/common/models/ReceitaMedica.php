@@ -15,10 +15,11 @@ use Yii;
  * @property string $data_validade
  * @property int $telefone
  * @property int $valido
- * @property string $posologia
  * @property int $user_id
+ * @property int $posologia
  *
  * @property LinhaFatura[] $linhaFaturas
+ * @property Produto $posologiaProduto
  * @property Profile $user
  */
 class ReceitaMedica extends \yii\db\ActiveRecord
@@ -37,12 +38,12 @@ class ReceitaMedica extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['codigo', 'local_prescricao', 'medico_prescricao', 'dosagem', 'data_validade', 'telefone', 'valido', 'posologia', 'user_id'], 'required'],
-            [['codigo', 'dosagem', 'telefone', 'valido', 'user_id'], 'integer'],
+            [['codigo', 'local_prescricao', 'medico_prescricao', 'dosagem', 'data_validade', 'telefone', 'valido', 'user_id', 'posologia'], 'required'],
+            [['codigo', 'dosagem', 'telefone', 'valido', 'user_id', 'posologia'], 'integer'],
             [['data_validade'], 'safe'],
             [['local_prescricao', 'medico_prescricao'], 'string', 'max' => 45],
-            [['posologia'], 'string', 'max' => 50],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Profile::class, 'targetAttribute' => ['user_id' => 'user_id']],
+            [['posologia'], 'exist', 'skipOnError' => true, 'targetClass' => Produto::class, 'targetAttribute' => ['posologia' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Profile::class, 'targetAttribute' => ['user_id' => 'user_id'], 'message' => 'O utilizador não tem o perfil criado.'],
         ];
     }
 
@@ -60,8 +61,8 @@ class ReceitaMedica extends \yii\db\ActiveRecord
             'data_validade' => 'Data Validade',
             'telefone' => 'Telefone',
             'valido' => 'Valido',
-            'posologia' => 'Posologia',
             'user_id' => 'User ID',
+            'posologia' => 'Posologia',
         ];
     }
 
@@ -76,12 +77,22 @@ class ReceitaMedica extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Posologia0]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPosologiaProduto()
+    {
+        return $this->hasOne(Produto::class, ['id' => 'posologia']);
+    }
+
+    /**
      * Gets query for [[User]].
      *
      * @return \yii\db\ActiveQuery
      */
     public function getUser()
     {
-        return $this->hasOne(Profile::class, ['user_id' => 'user_id']);
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 }

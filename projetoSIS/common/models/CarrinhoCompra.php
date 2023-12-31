@@ -40,7 +40,7 @@ class CarrinhoCompra extends \yii\db\ActiveRecord
             [['valortotal', 'ivatotal'], 'number'],
             [['cliente_id'], 'required'],
             [['fatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => Fatura::class, 'targetAttribute' => ['fatura_id' => 'id']],
-            [['cliente_id'], 'exist', 'skipOnError' => true, 'targetClass' => Profile::class, 'targetAttribute' => ['cliente_id' => 'user_id']],
+            [['cliente_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['cliente_id' => 'id']],
         ];
     }
 
@@ -67,7 +67,7 @@ class CarrinhoCompra extends \yii\db\ActiveRecord
      */
     public function getCliente()
     {
-        return $this->hasOne(Profile::class, ['user_id' => 'cliente_id']);
+        return $this->hasOne(User::class, ['id' => 'cliente_id']);
     }
 
     /**

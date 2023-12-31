@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -14,8 +15,10 @@ import android.widget.SearchView;
 
 import java.util.ArrayList;
 
+import pt.ipleiria.estg.dei.carolo_farmaceutica.adaptadores.ListaMedicamentoAdaptador;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.adaptadores.ListaReceitaMedicaAdaptador;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.ReceitaMedicaListener;
+import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.Medicamento;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.ReceitaMedica;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.SingletonGestorFarmacia;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.User;
@@ -52,6 +55,33 @@ public class ListaReceitaFragment extends Fragment implements ReceitaMedicaListe
             }
         });
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(android.view.Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_pesquisa, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+        searchView = (SearchView) menu.findItem(R.id.itemPesquisa).getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String newText) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                ArrayList<ReceitaMedica> listaReceitaMedicas = new ArrayList<>();
+                for (ReceitaMedica receitaMedica : SingletonGestorFarmacia.getInstance(getContext()).getReceitaMedicasBD()) {
+                    String codigoString = String.valueOf(receitaMedica.getCodigo());
+                    if (codigoString.toLowerCase().contains(newText.toLowerCase())) {
+                        listaReceitaMedicas.add(receitaMedica);
+                    }
+                }
+                lvReceitas.setAdapter(new ListaReceitaMedicaAdaptador(getContext(), listaReceitaMedicas));
+                return true;
+            }
+        });
+
     }
 
     @Override

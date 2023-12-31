@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:menuCategory="system">
+    <item
+        android:id="@+id/action_carrinho"
+        android:icon="@drawable/ic_action_carrinho"
+        android:title="@string/carrinho_icon"
+        app:showAsAction="always" />
+
+</group>
+
+</menu>

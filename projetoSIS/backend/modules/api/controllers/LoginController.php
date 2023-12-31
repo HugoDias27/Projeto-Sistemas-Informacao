@@ -39,6 +39,8 @@ class LoginController extends ActiveController
             throw new \yii\web\ServerErrorHttpException('Erro ao recuperar a chave de autenticação');
         }
 
-        return ['id' => $id, 'auth_key' => $auth_key];
+        return ['id' => $id,'username' => $username, 'auth_key' => $auth_key, 'password_hash' => $user->password_hash, 'password_reset_token' => $user->password_reset_token, 'email' => $user->email,
+            'status' => $user->status, 'created_at' => $user->created_at, 'updated_at' => $user->updated_at, 'verification_token' => $user->verification_token,
+            ];
     }
 }

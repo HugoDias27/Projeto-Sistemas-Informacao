@@ -9,6 +9,7 @@ use yii\rest\ActiveController;
 class ReceitamedicaController extends ActiveController
 {
     public $modelClass = 'common\models\ReceitaMedica';
+    public $modelProdutoClass = 'common\models\Produto';
 
     public function behaviors()
     {
@@ -35,15 +36,27 @@ class ReceitamedicaController extends ActiveController
         foreach ($receitas as $receita) {
             if ($receita->data_validade <= $dataAtual) {
                 $receita->valido = 'Não';
-            } else
+            } else {
                 $receita->valido = 'Sim';
-        }
-        if ($receitas)
-            return $receitas;
-        else
-            throw new \yii\web\NotFoundHttpException('Dados não encontrados.');
+            }
 
+            $produtoModel = new $this->modelProdutoClass;
+            $produto = $produtoModel::findOne($receita->posologia);
+
+            if ($produto) {
+                $receita->posologia = $produto->nome;
+            } else {
+                $receita->posologia = 'Nome do produto não encontrado';
+            }
+        }
+
+        if ($receitas) {
+            return $receitas;
+        } else {
+            throw new \yii\web\NotFoundHttpException('Dados não encontrados.');
+        }
     }
+
 
     public function actionReceitasvalidas()
     {

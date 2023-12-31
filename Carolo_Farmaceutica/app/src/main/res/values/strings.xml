@@ -64,4 +64,21 @@
     <string name="ip">Escreva o ip</string>
     <string name="inserir_ip">Insere o IP :</string>
     <string name="exemplo_ip">ex.:, 192.168.1.1</string>
+    <string name="carrinho_icon">Carrinho</string>
+    <string name="txt_menu_carrinho">Carrinho</string>
+    <string name="descontos_da_app">Descontos da APP</string>
+    <string name="adicionar_carrinho">Adicionar Carrinho</string>
+    <string name="logo_farmaceutica">Logo Farmaceutica</string>
+    <string name="vai_atraz">Vai_Atraz</string>
+    <string name="imagem_produto">Imagem Produto</string>
+    <string name="remove_produto_do_carrinho">Remove produto do carrinho</string>
+    <string name="reduz_quantidade_do_produto">Reduz quantidade do produto</string>
+    <string name="adicionar_quandtidade_ao_produto">Adicionar quandtidade ao produto</string>
+    <string name="imagem_medicamento_desconto">Imagem Medicamento desconto</string>
+    <string name="imagem_medicamento">Imagem Medicamento</string>
+    <string name="imagem_receita">Imagem Receita</string>
+    <string name="imagem_user">Imagem User</string>
+    <string name="pesquisa">Pesquisa</string>
+    <string name="remover">Remover</string>
+    <string name="guardar_receita">Guardar Receita</string>
 </resources>

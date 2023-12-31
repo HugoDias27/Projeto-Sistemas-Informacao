@@ -59,13 +59,14 @@ public class ListaReceitaMedicaAdaptador extends BaseAdapter {
 
     private class ViewHolderLista {
 
-        private TextView tvCodigo, tvDosagem, tvDataValidade, tvValido;
+        private TextView tvCodigo, tvDosagem, tvDataValidade, tvValido, tvPosologia;
 
         public ViewHolderLista(View view) {
             tvCodigo = view.findViewById(R.id.tvCodigo);
             tvDosagem = view.findViewById(R.id.tvDosagem);
             tvDataValidade = view.findViewById(R.id.tvDataValidade);
             tvValido = view.findViewById(R.id.tvValido);
+            tvPosologia = view.findViewById(R.id.tvPosologia);
         }
 
         public void update(ReceitaMedica receitaMedica) {
@@ -73,6 +74,7 @@ public class ListaReceitaMedicaAdaptador extends BaseAdapter {
             tvDosagem.setText(receitaMedica.getDosagem() + "");
             tvDataValidade.setText(receitaMedica.getDataValidade() + "");
             tvValido.setText(receitaMedica.getValido());
+            tvPosologia.setText(receitaMedica.getPosologia());
         }
     }
 }

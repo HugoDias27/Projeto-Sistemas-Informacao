@@ -1,6 +1,6 @@
 <?php
 
-namespace common\tests\unit\models;
+namespace unit\models;
 
 use Yii;
 use common\models\LoginForm;

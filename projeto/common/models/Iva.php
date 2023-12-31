@@ -2,6 +2,8 @@
 
 namespace common\models;
 
+use Yii;
+
 /**
  * This is the model class for table "ivas".
  *
@@ -66,5 +68,20 @@ class Iva extends \yii\db\ActiveRecord
     public function getServicos()
     {
         return $this->hasMany(Servico::class, ['iva_id' => 'id']);
+    }
+
+    public function setPercentagem($percentagem)
+    {
+        $this->percentagem = $percentagem;
+    }
+
+    public function setVigor($vigor)
+    {
+        $this->vigor = $vigor;
+    }
+
+    public function setDescricao($descricao)
+    {
+        $this->descricao = $descricao;
     }
 }

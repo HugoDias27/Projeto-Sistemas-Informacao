@@ -124,4 +124,6 @@ class Produto extends \yii\db\ActiveRecord
     {
         return $this->hasMany(LinhaCarrinho::class, ['produto_id' => 'id']);
     }
+
+
 }

@@ -13,9 +13,8 @@ public class CarrinhoJsonParser {
     public static Boolean parserJsonCarrinho(String response) {
         Boolean resposta = null;
         try {
-            JSONObject RegistarJson = new JSONObject(response);
-            resposta = RegistarJson.getBoolean("resposta");
-
+            JSONObject CarrinhoJson = new JSONObject(response);
+            resposta = CarrinhoJson.getBoolean("resposta");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

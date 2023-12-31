@@ -11,8 +11,13 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
+
 import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.LoginListener;
+import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.ReceitaMedicaListener;
+import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.ReceitaMedica;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.SingletonGestorFarmacia;
+import pt.ipleiria.estg.dei.carolo_farmaceutica.utils.LoginJsonParser;
 
 public class LoginActivity extends AppCompatActivity implements LoginListener {
 
@@ -20,6 +25,8 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
     private EditText etUsername, etPassword;
 
     public static final String USERNAME = "USERNAME";
+    private ReceitaMedicaListener receitaMedicaListener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +43,26 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
     }
 
     public void onClickLogin(View view) {
+        String username = etUsername.getText().toString();
+        String password = etPassword.getText().toString();
 
-        String username=etUsername.getText().toString();
-        String password=etPassword.getText().toString();
+        SingletonGestorFarmacia singletonGestorFarmacia = SingletonGestorFarmacia.getInstance(getApplicationContext());
+        singletonGestorFarmacia.setLoginListener(this);
 
-        SingletonGestorFarmacia.getInstance(getApplicationContext()).setLoginListener(this);
-        SingletonGestorFarmacia.getInstance(getApplicationContext()).login(username, password, getApplicationContext());
+        if (!LoginJsonParser.isConnectionInternet(this)) {
+            // Criação de um novo ReceitaMedicaListener para ser definido no Singleton
+            ReceitaMedicaListener receitaMedicaListener = new ReceitaMedicaListener() {
+                @Override
+                public void onRefreshReceitaMedica(ArrayList<ReceitaMedica> receitaMedicas) {
+                    // Implemente a lógica necessária aqui quando a receita médica for atualizada
+                }
+            };
+            singletonGestorFarmacia.setReceitaMedicaListener(receitaMedicaListener);
+        }
+
+        singletonGestorFarmacia.login(username, password, getApplicationContext());
     }
+
 
     public void onClickRegistar() {
         TextView textViewRegistar = findViewById(R.id.textViewRegistar);

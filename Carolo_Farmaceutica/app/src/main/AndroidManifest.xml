@@ -27,8 +27,11 @@
         </activity>
         <activity
             android:name=".MenuMainActivity"
-            android:exported="false"
-            android:launchMode="singleTop">
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".CarrinhoActivity"
+            android:exported="false">
         </activity>
         <activity
             android:name=".ReceitaMedicaActivity"

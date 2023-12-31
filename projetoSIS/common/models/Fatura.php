@@ -42,8 +42,8 @@ class Fatura extends \yii\db\ActiveRecord
             [['valortotal', 'ivatotal'], 'number'],
             [['cliente_id', 'estabelecimento_id', 'emissor_id'], 'integer'],
             [['estabelecimento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Estabelecimento::class, 'targetAttribute' => ['estabelecimento_id' => 'id']],
-            [['cliente_id'], 'exist', 'skipOnError' => true, 'targetClass' => Profile::class, 'targetAttribute' => ['cliente_id' => 'user_id']],
-            [['emissor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Profile::class, 'targetAttribute' => ['emissor_id' => 'user_id']],
+            [['cliente_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['cliente_id' => 'id']],
+            [['emissor_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['emissor_id' => 'user_id']],
         ];
     }
 
@@ -80,7 +80,7 @@ class Fatura extends \yii\db\ActiveRecord
      */
     public function getCliente()
     {
-        return $this->hasOne(Profile::class, ['user_id' => 'cliente_id']);
+        return $this->hasOne(User::class, ['id' => 'cliente_id']);
     }
 
     /**
