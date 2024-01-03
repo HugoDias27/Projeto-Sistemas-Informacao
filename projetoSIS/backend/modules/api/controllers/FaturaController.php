@@ -31,14 +31,18 @@ class FaturaController extends ActiveController
     public function actionFaturasporcliente($id)
     {
         $faturaModel = new $this->modelClass;
-        $faturas = $faturaModel::find()->where(['cliente_id' => $id])->all();
+        $faturas = $faturaModel::find()
+            ->select(['id', 'dta_emissao', 'valortotal', 'ivatotal'])
+            ->where(['cliente_id' => $id])
+            ->all();
 
         if ($faturas) {
             return $faturas;
         } else {
-            throw new \yii\web\NotFoundHttpException('Fatura(s) não encontrado.');
+            throw new \yii\web\NotFoundHttpException('Fatura(s) não encontrada(s).');
         }
     }
+
 
     public function actionCarrinhofatura($userid)
     {

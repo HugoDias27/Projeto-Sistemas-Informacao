@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\mosquitto\phpMQTT;
 use Yii;
 
 /**
@@ -68,5 +69,59 @@ class Iva extends \yii\db\ActiveRecord
     public function getServicos()
     {
         return $this->hasMany(Servico::class, ['iva_id' => 'id']);
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        $id = $this->id;
+        $percentagem = $this->percentagem;
+        $vigor = $this->vigor;
+        $descricao = $this->descricao;
+
+        $myObj = new \stdClass();
+        $myObj->id = $id;
+        $myObj->percentagem = $percentagem;
+        $myObj->vigor = $vigor;
+        $myObj->descricao = $descricao;
+        $myObj = json_encode($myObj);
+
+        if ($insert) {
+            $this->FazPublishMosquitto("INSERT_IVA", $myObj);
+        }
+        else {
+            $this->FazPublishMosquitto("UPDATE_IVA", $myObj);
+        }
+    }
+
+    public function afterDelete()
+    {
+        parent::afterDelete();
+
+        $id = $this->id;
+
+        $myObj = new \stdClass();
+        $myObj->id = $id;
+        $myObj = json_encode($myObj);
+
+        $this->FazPublishMosquitto("DELETE_IVA", $myObj);
+    }
+
+    public function FazPublishMosquitto($canal, $msg)
+    {
+        $server = "127.0.0.1";
+        $port = 1883;
+        $username = "";
+        $password = "";
+        $client_id = "phpMQTT-publisher";
+        $mqtt = new phpMQTT($server, $port, $client_id);
+        if($mqtt->connect(true, NULL, $username, $password)) {
+            $mqtt->publish($canal, $msg, 0);
+            $mqtt->close();
+        } else {
+            file_put_contents("debug.output", "Time out!");
+        }
+
     }
 }

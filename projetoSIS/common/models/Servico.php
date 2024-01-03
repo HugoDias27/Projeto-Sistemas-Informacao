@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\mosquitto\phpMQTT;
 use Yii;
 
 /**
@@ -96,4 +97,64 @@ class Servico extends \yii\db\ActiveRecord
     {
         return $this->hasMany(ServicoEstabelecimento::class, ['servico_id' => 'id']);
     }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        $id = $this->id;
+        $nome = $this->nome;
+        $duracao = $this->duracao;
+        $preco = $this->preco;
+        $iva_id = $this->iva_id;
+
+        $myObj = new \stdClass();
+        $myObj->id = $id;
+        $myObj->nome = $nome;
+        $myObj->duracao = $duracao;
+        $myObj->preco = $preco;
+        $myObj->iva_id = $iva_id;
+
+        $myJSON = json_encode($myObj);
+
+        if ($insert) {
+            $this->FazPublishMosquitto("INSERT_SERVICO", $myJSON);
+        }
+        else {
+            $this->FazPublishMosquitto("UPDATE_SERVICO", $myJSON);
+        }
+
+    }
+
+    public function afterDelete()
+    {
+        parent::afterDelete();
+
+        $id = $this->id;
+
+        $myObj = new \stdClass();
+        $myObj->id = $id;
+
+        $myJSON = json_encode($myObj);
+
+        $this->FazPublishMosquitto("DELETE_SERVICO", $myJSON);
+    }
+
+    public function FazPublishMosquitto($canal, $msg)
+    {
+        $server = "127.0.0.1";
+        $port = 1883;
+        $username = "";
+        $password = "";
+        $client_id = "phpMQTT-publisher";
+        $mqtt = new phpMQTT($server, $port, $client_id);
+        if($mqtt->connect(true, NULL, $username, $password)) {
+            $mqtt->publish($canal, $msg, 0);
+            $mqtt->close();
+        } else {
+            file_put_contents("debug.output", "Time out!");
+        }
+
+    }
+
 }
