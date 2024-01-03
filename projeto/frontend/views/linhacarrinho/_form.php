@@ -11,7 +11,7 @@ use yii\widgets\ActiveForm;
 <div class="linha-carrinho-form">
 
 
-    <?php $form = ActiveForm::begin(['action' => ['linhacarrinho/create', 'id' => $produto->id], 'method' => 'post']); ?>
+    <?php $form = ActiveForm::begin(['action' => ['linhacarrinho/create', 'produtoid' => $produto->id], 'method' => 'post']); ?>
 
     <?php if ($quantidadeDisponivel): ?>
         <?= $form->field($linhaCarrinho, 'quantidade')->dropDownList(

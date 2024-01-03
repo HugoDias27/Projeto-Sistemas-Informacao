@@ -19,7 +19,7 @@ $this->title = 'Login';
             'wrapperOptions' => ['class' => 'input-group mb-3']
         ])
             ->label(false)
-            ->textInput(['placeholder' => $model->getAttributeLabel('username')]) ?>
+            ->textInput(['placeholder' => $model->getAttributeLabel('username'),'id'=> 'username']) ?>
 
         <?= $form->field($model, 'password', [
             'options' => ['class' => 'form-group has-feedback'],
@@ -28,10 +28,10 @@ $this->title = 'Login';
             'wrapperOptions' => ['class' => 'input-group mb-3']
         ])
             ->label(false)
-            ->passwordInput(['placeholder' => $model->getAttributeLabel('password')]) ?>
+            ->passwordInput(['placeholder' => $model->getAttributeLabel('password'),'id' => 'password']) ?>
 
             <div class="col-4">
-                <?= Html::submitButton('Sign In', ['class' => 'btn btn-primary btn-block']) ?>
+                <?= Html::submitButton('Sign In', ['class' => 'btn btn-primary btn-block', 'name' => 'login-button']) ?>
                 <?= Html::a('Frontend', Url::to('/projeto/frontend/web/login'), ['class' => 'btn btn-primary btn-block']) ?>
             </div>
     </div>

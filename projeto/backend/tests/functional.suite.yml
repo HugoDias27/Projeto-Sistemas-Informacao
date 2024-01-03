@@ -2,5 +2,4 @@ suite_namespace: backend\tests\functional
 actor: FunctionalTester
 modules:
     enabled:
-        - Yii2:
-    error_level: "E_ALL & ~E_STRICT & ~E_DEPRECATED"
+        - Yii2

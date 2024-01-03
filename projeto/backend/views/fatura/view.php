@@ -91,24 +91,24 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <?php } ?>
                                         <?php }
                                     } else if
-                                        ($linhafatura->receita_medica_id != null) {
-                                            foreach ($receitas as $receita) { ?>
-                                                <tr>
-                                                <?php if (isset($linhafatura)) { ?>
-                                                    <td><?= Html::encode($receita->codigo) ?></td>
-                                                    <td>
-                                                        <?= Html::encode($linhafatura->quantidade) ?>
-                                                    </td>
+                                    ($linhafatura->receita_medica_id != null) {
+                                        foreach ($receitas as $receita) { ?>
+                                            <tr>
+                                            <?php if (isset($linhafatura)) { ?>
+                                                <td><?= Html::encode($receita->codigo) ?></td>
+                                                <td>
+                                                    <?= Html::encode($linhafatura->quantidade) ?>
+                                                </td>
 
-                                                    <td><?= Html::encode($linhafatura->precounit) ?></td>
-                                                    <td><?= Html::encode($linhafatura->valoriva) ?></td>
-                                                    <td><?= Html::encode($linhafatura->valorcomiva) ?></td>
-                                                    <td><?= Html::encode($linhafatura->subtotal) ?></td>
+                                                <td><?= Html::encode($linhafatura->precounit) ?></td>
+                                                <td><?= Html::encode($linhafatura->valoriva) ?></td>
+                                                <td><?= Html::encode($linhafatura->valorcomiva) ?></td>
+                                                <td><?= Html::encode($linhafatura->subtotal) ?></td>
 
-                                                    </tr>
-                                                <?php } ?>
+                                                </tr>
                                             <?php } ?>
-                                        <?php }
+                                        <?php } ?>
+                                    <?php }
                                 } ?>
                                 <?php if (!empty($produtos)) : ?>
                                     <?php foreach ($linhasCarrinho as $linhaCarrinho) : ?>

@@ -40,13 +40,13 @@ class LinhacarrinhoController extends Controller
      *
      * @return string
      */
-    public function actionIndex($id)
+    public function actionIndex($produtoid)
     {
         $linhaCarrinho = new LinhaCarrinhoSearch();
         $dataProvider = $linhaCarrinho->search($this->request->queryParams);
 
-        $quantidadeDisponivel = $this->actionQuantidade($id);
-        $produto = Produto::findOne($id);
+        $quantidadeDisponivel = $this->actionQuantidade($produtoid);
+        $produto = Produto::findOne($produtoid);
 
         return $this->render('index', [
             'linhaCarrinho' => $linhaCarrinho,
@@ -57,9 +57,9 @@ class LinhacarrinhoController extends Controller
 
     }
 
-    public function actionQuantidade($id)
+    public function actionQuantidade($produtoid)
     {
-        $produto = Produto::findOne($id);
+        $produto = Produto::findOne($produtoid);
 
 
         $quantidadeDisponivel = $produto->quantidade;
@@ -90,7 +90,7 @@ class LinhacarrinhoController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate($id)
+    public function actionCreate($produtoid)
     {
         $LinhaCarrinho = new LinhaCarrinho();
         $userId = Yii::$app->user->id;
@@ -100,15 +100,15 @@ class LinhacarrinhoController extends Controller
             ->orderBy(['dta_venda' => SORT_DESC])
             ->one();
 
-        $produto = Produto::findOne($id);
+        $produto = Produto::findOne($produtoid);
 
         $post = $this->request->post();
-        $quantidade = $post['LinhaCarrinhoSearch']['quantidade'];
+        $quantidade = 1;
 
 
-        if ($this->request->isPost) {
+
             $verificaProdutoLinha = LinhaCarrinho::find()
-                ->where(['carrinho_compra_id' => $ultimoCarrinho->id, 'produto_id' => $id])
+                ->where(['carrinho_compra_id' => $ultimoCarrinho->id, 'produto_id' => $produtoid])
                 ->one();
 
             if ($verificaProdutoLinha) {
@@ -138,7 +138,7 @@ class LinhacarrinhoController extends Controller
                 $LinhaCarrinho->subtotal = $LinhaCarrinho->valorcomiva * $quantidade;
 
                 $LinhaCarrinho->carrinho_compra_id = $ultimoCarrinho->id;
-                $LinhaCarrinho->produto_id = $id;
+                $LinhaCarrinho->produto_id = $produtoid;
                 $produto->quantidade = $produto->quantidade - $quantidade;
 
                 if ($LinhaCarrinho->save() && $produto->save()) {
@@ -146,7 +146,7 @@ class LinhacarrinhoController extends Controller
                 }
             }
         }
-    }
+
 
 
     /**
@@ -166,23 +166,28 @@ class LinhacarrinhoController extends Controller
             $post = $this->request->post();
             $quantidade = $post['quantidade'];
 
-            if ($quantidade > $produto->quantidade) {
-                Yii::$app->session->setFlash('error', 'Não dispomos de artigos em quantidade suficiente para satisfazer o seu pedido.');
-                return $this->redirect(['carrinhocompra/index']);
-            } else {
-                $quantidadeFinal = $quantidade - $quantidadeBd;
-                $LinhaCarrinho->quantidade = $quantidade;
-                $LinhaCarrinho->precounit = $produto->preco;
-
-                $LinhaCarrinho->valoriva = number_format($produto->preco * ($produto->iva->percentagem / 100), 2, '.');
-                $LinhaCarrinho->valorcomiva = number_format($LinhaCarrinho->valoriva + $LinhaCarrinho->precounit, 2, '.');
-                $LinhaCarrinho->subtotal = $LinhaCarrinho->valorcomiva * $quantidade;
-
-                $produto->quantidade = $produto->quantidade - $quantidadeFinal;
-
-                if ($LinhaCarrinho->save() && $produto->save()) {
+            // Verifica se a nova quantidade é menor ou igual à quantidade total já gasta
+            if ($quantidade > $quantidadeBd) {
+                // Verifica se há estoque disponível para a quantidade adicional desejada
+                $quantidadeDisponivel = $produto->quantidade - ($quantidade - $quantidadeBd);
+                if ($quantidadeDisponivel < 0) {
+                    Yii::$app->session->setFlash('error', 'Não dispomos de artigos em quantidade suficiente para satisfazer o seu pedido.');
                     return $this->redirect(['carrinhocompra/index']);
                 }
+            }
+
+            $LinhaCarrinho->quantidade = $quantidade;
+            $LinhaCarrinho->precounit = $produto->preco;
+
+            $LinhaCarrinho->valoriva = number_format($produto->preco * ($produto->iva->percentagem / 100), 2, '.');
+            $LinhaCarrinho->valorcomiva = number_format($LinhaCarrinho->valoriva + $LinhaCarrinho->precounit, 2, '.');
+            $LinhaCarrinho->subtotal = $LinhaCarrinho->valorcomiva * $quantidade;
+
+            $quantidadeAlterada = $quantidade - $quantidadeBd;
+            $produto->quantidade = $produto->quantidade - $quantidadeAlterada;
+
+            if ($LinhaCarrinho->save() && $produto->save()) {
+                return $this->redirect(['carrinhocompra/index']);
             }
         }
     }

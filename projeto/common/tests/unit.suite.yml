@@ -7,7 +7,7 @@ modules:
         - Yii2:
               part: ORM
         - Db:
-          dsn: 'mysql:host=localhost;dbname=yii2advanced_test'
+          dsn: 'mysql:host=localhost;dbname=projetofinal_test'
           user: 'root'
           password: ''
           dump: 'tests/_data/dump.sql'

@@ -95,31 +95,24 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <?php } ?>
                                     <?php } ?>
                                 <?php } ?>
-                                <?php if (!empty($produtos)) : ?>
-                                    <?php foreach ($linhasCarrinho as $linhaCarrinho) : ?>
-                                        <tr>
-                                            <td>
-                                                <?php
-                                                $produtoEncontrado = null;
-                                                foreach ($produtos as $produto) {
-                                                    if ($produto->id === $linhaCarrinho->produto_id) {
-                                                        $produtoEncontrado = $produto;
-                                                        break;
-                                                    }
-                                                }
-                                                if ($produtoEncontrado !== null) {
-                                                    echo Html::encode($produtoEncontrado->nome);
-                                                }
-                                                ?>
-                                            </td>
-                                            <td><?= Html::encode($linhaCarrinho->quantidade) ?></td>
-                                            <td><?= Html::encode($linhaCarrinho->precounit) ?></td>
-                                            <td><?= Html::encode($linhaCarrinho->valoriva) ?></td>
-                                            <td><?= Html::encode($linhaCarrinho->valorcomiva) ?></td>
-                                            <td><?= Html::encode($linhaCarrinho->subtotal) ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
+                                <?php foreach ($linhasCarrinho as $linhaCarrinho) : ?>
+                                    <tr>
+                                        <td>
+                                            <?php
+                                            $produtoEncontrado = null;
+                                            foreach ($produtos as $produto) {
+                                                $produtoEncontrado = $produto;
+                                            }
+                                            echo Html::encode($produtoEncontrado->nome);
+                                            ?>
+                                        </td>
+                                        <td><?= Html::encode($linhaCarrinho->quantidade) ?></td>
+                                        <td><?= Html::encode($linhaCarrinho->precounit) ?></td>
+                                        <td><?= Html::encode($linhaCarrinho->valoriva) ?></td>
+                                        <td><?= Html::encode($linhaCarrinho->valorcomiva) ?></td>
+                                        <td><?= Html::encode($linhaCarrinho->subtotal) ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
                                 </tbody>
                             </table>
                         </div>

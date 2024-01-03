@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /** @var common\models\Fatura $fatura */
 
 $this->title = $fatura->id;
-$this->params['breadcrumbs'][] = ['label' => 'Faturas', 'url' => ['index', 'id' => $fatura->cliente_id]];
+$this->params['breadcrumbs'][] = ['label' => 'Faturas', 'url' => ['site/index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
@@ -90,31 +90,26 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <?php } ?>
                                         <?php }
                                     } ?>
-                                    <?php if (!empty($produtos)) : ?>
-                                        <?php foreach ($linhasCarrinho as $linhaCarrinho) : ?>
-                                            <tr>
-                                                <td>
-                                                    <?php
-                                                    $produtoEncontrado = null;
-                                                    foreach ($produtos as $produto) {
-                                                        if ($produto->id === $linhaCarrinho->produto_id) {
-                                                            $produtoEncontrado = $produto;
-                                                            break;
-                                                        }
-                                                    }
-                                                    if ($produtoEncontrado !== null) {
-                                                        echo Html::encode($produtoEncontrado->nome);
-                                                    }
-                                                    ?>
-                                                </td>
-                                                <td><?= Html::encode($linhaCarrinho->quantidade) ?></td>
-                                                <td><?= Html::encode($linhaCarrinho->precounit) ?></td>
-                                                <td><?= Html::encode($linhaCarrinho->valoriva) ?></td>
-                                                <td><?= Html::encode($linhaCarrinho->valorcomiva) ?></td>
-                                                <td><?= Html::encode($linhaCarrinho->subtotal) ?></td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    <?php endif; ?>
+                                    <?php foreach ($linhasCarrinho as $linhaCarrinho) : ?>
+                                        <tr>
+                                            <td>
+                                                <?php
+                                                $produtoEncontrado = null;
+                                                foreach ($produtos as $produto) {
+                                                    $produtoEncontrado = $produto;
+                                                }
+                                                echo Html::encode($produtoEncontrado->nome); // Suponha que 'nome' seja um atributo do produto
+                                                ?>
+                                            </td>
+                                            <td><?= Html::encode($linhaCarrinho->quantidade) ?></td>
+                                            <td><?= Html::encode($linhaCarrinho->precounit) ?></td>
+                                            <td><?= Html::encode($linhaCarrinho->valoriva) ?></td>
+                                            <td><?= Html::encode($linhaCarrinho->valorcomiva) ?></td>
+                                            <td><?= Html::encode($linhaCarrinho->subtotal) ?></td>
+
+                                        </tr>
+                                    <?php endforeach; ?>
+
                                     </tbody>
                                 </table>
                             </div>

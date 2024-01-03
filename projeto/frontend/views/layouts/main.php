@@ -97,8 +97,7 @@ AppAsset::register($this);
         }
 
         if (!Yii::$app->user->isGuest) {
-            $menuItems[3]['items'][] = ['label' => 'Estatísticas', 'url' => ['site/statistics']];
-            $menuItems[] = ['label' => '<i class="fas fa-cart-arrow-down"></i>', 'encode' => false, 'url' => ['/carrinhocompra']];
+            $menuItems[] = ['label' => 'Carrinho', 'encode' => false, 'url' => ['/carrinhocompra']];
         }
 
         echo Nav::widget([

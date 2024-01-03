@@ -3,37 +3,53 @@
 
 namespace backend\tests\Functional;
 
+
 use backend\tests\FunctionalTester;
-use yii\helpers\Url;
+use common\models\Fatura;
+use common\models\User;
+
 
 class FaturaCest
 {
 
-    protected function formParams($login, $password)
-    {
-        return [
-            'LoginForm[username]' => $login,
-            'LoginForm[password]' => $password,
-        ];
-    }
 
-    public function _before(\backend\tests\FunctionalTester $I)
+    public function _before(FunctionalTester $I)
     {
-        $I->amOnPage('/site/login');
-        $I->fillField('input[name="LoginForm[username]"]', 'seu_nome_de_usuário');
-        $I->fillField('input[name="LoginForm[password]"]', 'sua_senha');
-        $I->see('Sign In');
+        $I->amOnRoute('/');
+        $I->see('Sign in to start your session', 'p');
+        $I->fillField('#username', 'admin');
+        $I->fillField('#password', 'admin*2024');
         $I->click('Sign In');
-        $I->dontSeeLink('Login');
-        $I->dontSeeLink('Signup');
-    }
+        $I->see('Bem vindo, admin');
+        $I->click('Gestão de dados');
+        $I->see('Gerir faturas');
+        $I->click('Gerir faturas');
 
+    }
 
     // tests
-    public function tryToTest(FunctionalTester $I)
+    public function CriarFaturaTest(FunctionalTester $I)
     {
-        $I->amOnRoute('site/index');
-        $I->see('Gii');
-    }
 
+        $I->see('Criar fatura');
+        $I->click('Criar fatura');
+        $I->selectOption('Fatura[cliente_id]', '3');
+        $I->selectOption('Fatura[estabelecimento_id]', '2');
+        $I->click('Guardar');
+        $I->fillField('LinhaFatura[quantidade]', '2');
+        $I->selectOption('LinhaFatura[servico_id]', '1');
+        $I->click('Adicionar servico');
+        $I->click('Criar Linha');
+        $I->selectOption('LinhaFatura[receita_medica_id]', '1');
+        $I->click('Adicionar receita');
+        $I->fillField('quantidade', '3');
+        $I->click('Atualizar Quantidade');
+        $I->click('Criar Linha');
+        $I->fillField('LinhaFatura[quantidade]', '2');
+        $I->selectOption('LinhaFatura[servico_id]', '1');
+        $I->click('Adicionar servico');
+        $I->click('Eliminar');
+        $I->click('Concluir Fatura');
+        $I->see('Faturas');
+    }
 }

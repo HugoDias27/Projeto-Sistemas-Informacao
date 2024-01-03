@@ -1,11 +1,7 @@
-suite_namespace: frontend\tests\acceptance
+
 actor: AcceptanceTester
 modules:
     enabled:
-        - WebDriver:
-            url: http://127.0.0.1:8080/
-            browser: firefox
-        - Yii2:
-            part: [orm, fixtures]
-            cleanup: false
-            entryScript: index-test.php
+        - PhpBrowser:
+              url: 'http://localhost/projeto'
+              auth: [ 'admin', 'admin*2024' ]

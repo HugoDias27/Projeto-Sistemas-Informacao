@@ -59,7 +59,7 @@ $this->title = 'Produto';
                 <p>Referência: <?= $produtoDetalhes->id ?></p>
                 <p>Unidades Disponíveis: <?= $produtoDetalhes->quantidade ?></p>
                 <p>Preço: <?= $precoFinal = number_format($precoFinal, 2, '.', ''); ?>€</p>
-                <a href="<?= '../carrinhocompra/create?id=' . $produtoDetalhes->id ?>"><i class="fas fa-shopping-cart"
+                <a href="<?= '../carrinhocompra/create?produtoid=' . $produtoDetalhes->id ?>">carro<i class="fas fa-shopping-cart"
                                                                                          style="color: #ff0000;"></i></a>
             </div>
         </div>

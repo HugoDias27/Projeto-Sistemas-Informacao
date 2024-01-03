@@ -90,12 +90,12 @@ class CarrinhocompraController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate($id)
+    public function actionCreate($produtoid)
     {
         if (!Yii::$app->user->isGuest) {
             $userId = Yii::$app->user->id;
             $carrinhoCompras = new CarrinhoCompra();
-            $produto = Produto::findOne($id);
+            $produto = Produto::findOne($produtoid);
 
             if ($produto !== null) {
                 $prescricao_medica = $produto->prescricao_medica;
@@ -114,10 +114,10 @@ class CarrinhocompraController extends Controller
                         $carrinhoCompras->cliente_id = $userId;
 
                         if ($carrinhoCompras->save()) {
-                            return $this->redirect(['linhacarrinho/index', 'id' => $id]);
+                            return $this->redirect(['linhacarrinho/create', 'produtoid' => $produtoid]);
                         }
                     } else {
-                        return $this->redirect(['linhacarrinho/index', 'id' => $id]);
+                        return $this->redirect(['linhacarrinho/create', 'produtoid' => $produtoid]);
                     }
                 } else {
                     return $this->redirect(['receitamedica/verificar', 'produtoid' => $produto->id]);
@@ -131,12 +131,12 @@ class CarrinhocompraController extends Controller
         return $this->redirect(Yii::$app->getHomeUrl());
     }
 
-    public function actionCreatecomreceita($id)
+    public function actionCreatecomreceita($produtoid)
     {
         if (!Yii::$app->user->isGuest) {
             $userId = Yii::$app->user->id;
             $carrinhoCompras = new CarrinhoCompra();
-            $produto = Produto::findOne($id);
+            $produto = Produto::findOne($produtoid);
 
             if ($produto !== null) {
                 $ultimoCarrinho = CarrinhoCompra::find()
@@ -152,10 +152,10 @@ class CarrinhocompraController extends Controller
                     $carrinhoCompras->cliente_id = $userId;
 
                     if ($carrinhoCompras->save()) {
-                        return $this->redirect(['linhacarrinho/index', 'id' => $id]);
+                        return $this->redirect(['linhacarrinho/create', 'produtoid' => $produtoid]);
                     }
                 } else {
-                    return $this->redirect(['linhacarrinho/index', 'id' => $id]);
+                    return $this->redirect(['linhacarrinho/create', 'produtoid' => $produtoid]);
                 }
             } else {
                 return $this->redirect(Yii::$app->getHomeUrl());

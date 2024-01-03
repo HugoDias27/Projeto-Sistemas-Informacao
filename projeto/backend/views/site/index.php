@@ -20,7 +20,7 @@ $logo = '../web/img/logo.png';
         </div>
     </div>
     <hr>
-
+    <h1 align="center">Carolo Farmacêutica</h1>
     <div class="row">
         <div id="DataAtual" class="col-md-4 col-sm-6 col-12">
             <script src="..\web\js\scriptData.js"></script>

@@ -17,7 +17,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($linhafatura, 'servico_id')->dropDownList($servicosItems, ['prompt' => 'Selecione o servico']) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Adicionar servico', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

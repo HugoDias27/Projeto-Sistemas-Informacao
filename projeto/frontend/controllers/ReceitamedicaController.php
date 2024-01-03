@@ -83,7 +83,7 @@ class ReceitamedicaController extends Controller
                 ->one();
 
             if ($receitaMedica !== null) {
-                return $this->redirect(['carrinhocompra/createcomreceita', 'id' => $produtoid]);
+                return $this->redirect(['carrinhocompra/createcomreceita', 'produtoid' => $produtoid]);
             } else {
                 $receitaMedica = new ReceitaMedica();
 

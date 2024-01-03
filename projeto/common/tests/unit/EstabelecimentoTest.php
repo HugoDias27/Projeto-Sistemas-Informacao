@@ -61,6 +61,7 @@ class EstabelecimentoTest extends \Codeception\Test\Unit
         $this->tester->seeInDatabase('estabelecimentos', ['nome' => 'Novo Nome']);
     }
 
+
     public function testDeleteEstabelecimento()
     {
         $deletedRows = Estabelecimento::deleteAll(['nome' => 'Novo Nome']);
