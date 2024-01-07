@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -19,8 +20,8 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import android.widget.Button;
 
+import android.widget.Button;
 
 
 import com.google.android.material.navigation.NavigationView;
@@ -35,7 +36,7 @@ public class MenuMainActivity extends AppCompatActivity implements NavigationVie
 
     private static final String USERNAME = "USERNAME";
 
-    public static final int ADD=100, EDIT=200, DELETE=300;
+    public static final int ADD = 100, EDIT = 200, DELETE = 300;
     public static final String OP_CODE = "op_detalhes";
 
 
@@ -64,7 +65,7 @@ public class MenuMainActivity extends AppCompatActivity implements NavigationVie
 
     }
 
-      private void openSettingsFragment() {
+    private void openSettingsFragment() {
         getSupportFragmentManager().beginTransaction().replace(R.id.contentFragment, new SettingsFragment()).addToBackStack(null).commit();
     }
 
@@ -101,19 +102,20 @@ public class MenuMainActivity extends AppCompatActivity implements NavigationVie
         if (item.getItemId() == R.id.navProduto) {
             fragment = new ListaMedicamentoFragment();
             setTitle(item.getTitle());
-        } else if (item.getItemId() == R.id.navLocalizacao) {
-            Toast.makeText(this, "Localização", Toast.LENGTH_SHORT).show();
         } else if (item.getItemId() == R.id.navReceitaMedica) {
             fragment = new ListaReceitaFragment();
             setTitle(item.getTitle());
-        } else if (item.getItemId() == R.id.navDesconto) {
-            fragment = new DescontosFragment();
-        }
-          else if (item.getItemId() == R.id.navSettings){
+        } else if (item.getItemId() == R.id.navSettings) {
             fragment = new SettingsFragment();
-        }
-          else if (item.getItemId() == R.id.navCarrinho){
+        } else if (item.getItemId() == R.id.navCarrinho) {
             fragment = new LinhaCarrinhoFragment();
+            setTitle(item.getTitle());
+        } else if (item.getItemId() == R.id.navLogout) {
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
+            finish();
+        } else if (item.getItemId() == R.id.navFatura) {
+            fragment = new ListaFaturaFragment();
             setTitle(item.getTitle());
         }
 

@@ -19,6 +19,7 @@ class ServicoController extends Controller
     /**
      * @inheritDoc
      */
+    // Método que permite definir o que o utilizador tem permissão para fazer
     public function behaviors()
     {
         return array_merge(
@@ -54,13 +55,14 @@ class ServicoController extends Controller
      *
      * @return string
      */
+    // Método que vai para o index dos serviços
     public function actionIndex()
     {
         $searchModel = new ServicoSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         foreach ($dataProvider->models as $model) {
-            $model->iva_id = $model->iva->percentagem . '%' ;
+            $model->iva_id = $model->iva->percentagem . '%';
         }
 
         return $this->render('index', [
@@ -75,18 +77,21 @@ class ServicoController extends Controller
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que vai para a view de um serviço
     public function actionView($id)
     {
         $model = $this->findModel($id);
+        if (\Yii::$app->user->can('viewServico')) {
+            $ivaModel = $model->iva;
 
-        $ivaModel = $model->iva;
+            $ivaPercentagem = $ivaModel->percentagem . '%';
 
-        $ivaPercentagem =  $ivaModel->percentagem . '%';
-
-        return $this->render('view', [
-            'model' => $model,
-            'ivaPercentagem' => $ivaPercentagem,
-        ]);
+            return $this->render('view', [
+                'model' => $model,
+                'ivaPercentagem' => $ivaPercentagem,
+            ]);
+        }
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
 
     /**
@@ -94,23 +99,28 @@ class ServicoController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
+    // Método que permite criar um novo serviço
     public function actionCreate()
     {
         $model = new Servico();
-        $ivaList = Iva::find()->where(['vigor' => 1])->all();
-        $ivaItems = ArrayHelper::map($ivaList, 'id', 'percentagem');
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+        if (\Yii::$app->user->can('createServico')) {
+            $ivaList = Iva::find()->where(['vigor' => 1])->all();
+            $ivaItems = ArrayHelper::map($ivaList, 'id', 'percentagem');
+
+            if ($this->request->isPost) {
+                if ($model->load($this->request->post()) && $model->save()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            } else {
+                $model->loadDefaultValues();
             }
-        } else {
-            $model->loadDefaultValues();
-        }
 
-        return $this->render('create', [
-            'model' => $model,'ivaItems'=>$ivaItems,
-        ]);
+            return $this->render('create', [
+                'model' => $model, 'ivaItems' => $ivaItems,
+            ]);
+        }
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
 
     /**
@@ -120,19 +130,24 @@ class ServicoController extends Controller
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite atualizar um serviço
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $ivaList = Iva::find()->where(['vigor' => 1])->all();
-        $ivaItems = ArrayHelper::map($ivaList, 'id', 'percentagem');
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if (\Yii::$app->user->can('updateServico')) {
+            $ivaList = Iva::find()->where(['vigor' => 1])->all();
+            $ivaItems = ArrayHelper::map($ivaList, 'id', 'percentagem');
+
+            if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+
+            return $this->render('update', [
+                'model' => $model, 'ivaItems' => $ivaItems,
+            ]);
         }
-
-        return $this->render('update', [
-            'model' => $model, 'ivaItems'=>$ivaItems,
-        ]);
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
 
     /**
@@ -142,11 +157,15 @@ class ServicoController extends Controller
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite apagar um serviço
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if (\Yii::$app->user->can('deleteServico')) {
+            $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+            return $this->redirect(['index']);
+        }
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
 
     /**
@@ -156,6 +175,7 @@ class ServicoController extends Controller
      * @return Servico the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite encontrar o serviço selecionado
     protected function findModel($id)
     {
         if (($model = Servico::findOne(['id' => $id])) !== null) {
@@ -163,11 +183,5 @@ class ServicoController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
-    }
-
-    public function actionGetIva($id)
-    {
-        $model = Iva::findOne(['id' => $id]);
-        return $model->percentagem;
     }
 }

@@ -13,6 +13,7 @@ use common\models\Servico;
 use common\models\User;
 use Mpdf\Mpdf;
 use Yii;
+use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\web\Controller;
@@ -27,6 +28,7 @@ class FaturaController extends Controller
     /**
      * @inheritDoc
      */
+    // Método que permite definir o que o utilizador tem permissão para fazer
     public function behaviors()
     {
         return array_merge(
@@ -38,6 +40,16 @@ class FaturaController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'rules' => [
+                        [
+                            'actions' => ['index', 'view', 'imprimir'],
+                            'allow' => true,
+                            'roles' => ['cliente'],
+                        ],
+                    ],
+                ],
             ]
         );
     }
@@ -47,6 +59,7 @@ class FaturaController extends Controller
      *
      * @return string
      */
+    // Método que vai para o index das faturas
     public function actionIndex($id)
     {
         $searchModel = new FaturaSearch();
@@ -66,6 +79,7 @@ class FaturaController extends Controller
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que vai para a view de uma fatura
     public function actionView($id)
     {
         $fatura = $this->findModel($id);
@@ -95,6 +109,8 @@ class FaturaController extends Controller
                 }
             }
 
+
+
             return $this->render('view', [
                 'fatura' => $fatura,
                 'cliente' => $cliente,
@@ -119,24 +135,8 @@ class FaturaController extends Controller
         }
     }
 
-
-    /**
-     * Finds the Fatura model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $id ID
-     * @return Fatura the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = Fatura::findOne(['id' => $id])) !== null) {
-            return $model;
-        }
-
-        throw new NotFoundHttpException('The requested page does not exist.');
-    }
-
-    public function actionImprimir($id) // Ação para gerar o PDF da fatura
+    //Método que permite imprimir uma fatura
+    public function actionImprimir($id)
     {
         $fatura = $this->findModel($id);
 
@@ -193,5 +193,22 @@ class FaturaController extends Controller
         $mpdf->WriteHTML($content);
         $mpdf->Output('Fatura ' . $id . '.pdf', 'D');
 
+    }
+
+    /**
+     * Finds the Fatura model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param int $id ID
+     * @return Fatura the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    // Método que permite encontrar a fatura selecionada
+    protected function findModel($id)
+    {
+        if (($model = Fatura::findOne(['id' => $id])) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
     }
 }

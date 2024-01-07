@@ -17,6 +17,7 @@ class ProfileController extends Controller
     /**
      * @inheritDoc
      */
+    // Método que permite definir o que o utilizador tem permissão para fazer
     public function behaviors()
     {
         return array_merge(
@@ -53,6 +54,7 @@ class ProfileController extends Controller
      *
      * @return string
      */
+    // Método que vai para o index das categorias
     public function actionIndex()
     {
         $searchModel = new ProfileSearch();
@@ -65,46 +67,34 @@ class ProfileController extends Controller
     }
 
     /**
-     * Displays a single Profile model.
-     * @param int $id ID
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'perfil' => $this->findModel($id),
-        ]);
-    }
-
-    /**
      * Creates a new Profile model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
+    // Método que permite criar um novo perfil
     public function actionCreate($id)
     {
-        $perfil = Profile::findOne(['user_id' => $id]);
+        if (\Yii::$app->user->can('createUser')) {
+            $perfil = Profile::findOne(['user_id' => $id]);
 
-        if ($perfil !== null) {
-            // Se um perfil já existe para este usuário, redirecionar para a página inicial (index)
-            return $this->redirect(['user/index']); // Substitua 'index' pelo nome da sua ação de página inicial
-        }
-
-        $perfil = new Profile();
-        $perfil->user_id = $id;
-
-        if ($this->request->isPost) {
-            if ($perfil->load($this->request->post()) && $perfil->save()) {
-                return $this->redirect(['view', 'id' => $perfil->user_id]);
+            if ($perfil !== null) {
+                return $this->redirect(['user/index']);
             }
-        } else {
-            $perfil->loadDefaultValues();
-        }
 
-        return $this->render('create', [
-            'perfil' => $perfil,
-        ]);
+            $perfil = new Profile();
+            $perfil->user_id = $id;
+
+            if ($this->request->isPost) {
+                if ($perfil->load($this->request->post()) && $perfil->save()) {
+                    return $this->redirect(['view', 'id' => $perfil->user_id]);
+                }
+            } else {
+                $perfil->loadDefaultValues();
+            }
+
+            return $this->render('create', ['perfil' => $perfil]);
+        }
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
 
     /**
@@ -114,35 +104,37 @@ class ProfileController extends Controller
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite atualizar o perfil
     public function actionUpdate($id)
     {
         $perfil = $this->findModel($id);
 
-        if ($perfil !== null) {
-            $post = $this->request->post();
+        if (\Yii::$app->user->can('updateUser')) {
+            if ($perfil !== null) {
+                $post = $this->request->post();
 
-            if ($this->request->isPost && $perfil->load($post) && $perfil->save()) {
-                $perfil->save();
+                if ($this->request->isPost && $perfil->load($post) && $perfil->save()) {
+                    $perfil->save();
 
-                return $this->redirect('index');
-            }
-            if ($perfil->n_utente == null) {
-                $mostra_n_utente = 1;
+                    return $this->redirect('index');
+                }
+                if ($perfil->n_utente == null) {
+                    $mostra_n_utente = 1;
+                } else {
+                    $mostra_n_utente = 0;
+                }
+                if ($perfil->nif == null) {
+                    $mostra_nif = 1;
+                } else {
+                    $mostra_nif = 0;
+                }
             } else {
-                $mostra_n_utente = 0;
+                return $this->redirect(['create', 'id' => $id]);
             }
-            if ($perfil->nif == null) {
-                $mostra_nif = 1;
-            } else {
-                $mostra_nif = 0;
-            }
-        } else {
-            return $this->redirect(['create', 'id' => $id]);
+            return $this->render('update', ['perfil' => $perfil, 'mostra_n_utente' => $mostra_n_utente, 'mostra_nif' => $mostra_nif]);
         }
-        return $this->render('update', ['perfil' => $perfil, 'mostra_n_utente' => $mostra_n_utente, 'mostra_nif' => $mostra_nif]);
-
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
-
 
     /**
      * Deletes an existing Profile model.
@@ -151,11 +143,15 @@ class ProfileController extends Controller
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite apagar o perfil
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if (\Yii::$app->user->can('deleteUser')) {
+            $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+            return $this->redirect(['index']);
+        }
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
 
     /**
@@ -165,6 +161,7 @@ class ProfileController extends Controller
      * @return Profile the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite encontrar o perfil selecionado
     protected function findModel($id)
     {
         if (($perfil = Profile::findOne(['user_id' => $id])) !== null) {

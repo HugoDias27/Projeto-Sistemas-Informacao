@@ -27,6 +27,7 @@ class LinhafaturaController extends Controller
     /**
      * @inheritDoc
      */
+    // Método que permite definir o que o utilizador tem permissão para fazer
     public function behaviors()
     {
         return array_merge(
@@ -57,41 +58,22 @@ class LinhafaturaController extends Controller
      *
      * @return string
      */
+    // Método que vai para o index das linhas das respetivas faturas
     public function actionIndex($id, $fatura_id, $estabelecimento, $cliente)
     {
         $searchModel = new LinhaFaturaSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
         $dataProvider->query->andWhere(['fatura_id' => $fatura_id]);
 
-        $clientefind = User::find()
-            ->with('profiles')
-            ->where(['id' => $cliente])
-            ->one();
+        $clientefind = User::find()->with('profiles')->where(['id' => $cliente])->one();
 
-
-        $totallinhas = LinhaFatura::find()
-            ->where(['fatura_id' => $fatura_id])
-            ->all();
-
-        $totallinhasservico = LinhaFatura::find()
-            ->with('servico') // Eager loading the 'servico' relation
-            ->where(['fatura_id' => $fatura_id])
-            ->all();
+        $totallinhas = LinhaFatura::find()->where(['fatura_id' => $fatura_id])->all();
 
         $servicosids = ArrayHelper::getColumn($totallinhas, 'servico_id');
-        $servicos = Servico::find()
-            ->where(['id' => $servicosids])
-            ->all();
-
-        $totallinhasreceita = LinhaFatura::find()
-            ->with('receitaMedica') // Eager loading the 'receitaMedica' relation
-            ->where(['fatura_id' => $fatura_id])
-            ->all();
+        $servicos = Servico::find()->where(['id' => $servicosids])->all();
 
         $receitasids = ArrayHelper::getColumn($totallinhas, 'receita_medica_id');
-        $receitas = ReceitaMedica::find()
-            ->where(['id' => $receitasids])
-            ->all();
+        $receitas = ReceitaMedica::find()->where(['id' => $receitasids])->all();
 
         $perfilCliente = $clientefind->profiles;
         $estabelecimentofind = Estabelecimento::find()->where(['id' => $estabelecimento])->one();
@@ -104,7 +86,6 @@ class LinhafaturaController extends Controller
             $fatura->valortotal = 0;
             $fatura->ivatotal = 0;
         }
-
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -129,11 +110,10 @@ class LinhafaturaController extends Controller
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que vai para a view de uma linha da fatura
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        return $this->render('view', ['model' => $this->findModel($id)]);
     }
 
     /**
@@ -141,7 +121,7 @@ class LinhafaturaController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-
+    // Método que permite criar uma nova linha da fatura
     public function actionCreate($id_fatura, $estabelecimento_id)
     {
         $linhafatura = new LinhaFatura();
@@ -149,12 +129,10 @@ class LinhafaturaController extends Controller
 
         $receitasItems = ArrayHelper::map($receitas, 'id', 'codigo');
 
-
         $servicosestabelecimento = ServicoEstabelecimento::find()->where(['estabelecimento_id' => $estabelecimento_id])->all();
         $servicosids = ArrayHelper::getColumn($servicosestabelecimento, 'servico_id');
-        $servicos = Servico::find()
-            ->where(['id' => $servicosids])
-            ->all();
+
+        $servicos = Servico::find()->where(['id' => $servicosids])->all();
         $servicosItems = ArrayHelper::map($servicos, 'id', 'nome');
 
         $fatura = Fatura::find()->where(['id' => $id_fatura])->one();
@@ -186,7 +164,6 @@ class LinhafaturaController extends Controller
 
 
         if ($this->request->isPost && $linhafatura->load(Yii::$app->request->post())) {
-
             if (!empty($linhafatura->servico_id)) {
                 $linhafatura->precounit = $servicoPreco;
                 $linhafatura->valoriva = $servicoPreco * ($percentservico / 100);
@@ -222,11 +199,7 @@ class LinhafaturaController extends Controller
             }
         }
 
-        return $this->render('create', [
-            'linhafatura' => $linhafatura,
-            'receitasItems' => $receitasItems,
-            'servicosItems' => $servicosItems,
-        ]);
+        return $this->render('create', ['linhafatura' => $linhafatura, 'receitasItems' => $receitasItems, 'servicosItems' => $servicosItems]);
     }
 
     /**
@@ -236,6 +209,7 @@ class LinhafaturaController extends Controller
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite atualizar uma linha da fatura
     public function actionUpdate($id)
     {
         $linhafatura = LinhaFatura::findOne($id);
@@ -254,15 +228,14 @@ class LinhafaturaController extends Controller
 
         $linhafatura->save();
         $fatura->save();
+
         return $this->redirect(['index',
             'id' => $linhafatura->id,
             'fatura_id' => $linhafatura->fatura_id,
             'estabelecimento' => $estabelecimento,
             'cliente' => $cliente,
         ]);
-
     }
-
 
     /**
      * Deletes an existing LinhaFatura model.
@@ -271,47 +244,79 @@ class LinhafaturaController extends Controller
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite apagar uma linha da fatura com serviço
     public function actionDelete($id, $fatura_id, $estabelecimento, $cliente, $servico_id)
     {
-        $fatura = Fatura::find()->where(['id' => $fatura_id])->one();
         $linhafatura = LinhaFatura::find()->where(['id' => $id])->one();
-        $fatura->valortotal -= $linhafatura->subtotal;
-        if ($fatura->ivatotal < 0)
-            $fatura->ivatotal = 0;
-        else
-            $fatura->ivatotal -= $linhafatura->valoriva * $linhafatura->quantidade;
-        $fatura->save();
-        $this->findModel($id)->delete();
-        return $this->redirect(['index', 'id' => $id, 'fatura_id' => $fatura_id, 'estabelecimento' => $estabelecimento, 'cliente' => $cliente, 'servico_id' => $servico_id,]);
+
+        if ($linhafatura) {
+            $this->findModel($id)->delete();
+
+            $fatura = Fatura::find()->where(['id' => $fatura_id])->one();
+
+            if ($fatura) {
+                $fatura->valortotal -= $linhafatura->subtotal;
+
+                if ($fatura->ivatotal < 0) {
+                    $fatura->ivatotal = 0;
+                } else {
+                    $fatura->ivatotal -= $linhafatura->valoriva * $linhafatura->quantidade;
+                }
+
+                $fatura->save();
+            }
+        }
+
+        return $this->redirect([
+            'index',
+            'id' => $id,
+            'fatura_id' => $fatura_id,
+            'estabelecimento' => $estabelecimento,
+            'cliente' => $cliente,
+            'servico_id' => $servico_id,
+        ]);
     }
 
+    // Método que permite apagar uma linha da fatura com receita médica
     public function actionDeletereceita($id, $fatura_id, $estabelecimento, $cliente)
     {
         $fatura = Fatura::find()->where(['id' => $fatura_id])->one();
         $linhafatura = LinhaFatura::find()->where(['id' => $id])->one();
-        $receitaMedicaid = $linhafatura->receita_medica_id;
-        $quantidade = $linhafatura->quantidade;
-        $fatura->valortotal -= $linhafatura->subtotal;
 
-        $receita = ReceitaMedica::findOne($receitaMedicaid); // Encontrar a receita pelo ID
-        $posologia = $receita->posologia; // Obtém o valor do campo posologia (nome do produto ou identificador)
+        if ($fatura && $linhafatura) {
+            $receitaMedicaid = $linhafatura->receita_medica_id;
+            $quantidade = $linhafatura->quantidade;
+            $fatura->valortotal -= $linhafatura->subtotal;
 
-        $produto = Produto::find()->where(['id' => $posologia])->one();
+            $receita = ReceitaMedica::findOne($receitaMedicaid);
+            $posologia = $receita->posologia;
 
-        if ($fatura->ivatotal < 0)
-            $fatura->ivatotal = 0;
-        else
-            $fatura->ivatotal -= $linhafatura->valoriva * $linhafatura->quantidade;
-        $fatura->save();
+            $produto = Produto::find()->where(['id' => $posologia])->one();
 
-        if ($produto) {
-            $this->findModel($id)->delete();
-            $produto->quantidade += $quantidade;
-            $produto->save();
+            if ($fatura->ivatotal < 0) {
+                $fatura->ivatotal = 0;
+            } else {
+                $fatura->ivatotal -= $linhafatura->valoriva * $linhafatura->quantidade;
+            }
+
+            $fatura->save();
+
+            if ($produto) {
+                $this->findModel($id)->delete();
+                $produto->quantidade += $quantidade;
+                $produto->save();
+            }
         }
 
-        return $this->redirect(['index', 'id' => $id, 'fatura_id' => $fatura_id, 'estabelecimento' => $estabelecimento, 'cliente' => $cliente]);
+        return $this->redirect([
+            'index',
+            'id' => $id,
+            'fatura_id' => $fatura_id,
+            'estabelecimento' => $estabelecimento,
+            'cliente' => $cliente
+        ]);
     }
+
 
     /**
      * Finds the LinhaFatura model based on its primary key value.
@@ -320,8 +325,8 @@ class LinhafaturaController extends Controller
      * @return LinhaFatura the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected
-    function findModel($id)
+    // Método que permite encontrar a linha da fatura selecionada
+    protected function findModel($id)
     {
         if (($model = LinhaFatura::findOne(['id' => $id])) !== null) {
             return $model;

@@ -23,6 +23,7 @@ class ImagemController extends Controller
     /**
      * @inheritDoc
      */
+    // Método que permite definir o que o utilizador tem permissão para fazer
     public function behaviors()
     {
         return array_merge(
@@ -59,6 +60,7 @@ class ImagemController extends Controller
      *
      * @return string
      */
+    // Método que vai para o index das imagens
     public function actionIndex()
     {
         $searchModel = new ImagemSearch();
@@ -70,68 +72,31 @@ class ImagemController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Imagem model.
-     * @param int $id ID
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-
-    public function actionView($id)
-    {
-        $imagem = $this->findModel($id);
-
-        $imageHtml = Yii::getAlias('@web') . '/uploads/' . $imagem->filename;
-
-        return $this->render('view', [
-            'imagem' => $imagem,
-            'imageHtml' => $imageHtml,
-        ]);
-    }
 
     /**
      * Creates a new Imagem model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-
-
+    // Método que permite adicionar uma nova imagem ao produto
     public function actionCreate($produto_id)
     {
-        $imagem = new Imagem();
-        $uploadForm = new UploadForm();
+        if (\Yii::$app->user->can('createMedicamento')) {
+            $imagem = new Imagem();
+            $uploadForm = new UploadForm();
 
-        if (Yii::$app->request->isPost) {
-            $uploadForm->imageFiles = UploadedFile::getInstances($imagem, 'imageFiles');
-            $uploadForm->produto_id = $produto_id;
+            if (Yii::$app->request->isPost) {
+                $uploadForm->imageFiles = UploadedFile::getInstances($imagem, 'imageFiles');
+                $uploadForm->produto_id = $produto_id;
 
-            if ($uploadForm->upload()) {
-                return $this->redirect(['produto/view', 'id' => $produto_id]);
+                if ($uploadForm->upload()) {
+                    return $this->redirect(['produto/view', 'id' => $produto_id]);
+                }
             }
+
+            return $this->render('create', ['imagem' => $imagem]);
         }
-
-        return $this->render('create', ['imagem' => $imagem]);
-    }
-
-
-    /**
-     * Updates an existing Imagem model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
-    {
-        $imagem = $this->findModel($id);
-
-        if ($this->request->isPost && $imagem->load($this->request->post()) && $imagem->save()) {
-            return $this->redirect(['view', 'id' => $imagem->id]);
-        }
-
-        return $this->render('update', [
-            'imagem' => $imagem,
-        ]);
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
 
     /**
@@ -141,11 +106,15 @@ class ImagemController extends Controller
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite apagar uma imagem
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if (\Yii::$app->user->can('deleteMedicamento')) {
+            $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+            return $this->redirect(['produto/index']);
+        }
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
 
     /**
@@ -155,14 +124,12 @@ class ImagemController extends Controller
      * @return Imagem the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite encontrar a imagem selecionada
     protected function findModel($id)
     {
         if (($imagem = Imagem::findOne(['id' => $id])) !== null) {
             return $imagem;
         }
-
         throw new NotFoundHttpException('The requested page does not exist.');
     }
-
-
 }

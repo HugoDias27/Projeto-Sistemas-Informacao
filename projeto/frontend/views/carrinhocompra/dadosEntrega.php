@@ -32,17 +32,51 @@ $this->params['breadcrumbs'][] = $this->title;
         <input type="text"> <br>
 
         <label for="pais">País:</label>
-        <input type="text"><br>
+        <input type="text">
+        <br>
+        <br>
 
     </div>
-
-    <div class="carrinho-compra-index">
+    <div class="produto-form">
+        <form >
+        <?= Html::button('Cartão', ['class' => 'btn btn-primary', 'onclick' => 'mostrarCartao()']) ?>
+        <?= Html::button('Multibanco', ['class' => 'btn btn-primary', 'onclick' => 'mostrarMultibanco()']) ?>
 
         <br>
-        <?= Html::beginForm(['/carrinhocompra/dadosentrega']) ?>
-        <?= Html::submitButton('Finalizar Compra', ['class' => 'btn btn-success']) ?>
-        <?= Html::endForm() ?>
+        <br>
+        <div id="dadosCartao" style="display: none;">
+            <label for="pais">Nº cartão:</label>
+            <input type="text"><br>
+            <label for="pais">Data Validade:</label>
+            <input type="text"><br>
+            <label for="pais">CVV:</label>
+            <input type="text"><br>
+        </div>
 
+        <br>
+        <div id="dadosMultibanco" style="display: none;">
+            <label for="pais">Entidade: 1234</label>
+            <br>
+            <label for="pais">Referencia: 123456789</label>
+            <br>
+            <label for="pais">Preço: <?= $valortotal ?></label>
+            <br>
+        </div>
     </div>
 
+    <script>
+        function mostrarCartao() {
+            document.getElementById("dadosCartao").style.display = "block";
+            document.getElementById("dadosMultibanco").style.display = "none";
+        }
+
+        function mostrarMultibanco() {
+            document.getElementById("dadosCartao").style.display = "none";
+            document.getElementById("dadosMultibanco").style.display = "block";
+        }
+    </script>
+        <div class="carrinho-compra-index">
+            <br>
+            <?= Html::a('Concluir Compra', Url::to(Yii::$app->homeUrl), ['class' => 'btn btn-success']); ?>
+        </div>
 </div>

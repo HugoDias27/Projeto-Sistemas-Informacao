@@ -26,6 +26,7 @@ class ProdutoController extends Controller
     /**
      * @inheritDoc
      */
+    // Método que permite definir o que o utilizador tem permissão para fazer
     public function behaviors()
     {
         return array_merge(
@@ -62,11 +63,11 @@ class ProdutoController extends Controller
      *
      * @return string
      */
+    // Método que vai para o index dos produtos
     public function actionIndex()
     {
         $searchModel = new ProdutoSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-
 
         $dataProvider->query->with('fornecedoresProdutos');
         $dataProvider->query->with('fornecedores');
@@ -83,23 +84,33 @@ class ProdutoController extends Controller
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que vai para a view de um produto
     public function actionView($id)
     {
-        $imagemArray = [];
+        if (\Yii::$app->user->can('viewMedicamento')) {
+            $imagemArray = [];
 
-        $fornecedorProduto = FornecedorProduto::find()->where(['produto_id' => $id])->with('fornecedor')->all();
+            $fornecedorProduto = FornecedorProduto::find()->where(['produto_id' => $id])->with('fornecedor')->all();
 
-        $imagens = Imagem::find()->where(['produto_id' => $id])->all();
-        foreach ($imagens as $imagem) {
-            $imagem->filename = Yii::getAlias('@web') . '/uploads/' . $imagem->filename;
-            $imagemArray[] = $imagem->filename;
+            $imagens = Imagem::find()->where(['produto_id' => $id])->all();
+            if (!empty($imagens)) {
+                foreach ($imagens as $imagem) {
+                    $imagemid = $imagem->id;
+                    $imagem->filename = Yii::getAlias('@web') . '/uploads/' . $imagem->filename;
+                    $imagemArray[] = $imagem->filename;
+                }
+            } else {
+                $imagemid = null;
+            }
+
+            return $this->render('view', [
+                'produto' => $this->findModel($id),
+                'imagemArray' => $imagemArray,
+                'fornecedorProduto' => $fornecedorProduto,
+                'imagemid' => $imagemid
+            ]);
         }
-
-        return $this->render('view', [
-            'produto' => $this->findModel($id),
-            'imagemArray' => $imagemArray,
-            'fornecedorProduto' => $fornecedorProduto
-        ]);
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
 
 
@@ -108,44 +119,47 @@ class ProdutoController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
+    // Método que permite criar um novo produto
     public function actionCreate()
     {
         $produto = new Produto();
-        $fornecedorProduto = new FornecedorProduto();
-        $fornecedoresList = Fornecedor::find()->all();
-        $fornecedores = ArrayHelper::map($fornecedoresList, 'id', 'nome');
 
-        $ivaList = Iva::find()->where(['vigor' => 1])->all();
-        $ivaItems = ArrayHelper::map($ivaList, 'id', 'percentagem');
+        if (\Yii::$app->user->can('createMedicamento')) {
+            $fornecedorProduto = new FornecedorProduto();
+            $fornecedoresList = Fornecedor::find()->all();
+            $fornecedores = ArrayHelper::map($fornecedoresList, 'id', 'nome');
 
-        $categoriaList = Categoria::find()->all();
-        $categoriaItems = ArrayHelper::map($categoriaList, 'id', 'descricao');
+            $ivaList = Iva::find()->where(['vigor' => 1])->all();
+            $ivaItems = ArrayHelper::map($ivaList, 'id', 'percentagem');
 
+            $categoriaList = Categoria::find()->all();
+            $categoriaItems = ArrayHelper::map($categoriaList, 'id', 'descricao');
 
-        $post = $this->request->post();
+            $post = $this->request->post();
 
-        if ($this->request->isPost) {
-            $produto->load($this->request->post());
-            if ($produto->save()) {
-                $fornecedorProduto->produto_id = $produto->id;
-                $fornecedorProduto->data_importacao = $post['FornecedorProduto']['data_importacao'];
-                $fornecedorProduto->fornecedor_id = $post['FornecedorProduto']['fornecedor_id'];
-                $fornecedorProduto->hora_importacao = $post['FornecedorProduto']['hora_importacao'];
-                $fornecedorProduto->quantidade = $post['Produto']['quantidade'];
-                if ($fornecedorProduto->save()) {
-                    return $this->redirect(['index']);
+            if ($this->request->isPost) {
+                $produto->load($this->request->post());
+                if ($produto->save()) {
+                    $fornecedorProduto->produto_id = $produto->id;
+                    $fornecedorProduto->data_importacao = $post['FornecedorProduto']['data_importacao'];
+                    $fornecedorProduto->fornecedor_id = $post['FornecedorProduto']['fornecedor_id'];
+                    $fornecedorProduto->hora_importacao = $post['FornecedorProduto']['hora_importacao'];
+                    $fornecedorProduto->quantidade = $post['Produto']['quantidade'];
+                    if ($fornecedorProduto->save()) {
+                        return $this->redirect(['index']);
+                    }
                 }
-
             }
-        }
 
-        return $this->render('create', [
-            'produto' => $produto,
-            'ivaItems' => $ivaItems,
-            'categoriaItems' => $categoriaItems,
-            'fornecedorProduto' => $fornecedorProduto,
-            'fornecedores' => $fornecedores
-        ]);
+            return $this->render('create', [
+                'produto' => $produto,
+                'ivaItems' => $ivaItems,
+                'categoriaItems' => $categoriaItems,
+                'fornecedorProduto' => $fornecedorProduto,
+                'fornecedores' => $fornecedores
+            ]);
+        }
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
 
 
@@ -156,24 +170,28 @@ class ProdutoController extends Controller
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite atualizar um produto
     public function actionUpdate($id)
     {
         $produto = $this->findModel($id);
 
-        $ivaList = Iva::find()->where(['vigor' => 1])->all();
-        $ivaItems = ArrayHelper::map($ivaList, 'id', 'percentagem');
+        if (\Yii::$app->user->can('updateMedicamento')) {
+            $ivaList = Iva::find()->where(['vigor' => 1])->all();
+            $ivaItems = ArrayHelper::map($ivaList, 'id', 'percentagem');
 
-        $categoriaList = Categoria::find()->all();
-        $categoriaItems = ArrayHelper::map($categoriaList, 'id', 'descricao');
-        if ($this->request->isPost && $produto->load($this->request->post()) && $produto->save()) {
-            return $this->redirect(['view', 'id' => $produto->id]);
+            $categoriaList = Categoria::find()->all();
+            $categoriaItems = ArrayHelper::map($categoriaList, 'id', 'descricao');
+            if ($this->request->isPost && $produto->load($this->request->post()) && $produto->save()) {
+                return $this->redirect(['view', 'id' => $produto->id]);
+            }
+
+            return $this->render('update', [
+                'produto' => $produto,
+                'ivaItems' => $ivaItems,
+                'categoriaItems' => $categoriaItems,
+            ]);
         }
-
-        return $this->render('update', [
-            'produto' => $produto,
-            'ivaItems' => $ivaItems,
-            'categoriaItems' => $categoriaItems,
-        ]);
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
 
     /**
@@ -183,17 +201,21 @@ class ProdutoController extends Controller
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite apagar um produto
     public function actionDelete($id)
     {
-        $imagens = Imagem::find()->where(['produto_id' => $id])->all();
-        foreach ($imagens as $imagem) {
-            $imagem->delete();
-        }
-        $FornecedorProduto = FornecedorProduto::find()->where(['produto_id' => $id])->one();
-        $FornecedorProduto->delete();
-        $this->findModel($id)->delete();
+        if (\Yii::$app->user->can('deleteMedicamento')) {
+            $imagens = Imagem::find()->where(['produto_id' => $id])->all();
+            foreach ($imagens as $imagem) {
+                $imagem->delete();
+            }
+            $FornecedorProduto = FornecedorProduto::find()->where(['produto_id' => $id])->one();
+            $FornecedorProduto->delete();
+            $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+            return $this->redirect(['index']);
+        }
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
 
     /**
@@ -203,6 +225,7 @@ class ProdutoController extends Controller
      * @return Produto the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite encontrar o produto selecionado
     protected function findModel($id)
     {
         if (($produto = Produto::findOne(['id' => $id])) !== null) {

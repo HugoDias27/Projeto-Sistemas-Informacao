@@ -42,7 +42,6 @@ public class DetalhesReceitaActivity extends AppCompatActivity {
             receitaMedica = SingletonGestorFarmacia.getInstance(getApplicationContext()).getReceitaMedica(id);
             if (receitaMedica != null) {
                 carregarReceitaMedica();
-
             } else
                 finish();
         }

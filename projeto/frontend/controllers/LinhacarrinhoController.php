@@ -6,8 +6,10 @@ use common\models\CarrinhoCompra;
 use common\models\LinhaCarrinho;
 use common\models\LinhaCarrinhoSearch;
 use common\models\Produto;
+use common\models\ReceitaMedica;
 use common\models\User;
 use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -20,6 +22,7 @@ class LinhacarrinhoController extends Controller
     /**
      * @inheritDoc
      */
+    // Método que permite definir o que o utilizador tem permissão para fazer
     public function behaviors()
     {
         return array_merge(
@@ -31,58 +34,18 @@ class LinhacarrinhoController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'rules' => [
+                        [
+                            'actions' => ['index', 'view', 'create', 'quantidade', 'update', 'delete', 'createreceita'],
+                            'allow' => true,
+                            'roles' => ['cliente'],
+                        ],
+                    ],
+                ],
             ]
         );
-    }
-
-    /**
-     * Lists all LinhaCarrinho models.
-     *
-     * @return string
-     */
-    public function actionIndex($produtoid)
-    {
-        $linhaCarrinho = new LinhaCarrinhoSearch();
-        $dataProvider = $linhaCarrinho->search($this->request->queryParams);
-
-        $quantidadeDisponivel = $this->actionQuantidade($produtoid);
-        $produto = Produto::findOne($produtoid);
-
-        return $this->render('index', [
-            'linhaCarrinho' => $linhaCarrinho,
-            'dataProvider' => $dataProvider,
-            'produto' => $produto,
-            'quantidadeDisponivel' => $quantidadeDisponivel
-        ]);
-
-    }
-
-    public function actionQuantidade($produtoid)
-    {
-        $produto = Produto::findOne($produtoid);
-
-
-        $quantidadeDisponivel = $produto->quantidade;
-
-        if ($quantidadeDisponivel > 0) {
-            return ($quantidadeDisponivel);
-        } else {
-            return 0;
-        }
-
-    }
-
-    /**
-     * Displays a single LinhaCarrinho model.
-     * @param int $id ID
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
     }
 
     /**
@@ -90,6 +53,7 @@ class LinhacarrinhoController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
+    // Método que permite criar a linha do carrinho de compras com o produto escolhido
     public function actionCreate($produtoid)
     {
         $LinhaCarrinho = new LinhaCarrinho();
@@ -102,34 +66,69 @@ class LinhacarrinhoController extends Controller
 
         $produto = Produto::findOne($produtoid);
 
-        $post = $this->request->post();
         $quantidade = 1;
 
+        $verificaProdutoLinha = LinhaCarrinho::find()
+            ->where(['carrinho_compra_id' => $ultimoCarrinho->id, 'produto_id' => $produtoid])
+            ->one();
+
+        if ($verificaProdutoLinha) {
+            $quantidadeBd = $verificaProdutoLinha->quantidade;
+
+            $quantidadeFinal = $quantidade + $quantidadeBd;
+            $verificaProdutoLinha->quantidade = $quantidadeFinal;
+            $verificaProdutoLinha->precounit = $produto->preco;
+
+            $verificaProdutoLinha->valoriva = number_format($produto->preco * ($produto->iva->percentagem / 100), 2, '.');
+            $verificaProdutoLinha->valorcomiva = number_format($verificaProdutoLinha->valoriva + $verificaProdutoLinha->precounit, 2, '.');
+            $verificaProdutoLinha->subtotal = $verificaProdutoLinha->valorcomiva * $quantidade;
+
+            $produto->quantidade = $produto->quantidade - $quantidade;
+
+            if ($verificaProdutoLinha->save() && $produto->save()) {
+                return $this->redirect('..\carrinhocompra/index');
+            }
+        } else {
+            $LinhaCarrinho->quantidade = $quantidade;
+            $LinhaCarrinho->precounit = $produto->preco;
+
+            $LinhaCarrinho->valoriva = number_format($produto->preco * ($produto->iva->percentagem / 100), 2, '.');
+            $LinhaCarrinho->valorcomiva = number_format($LinhaCarrinho->valoriva + $LinhaCarrinho->precounit, 2, '.');
+            $LinhaCarrinho->subtotal = $LinhaCarrinho->valorcomiva * $quantidade;
+
+            $LinhaCarrinho->carrinho_compra_id = $ultimoCarrinho->id;
+            $LinhaCarrinho->produto_id = $produtoid;
+            $produto->quantidade = $produto->quantidade - $quantidade;
+
+            if ($LinhaCarrinho->save() && $produto->save()) {
+                return $this->redirect('..\carrinhocompra/index');
+            }
+        }
+    }
+
+    // Método que permite criar a linha do carrinho de compras com o produto escolhido
+    public function actionCreatereceita($produtoid, $receitamedicaid)
+    {
+        $LinhaCarrinho = new LinhaCarrinho();
+        $userId = Yii::$app->user->id;
+
+        $ultimoCarrinho = CarrinhoCompra::find()
+            ->where(['cliente_id' => $userId, 'fatura_id' => null])
+            ->orderBy(['dta_venda' => SORT_DESC])
+            ->one();
+
+        $produto = Produto::findOne($produtoid);
+
+        $receitamedica = ReceitaMedica::findOne($receitamedicaid);
+
+        $quantidade = $receitamedica->dosagem;
 
 
-            $verificaProdutoLinha = LinhaCarrinho::find()
-                ->where(['carrinho_compra_id' => $ultimoCarrinho->id, 'produto_id' => $produtoid])
-                ->one();
+        if ($receitamedica->valido == 0) {
+            return $this->redirect(Yii::$app->homeUrl);
+        } else {
 
-            if ($verificaProdutoLinha) {
-                $quantidadeBd = $verificaProdutoLinha->quantidade; // Usar $verificaProdutoLinha aqui
-
-                $quantidadeFinal = $quantidade + $quantidadeBd;
-                $verificaProdutoLinha->quantidade = $quantidadeFinal;
-                $verificaProdutoLinha->precounit = $produto->preco;
-
-                $verificaProdutoLinha->valoriva = number_format($produto->preco * ($produto->iva->percentagem / 100), 2, '.');
-                $verificaProdutoLinha->valorcomiva = number_format($verificaProdutoLinha->valoriva + $verificaProdutoLinha->precounit, 2, '.');
-                $verificaProdutoLinha->subtotal = $verificaProdutoLinha->valorcomiva * $quantidade;
-
-                $produto->quantidade = $produto->quantidade - $quantidade;
-
-                if ($verificaProdutoLinha->save() && $produto->save()) {
-                    return $this->redirect('..\carrinhocompra/index');
-                }
-
-
-            } else {
+            if($produto->quantidade >= $receitamedica->dosagem) {
                 $LinhaCarrinho->quantidade = $quantidade;
                 $LinhaCarrinho->precounit = $produto->preco;
 
@@ -140,14 +139,18 @@ class LinhacarrinhoController extends Controller
                 $LinhaCarrinho->carrinho_compra_id = $ultimoCarrinho->id;
                 $LinhaCarrinho->produto_id = $produtoid;
                 $produto->quantidade = $produto->quantidade - $quantidade;
+                $receitamedica->valido = 0;
 
-                if ($LinhaCarrinho->save() && $produto->save()) {
+                if ($LinhaCarrinho->save() && $produto->save() && $receitamedica->save()) {
                     return $this->redirect('..\carrinhocompra/index');
                 }
             }
+            else
+            {
+                return $this->redirect(Yii::$app->homeUrl);
+            }
         }
-
-
+    }
 
     /**
      * Updates an existing LinhaCarrinho model.
@@ -156,6 +159,7 @@ class LinhacarrinhoController extends Controller
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite atualizar a quantidade de um produto no carrinho de compras
     public function actionUpdate($id)
     {
         $LinhaCarrinho = $this->findModel($id);
@@ -166,12 +170,10 @@ class LinhacarrinhoController extends Controller
             $post = $this->request->post();
             $quantidade = $post['quantidade'];
 
-            // Verifica se a nova quantidade é menor ou igual à quantidade total já gasta
             if ($quantidade > $quantidadeBd) {
-                // Verifica se há estoque disponível para a quantidade adicional desejada
                 $quantidadeDisponivel = $produto->quantidade - ($quantidade - $quantidadeBd);
                 if ($quantidadeDisponivel < 0) {
-                    Yii::$app->session->setFlash('error', 'Não dispomos de artigos em quantidade suficiente para satisfazer o seu pedido.');
+                    Yii::$app->session->setFlash('error', 'Não dispomos de artigos em stock suficiente para satisfazer o seu pedido.');
                     return $this->redirect(['carrinhocompra/index']);
                 }
             }
@@ -199,19 +201,24 @@ class LinhacarrinhoController extends Controller
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite apagar a respetiva linha do carrinho de compras
     public function actionDelete($id)
     {
         $linhaCarrinho = $this->findModel($id);
 
         $quantidadeLinhaCarrinho = $linhaCarrinho->quantidade;
         $produto = $linhaCarrinho->produto;
+        $produtoId = $linhaCarrinho->produto_id;
+
+        $receitaMedica = ReceitaMedica::find()->where(['posologia' => $produtoId])->one();
 
         if ($linhaCarrinho->delete()) {
             if ($produto) {
                 $produto->quantidade += $quantidadeLinhaCarrinho;
+                $receitaMedica->valido = 1;
                 $produto->save();
+                $receitaMedica->save();
             }
-
             return $this->redirect(['carrinhocompra/index']);
         }
     }
@@ -223,8 +230,8 @@ class LinhacarrinhoController extends Controller
      * @return LinhaCarrinho the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected
-    function findModel($id)
+    // Método que permite encontrar a categoria selecionada
+    protected function findModel($id)
     {
         if (($model = LinhaCarrinho::findOne(['id' => $id])) !== null) {
             return $model;

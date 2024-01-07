@@ -81,15 +81,6 @@ class RbacController extends Controller
         $deleteUser->description = 'Apagar o user';
         $auth->add($deleteUser);
 
-        // permissão RBAC das vendas
-        $viewVenda = $auth->createPermission('viewVenda');
-        $viewVenda->description = 'Ver as compras realizadas';
-        $auth->add($viewVenda);
-
-        $createVenda = $auth->createPermission('createVenda');
-        $createVenda->description = 'Criar venda';
-        $auth->add($createVenda);
-
 
         // permissão RBAC dos fornecedores
         $viewFornecedor = $auth->createPermission('viewFornecedor');
@@ -116,10 +107,6 @@ class RbacController extends Controller
         $createReceita = $auth->createPermission('createReceita');
         $createReceita->description = 'Criar receita medica';
         $auth->add($createReceita);
-
-        $updateReceita = $auth->createPermission('updateReceita');
-        $updateReceita->description = 'Editar a receita medica';
-        $auth->add($updateReceita);
 
         $deleteReceita = $auth->createPermission('deleteReceita');
         $deleteReceita->description = 'Apagar a receita medica';
@@ -173,11 +160,6 @@ class RbacController extends Controller
         $deleteFatura = $auth->createPermission('deleteFatura');
         $deleteFatura->description = 'Apagar fatura';
         $auth->add($deleteFatura);
-
-        // permissão RBAC das estatisticas
-        $viewEstatisticas = $auth->createPermission('viewEstatisticas');
-        $viewEstatisticas->description = 'Ver estatisticas';
-        $auth->add($viewEstatisticas);
 
 
         // permissão RBAC dos servicos
@@ -254,13 +236,11 @@ class RbacController extends Controller
         $cliente = $auth->createRole('cliente');
         $auth->add($cliente);
         $auth->addChild($cliente, $viewMedicamento);
-        $auth->addChild($cliente, $viewVenda);
         $auth->addChild($cliente, $viewReceita);
         $auth->addChild($cliente, $viewDespesa);
         $auth->addChild($cliente, $viewFatura);
-        $auth->addChild($cliente, $viewEstatisticas);
         $auth->addChild($cliente, $viewServico);
-        $auth->addChild($cliente,$viewCategorias);
+        $auth->addChild($cliente, $viewCategorias);
         $auth->addChild($cliente, $viewCarrinhoCompras);
         $auth->addChild($cliente, $createCarrinhoCompras);
         $auth->addChild($cliente, $updateCarrinhoCompras);
@@ -275,10 +255,8 @@ class RbacController extends Controller
         $auth->addChild($funcionario, $viewUtente);
         $auth->addChild($funcionario, $createUtente);
         $auth->addChild($funcionario, $updateUtente);
-        $auth->addChild($funcionario, $createVenda);
         $auth->addChild($funcionario, $viewFornecedor);
         $auth->addChild($funcionario, $createReceita);
-        $auth->addChild($funcionario, $updateReceita);
         $auth->addChild($funcionario, $viewEstabelecimento);
         $auth->addChild($funcionario, $createDespesa);
         $auth->addChild($funcionario, $updateDespesa);

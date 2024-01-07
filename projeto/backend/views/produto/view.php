@@ -106,10 +106,22 @@ $this->params['breadcrumbs'][] = $this->title;
     </table>
 
 
-    <!-- Exibir imagens associadas ao produto -->
     <h2>Imagens:</h2>
-    <?php foreach ($imagemArray as $imagem): ?>
-        <?= Html::img($imagem, ['width' => '300px']); ?>
+    <?php foreach ($imagemArray as $imagemid => $imagem): ?>
+        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+            <div style="margin-right: 10px;">
+                <?= Html::img($imagem, ['width' => '300px']); ?>
+            </div>
+            <div>
+                <?= Html::a('Apagar Imagem', ['imagem/delete', 'id' => $imagemid], [
+                    'data' => [
+                        'confirm' => 'Tem certeza que deseja apagar esta imagem?',
+                        'method' => 'post',
+                    ],
+                    'class' => 'btn btn-danger',
+                ]); ?>
+            </div>
+        </div>
     <?php endforeach; ?>
 
-</div>
+

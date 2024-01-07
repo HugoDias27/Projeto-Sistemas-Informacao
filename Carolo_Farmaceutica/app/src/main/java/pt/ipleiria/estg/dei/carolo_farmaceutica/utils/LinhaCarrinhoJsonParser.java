@@ -34,7 +34,6 @@ public class LinhaCarrinhoJsonParser {
 
     public static ArrayList<LinhaCarrinhoCompra> parserJsonLinhaCarrinhoUpdate(String response) {
         ArrayList<LinhaCarrinhoCompra> linhasCarrinho = new ArrayList<>();
-
         try {
             JSONArray linhasCarrinhoJsonArray = new JSONArray(response);
 
@@ -49,8 +48,9 @@ public class LinhaCarrinhoJsonParser {
                 double subtotal = linhaCarrinhoJson.getDouble("subtotal");
                 int carrinho_compra_id = linhaCarrinhoJson.getInt("carrinho_compra_id");
                 String produto_id = linhaCarrinhoJson.getString("produto_id");
+                String imagem = linhaCarrinhoJson.getString("imagem");
 
-                LinhaCarrinhoCompra linhaCarrinho = new LinhaCarrinhoCompra(id, quantidade, precounit, valoriva, valorcomiva, subtotal, carrinho_compra_id, produto_id);
+                LinhaCarrinhoCompra linhaCarrinho = new LinhaCarrinhoCompra(id, quantidade, precounit, valoriva, valorcomiva, subtotal, carrinho_compra_id, produto_id, imagem);
                 linhasCarrinho.add(linhaCarrinho);
             }
         } catch (Exception e) {
@@ -59,17 +59,29 @@ public class LinhaCarrinhoJsonParser {
         return linhasCarrinho;
     }
 
-
-    public static int[] parserJsonQuantidadeProduto(String response) {
-        int[] quantidades = new int[2]; // Array para armazenar as quantidades
+    public static double[] parserJsonQuantidadeProduto(String response) {
+        double[] quantidades = new double[3];
         try {
             JSONObject quantidadeProdutoJson = new JSONObject(response);
-            quantidades[0] = quantidadeProdutoJson.getInt("quantidade");
-            quantidades[1] = quantidadeProdutoJson.getInt("quantidadelinha");
+            quantidades[0] = quantidadeProdutoJson.getDouble("quantidade");
+            quantidades[1] = quantidadeProdutoJson.getDouble("quantidadelinha");
+            quantidades[2] = quantidadeProdutoJson.getDouble("preco");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return quantidades; // Retorna o array com os dois valores
+        return quantidades;
+    }
+
+    public static double parserJsonSubtotal(String response) {
+        double subtotal = 0;
+        try {
+                JSONObject subtotalJson = new JSONObject(response);
+                subtotal += subtotalJson.getDouble("subtotal");
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return subtotal;
     }
 
 }

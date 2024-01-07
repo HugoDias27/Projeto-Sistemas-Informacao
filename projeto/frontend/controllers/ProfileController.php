@@ -42,21 +42,6 @@ class ProfileController extends Controller
         );
     }
 
-    /**
-     * Lists all Profile models.
-     *
-     * @return string
-     */
-    public function actionIndex()
-    {
-        $searchModel = new ProfileSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
 
     /**
      * Displays a single Profile model.
@@ -64,18 +49,16 @@ class ProfileController extends Controller
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que vai para a view de um perfil
     public function actionView($id)
     {
         $model = $this->findModel($id);
 
         if ($model != null) {
-            return $this->render('view', [
-                'model' => $model,
-            ]);
+            return $this->render('view', ['model' => $model]);
         } else {
             return $this->redirect(['create', 'id' => $id]);
         }
-
     }
 
     /**
@@ -83,6 +66,7 @@ class ProfileController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
+    // Método que permite criar um novo perfil
     public function actionCreate($id)
     {
         $model = new Profile();
@@ -96,9 +80,7 @@ class ProfileController extends Controller
             $model->loadDefaultValues();
         }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        return $this->render('create', ['model' => $model]);
     }
 
     /**
@@ -108,6 +90,7 @@ class ProfileController extends Controller
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite atualizar o perfil
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -135,32 +118,17 @@ class ProfileController extends Controller
     }
 
     /**
-     * Deletes an existing Profile model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $id ID
-     * @return \yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    /**
      * Finds the Profile model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
      * @return Profile the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite encontrar o perfil selecionado
     protected function findModel($id)
     {
         if (($model = Profile::findOne(['user_id' => $id])) !== null) {
             return $model;
         }
-
-        // throw new NotFoundHttpException('The requested page does not exist.');
     }
 }

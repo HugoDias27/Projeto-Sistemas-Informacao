@@ -1,13 +1,15 @@
 package pt.ipleiria.estg.dei.carolo_farmaceutica.modelo;
 
+import java.util.ArrayList;
+
 public class Medicamento {
 
     private int id, quantidade, iva_id;
     private String nome, categoria_id, prescricao_medica;
     private double preco;
+    private String imagem;
 
-
-    public Medicamento(int id, String nome, String prescricao_medica, double preco, int quantidade, String categoria_id, int iva_id) {
+    public Medicamento(int id, String nome, String prescricao_medica, double preco, int quantidade, String categoria_id, int iva_id, String imagem) {
         this.id = id;
         this.nome = nome;
         this.prescricao_medica = prescricao_medica;
@@ -15,7 +17,7 @@ public class Medicamento {
         this.quantidade = quantidade;
         this.categoria_id = categoria_id;
         this.iva_id = iva_id;
-
+        this.imagem = imagem;
     }
 
     public int getId() {
@@ -72,6 +74,14 @@ public class Medicamento {
 
     public void setIvaId(int iva_id) {
         this.iva_id = iva_id;
+    }
+
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagens) {
+        this.imagem = imagens;
     }
 
 }

@@ -25,12 +25,21 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'quantidade',
                 'format' => 'raw',
-                'value' => function ($model) {
+                'value' => function ($model) use ($produtosComReceita) {
+                    $disabled = in_array($model->produto->nome, $produtosComReceita);
                     return Html::beginForm(['linhacarrinho/update', 'id' => $model->id], 'post')
-                        . Html::input('number', 'quantidade', $model->quantidade, ['class' => 'form-control', 'style' => 'width: 80px;', 'min' => 1])
-                        . Html::submitButton('Atualizar', ['class' => 'btn btn-sm btn-primary'])
+                        . Html::input('number', 'quantidade', $model->quantidade, [
+                            'class' => 'form-control',
+                            'style' => 'width: 80px;',
+                            'min' => 1,
+                            'disabled' => $disabled,
+                        ])
+                        . ($disabled ? '' : Html::submitButton('Atualizar', [
+                            'class' => 'btn btn-sm btn-primary',
+                        ]))
                         . Html::endForm();
                 },
+
             ],
             'precounit',
             'valoriva',
@@ -63,9 +72,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </div>
 <div class="carrinho-compra-index">
-
-    <?= Html::beginForm(['carrinhocompra/concluir'], 'post') ?>
-    <?= Html::submitButton('Concluir Carrinho', ['class' => 'btn btn-success']) ?>
-    <?= Html::endForm() ?>
-
+    <?php
+    if ($dataProvider->getCount() > 0) {
+        echo Html::beginForm(['carrinhocompra/concluir'], 'post');
+        echo Html::submitButton('Concluir Carrinho', ['class' => 'btn btn-success']);
+        echo Html::endForm();
+    }
+    ?>
 </div>

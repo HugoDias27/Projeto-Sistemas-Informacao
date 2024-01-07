@@ -8,6 +8,7 @@ use common\models\Produto;
 use common\models\ProdutoSearch;
 use Yii;
 use yii\data\Pagination;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -20,6 +21,7 @@ class ProdutoController extends Controller
     /**
      * @inheritDoc
      */
+    // Método que permite definir o que o utilizador tem permissão para fazer
     public function behaviors()
     {
         return array_merge(
@@ -31,6 +33,17 @@ class ProdutoController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'rules' => [
+                        [
+                            'actions' => ['detalhes', 'categoriamedicamentossemreceita', 'categoriamedicamentoscomreceita', 'categoriasaudeoral',
+                                'categoriabensbeleza', 'categoriahigiene', 'categoriaservicos'],
+                            'allow' => true,
+                            'roles' => ['cliente'],
+                        ],
+                    ],
+                ],
             ]
         );
     }
@@ -40,21 +53,20 @@ class ProdutoController extends Controller
      *
      * @return string
      */
-
+    // Método que vai para a página de detalhes do produto escolhido
     public function actionDetalhes($id)
     {
-        // Obter os detalhes do produto pelo ID
         $produtoDetalhes = Produto::findOne($id);
 
         if ($produtoDetalhes) {
             $imagemArray = [];
-            //caso necessite de receita médica
+
             if (($produtoDetalhes->prescricao_medica) === 1) {
                 $receitaMedica = "Sim";
             } else {
                 $receitaMedica = "Não";
             }
-            //calcular o preço do produto com o iva atribuído
+
             $precoFinal = ($produtoDetalhes->preco) + (($produtoDetalhes->preco) * ($produtoDetalhes->iva->percentagem / 100));
 
             $imagens = Imagem::find()->where(['produto_id' => $id])->all();
@@ -63,7 +75,6 @@ class ProdutoController extends Controller
                 $imagemArray[] = $imagem->filename;
             }
 
-            // Apresenta na página de detalhes os dados pretendidos para o utilizador
             return $this->render('detalhes', [
                 'produtoDetalhes' => $produtoDetalhes,
                 'receitaMedica' => $receitaMedica,
@@ -71,24 +82,19 @@ class ProdutoController extends Controller
                 'imagemArray' => $imagemArray,
             ]);
         }
+        throw new NotFoundHttpException('Ocorreu um erro ao tentar aceder a esta página.');
     }
 
 
+    // Método que vai para a página onde mostra todos os produtos sem receita médica
     public function actionCategoriamedicamentossemreceita()
     {
-        //Procurar na categoria dos Medicamentos
         $categoriaMedicamentos = Produto::find()->where(['prescricao_medica' => 0]);
 
         if ($categoriaMedicamentos) {
+            $paginacao = new Pagination(['defaultPageSize' => 20, 'totalCount' => $categoriaMedicamentos->count()]);
 
-            $paginacao = new Pagination([
-                'defaultPageSize' => 20,
-                'totalCount' => $categoriaMedicamentos->count(),
-            ]);
-
-            $produtos = $categoriaMedicamentos->offset($paginacao->offset)
-                ->limit($paginacao->limit)
-                ->all();
+            $produtos = $categoriaMedicamentos->offset($paginacao->offset)->limit($paginacao->limit)->all();
 
             $imagens = [];
             foreach ($produtos as $produto) {
@@ -97,31 +103,48 @@ class ProdutoController extends Controller
                     $imagens[$produto->id] = $primeiraImagem;
                 }
             }
-
-            return $this->render('medicamentos', [
-                'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
-                'paginacao' => $paginacao,
-                'imagens' => $imagens
-            ]);
+            return $this->render('medicamentos', ['produtos' => $produtos, 'paginacao' => $paginacao, 'imagens' => $imagens]);
         }
+        throw new NotFoundHttpException('Ocorreu um erro ao tentar aceder a esta página.');
     }
 
 
+    // Método que vai para a página onde mostra todos os produtos com receita médica
     public function actionCategoriamedicamentoscomreceita()
     {
-        //Procurar na categoria dos Medicamentos
         $categoriaMedicamentos = Produto::find()->where(['prescricao_medica' => 1]);
 
         if ($categoriaMedicamentos) {
+            $paginacao = new Pagination(['defaultPageSize' => 20, 'totalCount' => $categoriaMedicamentos->count()]);
 
-            $paginacao = new Pagination([
-                'defaultPageSize' => 20,
-                'totalCount' => $categoriaMedicamentos->count(),
-            ]);
+            $produtos = $categoriaMedicamentos->offset($paginacao->offset)->limit($paginacao->limit)->all();
 
-            $produtos = $categoriaMedicamentos->offset($paginacao->offset)
-                ->limit($paginacao->limit)
-                ->all();
+            $imagens = [];
+            foreach ($produtos as $produto) {
+                $primeiraImagem = $produto->getImagens()->orderBy(['id' => SORT_ASC])->one();
+                if ($primeiraImagem) {
+                    $imagens[$produto->id] = $primeiraImagem;
+                }
+            }
+            return $this->render('medicamentos', ['produtos' => $produtos, 'paginacao' => $paginacao, 'imagens' => $imagens]);
+        }
+        throw new NotFoundHttpException('Ocorreu um erro ao tentar aceder a esta página.');
+    }
+
+    // Método que vai para a página onde mostra todos os produtos com receita médica
+    public function actionCategoriasaudeoral()
+    {
+        $categoria = Categoria::find()->where(['descricao' => 'saudeoral'])->one();
+
+        if ($categoria != null) {
+            $categoriaMedicamentos = Categoria::findOne(['descricao' => 'saudeoral']);
+
+            $queryProdutos = Produto::find()
+                ->where(['categoria_id' => $categoriaMedicamentos->id]);
+
+            $paginacao = new Pagination(['defaultPageSize' => 20, 'totalCount' => $queryProdutos->count()]);
+
+            $produtos = $queryProdutos->offset($paginacao->offset)->limit($paginacao->limit)->all();
 
             $imagens = [];
             foreach ($produtos as $produto) {
@@ -131,172 +154,61 @@ class ProdutoController extends Controller
                 }
             }
 
-            return $this->render('medicamentos', [
-                'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
-                'paginacao' => $paginacao,
-                'imagens' => $imagens
-            ]);
+            return $this->render('medicamentos', ['produtos' => $produtos, 'paginacao' => $paginacao, 'imagens' => $imagens]);
         }
+        throw new NotFoundHttpException('Ocorreu um erro ao tentar aceder a esta página.');
     }
 
-    public
-    function actionCategoriasaudeoral()
-    {
-        $categoria = Categoria::find()->where(['descricao' => 'saudeoral'])->one();
-        if ($categoria != null) {
-            //Procura os Medicamentos pela categoria
-            $categoriaMedicamentos = Categoria::findOne(['descricao' => 'saudeoral']);
-
-            if ($categoriaMedicamentos) {
-                $queryProdutos = Produto::find()
-                    ->where(['categoria_id' => $categoriaMedicamentos->id]);
-
-                $paginacao = new Pagination([
-                    'defaultPageSize' => 20,
-                    'totalCount' => $queryProdutos->count(),
-                ]);
-
-                $produtos = $queryProdutos->offset($paginacao->offset)
-                    ->limit($paginacao->limit)
-                    ->all();
-
-                $imagens = [];
-                foreach ($produtos as $produto) {
-                    $primeiraImagem = $produto->getImagens()->orderBy(['id' => SORT_ASC])->one();
-                    if ($primeiraImagem) {
-                        $imagens[$produto->id] = $primeiraImagem;
-                    }
-                }
-
-                return $this->render('medicamentos', [
-                    'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
-                    'paginacao' => $paginacao,
-                    'imagens' => $imagens
-                ]);
-            }
-        } else {
-            throw new \yii\web\NotFoundHttpException('Categoria não encontrada!');
-        }
-    }
-
-    public
-    function actionCategoriabensbeleza()
+    // Método que vai para a página onde mostra todos os produtos da categoria de bens de beleza
+    public function actionCategoriabensbeleza()
     {
         $categoria = Categoria::find()->where(['descricao' => 'bens_beleza'])->one();
-        if ($categoria != null) {
 
-            //Procura os Medicamentos pela categoria
+        if ($categoria != null) {
             $categoriaMedicamentos = Categoria::findOne(['descricao' => 'bens_beleza']);
 
-            if ($categoriaMedicamentos) {
-                $queryProdutos = Produto::find()
-                    ->where(['categoria_id' => $categoriaMedicamentos->id]);
+            $queryProdutos = Produto::find()->where(['categoria_id' => $categoriaMedicamentos->id]);
 
-                $paginacao = new Pagination([
-                    'defaultPageSize' => 20,
-                    'totalCount' => $queryProdutos->count(),
-                ]);
+            $paginacao = new Pagination(['defaultPageSize' => 20, 'totalCount' => $queryProdutos->count()]);
 
-                $produtos = $queryProdutos->offset($paginacao->offset)
-                    ->limit($paginacao->limit)
-                    ->all();
+            $produtos = $queryProdutos->offset($paginacao->offset)->limit($paginacao->limit)->all();
 
-                $imagens = [];
-                foreach ($produtos as $produto) {
-                    $primeiraImagem = $produto->getImagens()->orderBy(['id' => SORT_ASC])->one();
-                    if ($primeiraImagem) {
-                        $imagens[$produto->id] = $primeiraImagem;
-                    }
+            $imagens = [];
+            foreach ($produtos as $produto) {
+                $primeiraImagem = $produto->getImagens()->orderBy(['id' => SORT_ASC])->one();
+                if ($primeiraImagem) {
+                    $imagens[$produto->id] = $primeiraImagem;
                 }
-
-                return $this->render('medicamentos', [
-                    'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
-                    'paginacao' => $paginacao,
-                    'imagens' => $imagens
-                ]);
             }
-        } else {
-            throw new \yii\web\NotFoundHttpException('Categoria não encontrada!');
+            return $this->render('medicamentos', ['produtos' => $produtos, 'paginacao' => $paginacao, 'imagens' => $imagens]);
         }
+        throw new NotFoundHttpException('Ocorreu um erro ao tentar aceder a esta página.');
     }
 
-    public
-    function actionCategoriahigiene()
+    // Método que vai para a página onde mostra todos os produtos da categoria de higiene
+    public function actionCategoriahigiene()
     {
         $categoria = Categoria::find()->where(['descricao' => 'higiene'])->one();
         if ($categoria != null) {
-            //Procura os Medicamentos pela categoria
+
             $categoriaMedicamentos = Categoria::findOne(['descricao' => 'Higiene']);
 
-            if ($categoriaMedicamentos) {
-                $queryProdutos = Produto::find()
-                    ->where(['categoria_id' => $categoriaMedicamentos->id]);
+            $queryProdutos = Produto::find()
+                ->where(['categoria_id' => $categoriaMedicamentos->id]);
 
-                $paginacao = new Pagination([
-                    'defaultPageSize' => 20,
-                    'totalCount' => $queryProdutos->count(),
-                ]);
+            $paginacao = new Pagination(['defaultPageSize' => 20, 'totalCount' => $queryProdutos->count()]);
 
-                $produtos = $queryProdutos->offset($paginacao->offset)
-                    ->limit($paginacao->limit)
-                    ->all();
+            $produtos = $queryProdutos->offset($paginacao->offset)->limit($paginacao->limit)->all();
 
-                $imagens = [];
-                foreach ($produtos as $produto) {
-                    $primeiraImagem = $produto->getImagens()->orderBy(['id' => SORT_ASC])->one();
-                    if ($primeiraImagem) {
-                        $imagens[$produto->id] = $primeiraImagem;
-                    }
+            $imagens = [];
+            foreach ($produtos as $produto) {
+                $primeiraImagem = $produto->getImagens()->orderBy(['id' => SORT_ASC])->one();
+                if ($primeiraImagem) {
+                    $imagens[$produto->id] = $primeiraImagem;
                 }
-
-                return $this->render('medicamentos', [
-                    'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
-                    'paginacao' => $paginacao,
-                    'imagens' => $imagens
-                ]);
             }
-        } else {
-            throw new \yii\web\NotFoundHttpException('Categoria não encontrada!');
+            return $this->render('medicamentos', ['produtos' => $produtos, 'paginacao' => $paginacao, 'imagens' => $imagens]);
         }
-    }
-
-    public
-    function actionCategoriaservicos()
-    {
-        $categoria = Categoria::find()->where(['descricao' => 'servicos'])->one();
-        if ($categoria != null) {
-            //Procura os Medicamentos pela categoria
-            $categoriaMedicamentos = Categoria::findOne(['descricao' => 'Serviços']);
-
-            if ($categoriaMedicamentos) {
-                $queryProdutos = Produto::find()
-                    ->where(['categoria_id' => $categoriaMedicamentos->id]);
-
-                $paginacao = new Pagination([
-                    'defaultPageSize' => 20,
-                    'totalCount' => $queryProdutos->count(),
-                ]);
-
-                $produtos = $queryProdutos->offset($paginacao->offset)
-                    ->limit($paginacao->limit)
-                    ->all();
-
-                $imagens = [];
-                foreach ($produtos as $produto) {
-                    $primeiraImagem = $produto->getImagens()->orderBy(['id' => SORT_ASC])->one();
-                    if ($primeiraImagem) {
-                        $imagens[$produto->id] = $primeiraImagem;
-                    }
-                }
-
-                return $this->render('medicamentos', [
-                    'produtos' => $produtos, // Corrigido para usar a variável de produtos encontrados
-                    'paginacao' => $paginacao,
-                    'imagens' => $imagens
-                ]);
-            }
-        } else {
-            throw new \yii\web\NotFoundHttpException('Categoria não encontrada!');
-        }
+        throw new NotFoundHttpException('Ocorreu um erro ao tentar aceder a esta página.');
     }
 }

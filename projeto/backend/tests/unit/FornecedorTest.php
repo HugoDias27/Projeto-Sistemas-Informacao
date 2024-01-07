@@ -19,6 +19,7 @@ class FornecedorTest extends \Codeception\Test\Unit
     // tests
     public function testValidation()
     {
+        //Teste de validação dos campos com dados errados
         $fornecedor = new Fornecedor();
 
         $fornecedor->nome = 22;
@@ -30,23 +31,24 @@ class FornecedorTest extends \Codeception\Test\Unit
     }
 
 
-    public function testSavingFornecedor()
+    public function testFornecedor()
     {
+        //Teste de inserção dos dados na tabela fornecedores
         $fornecedor = new Fornecedor();
-
         $fornecedor->nome = 'Teste Fornecedor';
         $fornecedor->telefone = 916743092;
         $fornecedor->email = 'teste@teste.pt';
-
         $fornecedor->save();
 
-        $this->tester->seeInDatabase('fornecedores', ['nome' => 'Teste Fornecedor']);
-    }
+        //Teste de atualização dos dados na tabela fornecedores
+        $fornecedor = Fornecedor::find()->where(['nome' => 'Teste Fornecedor'])->one();
+        $fornecedor->nome = 'Teste Fornecedor Update';
+        $fornecedor->telefone = 930956789;
+        $fornecedor->email = 'testeupdate@teste.pt';
+        $fornecedor->save();
 
-    public function testDeleteFornecedor()
-    {
-        $deletedRows = Fornecedor::deleteAll(['nome' => 'Teste Fornecedor']);
+        //Teste de apagar os dados na tabela fornecedores
+        $deletedRows = Fornecedor::deleteAll(['nome' => 'Teste Fornecedor Update']);
         $this->tester->assertGreaterThan(0, $deletedRows, 'Nenhum registo foi apagado');
-
     }
 }

@@ -22,6 +22,7 @@ class ReceitamedicaController extends Controller
     /**
      * @inheritDoc
      */
+    // Método que permite definir o que o utilizador tem permissão para fazer
     public function behaviors()
     {
         return array_merge(
@@ -58,12 +59,11 @@ class ReceitamedicaController extends Controller
      *
      * @return string
      */
+    // Método que vai para o index das receitas médicas
     public function actionIndex()
     {
         $searchModel = new ReceitaMedicaSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-
-
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -71,21 +71,24 @@ class ReceitamedicaController extends Controller
         ]);
     }
 
-
-
     /**
      * Displays a single ReceitaMedica model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que vai para a view de uma receita médica
     public function actionView($id)
     {
-        $receita = $this->findModel($id);
+        if (\Yii::$app->user->can('viewReceita')) {
+            $receita = $this->findModel($id);
 
-        return $this->render('view', [
-            'receita' => $receita,
-        ]);
+            return $this->render('view', [
+                'receita' => $receita,
+            ]);
+        }
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
+
     }
 
     /**
@@ -93,40 +96,44 @@ class ReceitamedicaController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
+    // Método que permite criar uma nova receita médica
     public function actionCreate()
     {
         $receita = new ReceitaMedica();
-        $authManager = Yii::$app->authManager;
-        $clienteRole = $authManager->getRole('cliente');
 
-        $clientes = User::find()
-            ->innerJoin('auth_assignment', 'auth_assignment.user_id = user.id')
-            ->andWhere(['auth_assignment.item_name' => $clienteRole->name])
-            ->select(['user.id', 'user.username'])
-            ->asArray()
-            ->all();
+        if (\Yii::$app->user->can('createReceita')) {
+            $authManager = Yii::$app->authManager;
+            $clienteRole = $authManager->getRole('cliente');
 
-        $clientesItems = ArrayHelper::map($clientes, 'id', 'username');
+            $clientes = User::find()
+                ->innerJoin('auth_assignment', 'auth_assignment.user_id = user.id')
+                ->andWhere(['auth_assignment.item_name' => $clienteRole->name])
+                ->select(['user.id', 'user.username'])
+                ->asArray()
+                ->all();
 
-        $produtos = Produto::find()->where(['prescricao_medica' => 1])->all();
-        $produtosItems = ArrayHelper::map($produtos, 'id', 'nome');
+            $clientesItems = ArrayHelper::map($clientes, 'id', 'username');
+
+            $produtos = Produto::find()->where(['prescricao_medica' => 1])->all();
+            $produtosItems = ArrayHelper::map($produtos, 'id', 'nome');
 
 
-        if ($this->request->isPost) {
-            if ($receita->load($this->request->post()) && $receita->save()) {
-                return $this->redirect(['view', 'id' => $receita->id]);
+            if ($this->request->isPost) {
+                if ($receita->load($this->request->post()) && $receita->save()) {
+                    return $this->redirect(['view', 'id' => $receita->id]);
+                }
+            } else {
+                $receita->loadDefaultValues();
             }
-        } else {
-            $receita->loadDefaultValues();
+
+            return $this->render('create', [
+                'receita' => $receita,
+                'clientes' => $clientesItems,
+                'produtos' => $produtosItems,
+            ]);
         }
-
-        return $this->render('create', [
-            'receita' => $receita,
-            'clientes' => $clientesItems,
-            'produtos' => $produtosItems,
-        ]);
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
-
 
 
     /**
@@ -136,11 +143,15 @@ class ReceitamedicaController extends Controller
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite atualizar uma receita médica
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if (\Yii::$app->user->can('deleteReceita')) {
+            $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+            return $this->redirect(['index']);
+        }
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
 
     /**
@@ -150,6 +161,7 @@ class ReceitamedicaController extends Controller
      * @return ReceitaMedica the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite encontrar a receita médica selecionada
     protected function findModel($id)
     {
         if (($receita = ReceitaMedica::findOne(['id' => $id])) !== null) {

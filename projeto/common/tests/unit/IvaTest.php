@@ -18,6 +18,7 @@ class IvaTest extends \Codeception\Test\Unit
     // tests
     public function testValidation()
     {
+        //Teste de validação dos campos com dados errados
         $iva = new Iva();
 
         $iva->percentagem = 'ABC';
@@ -31,38 +32,24 @@ class IvaTest extends \Codeception\Test\Unit
 
     }
 
-    public function testSavingIva()
+    public function testIva()
     {
+        //Teste de inserção dos dados na tabela ivas
         $iva = new Iva();
-
         $iva->setPercentagem(23);
         $iva->setVigor(1);
         $iva->setDescricao('teste');
-
         $iva->save();
 
-        $this->tester->seeInDatabase('ivas', ['descricao' => 'teste']);
-    }
-
-    public function testUpdateIva()
-    {
+        //Teste de atualização dos dados na tabela ivas
         $iva = Iva::find()->where(['descricao' => 'teste'])->one();
-
         $iva->percentagem = 13;
         $iva->vigor = 0;
         $iva->descricao = 'teste2';
-
         $iva->save();
 
-        $this->tester->seeInDatabase('ivas', ['descricao' => 'teste2']);
-    }
-
-
-    public function testDeleteIva()
-    {
+        //Teste de apagar os dados na tabela ivas
         $deletedRows = Iva::deleteAll(['descricao' => 'teste2']);
         $this->tester->assertGreaterThan(0, $deletedRows, 'Nenhum registo foi apagado');
-
     }
-
 }

@@ -19,6 +19,7 @@ class CategoriaTest extends \Codeception\Test\Unit
     // tests
     public function testValidation()
     {
+        //Teste de validação dos campos com dados errados
         $categoria = new Categoria();
 
         $categoria->descricao = 22;
@@ -26,21 +27,21 @@ class CategoriaTest extends \Codeception\Test\Unit
     }
 
 
-    public function testSavingCategoria()
+    public function testCategoria()
     {
+        //Teste de inserção dos dados na tabela categorias
         $categoria = new Categoria();
-
-        $categoria->descricao = 'Descrição categoria';
-
+        $categoria->descricao = 'Descricao categoria';
         $categoria->save();
 
-        $this->tester->seeInDatabase('categorias', ['descricao' => 'Descrição categoria']);
-    }
+        //Teste de atualização dos dados na tabela categorias
+        $categoria = Categoria::find()->where(['descricao' => 'Descricao categoria'])->one();
+        $categoria->descricao = 'Descricao categoria update';
+        $categoria->save();
 
-    public function testDeleteCategoria()
-    {
-        $deletedRows = Categoria::deleteAll(['descricao' => 'Descrição categoria']);
+        //Teste de apagar os dados na tabela categorias
+        $deletedRows = Categoria::deleteAll(['descricao' => 'Descricao categoria update']);
         $this->tester->assertGreaterThan(0, $deletedRows, 'Nenhum registo foi apagado');
-
     }
+
 }

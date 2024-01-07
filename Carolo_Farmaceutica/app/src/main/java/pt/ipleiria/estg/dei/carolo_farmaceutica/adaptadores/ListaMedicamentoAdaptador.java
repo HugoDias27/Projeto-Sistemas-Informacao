@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -63,6 +64,7 @@ public class ListaMedicamentoAdaptador extends BaseAdapter {
     private class ViewHolderLista {
 
         private TextView tvNome, tvPrescricao, tvPreco, tvQuantidade, tvCategoria, tvIVA;
+        private ImageView imgProduto;
 
         public ViewHolderLista(View view) {
             tvNome = view.findViewById(R.id.tvNome);
@@ -71,6 +73,7 @@ public class ListaMedicamentoAdaptador extends BaseAdapter {
             tvQuantidade = view.findViewById(R.id.tvQuantidade);
             tvCategoria = view.findViewById(R.id.tvCategoria);
             tvIVA = view.findViewById(R.id.tvIVA);
+            imgProduto = view.findViewById(R.id.imgProduto);
         }
 
         public void update(Medicamento medicamento) {
@@ -80,6 +83,11 @@ public class ListaMedicamentoAdaptador extends BaseAdapter {
             tvQuantidade.setText(medicamento.getQuantidade() + "");
             tvCategoria.setText(medicamento.getCategoriaId());
             tvIVA.setText(medicamento.getIvaId() + "");
+            Glide.with(context)
+                    .load(medicamento.getImagem())
+                    .placeholder(R.drawable.medicamento_stock)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(imgProduto);
         }
     }
 }

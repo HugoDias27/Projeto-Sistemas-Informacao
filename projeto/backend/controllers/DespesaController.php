@@ -19,6 +19,7 @@ class DespesaController extends Controller
     /**
      * @inheritDoc
      */
+    // Método que permite definir o que o utilizador tem permissão para fazer
     public function behaviors()
     {
         return array_merge(
@@ -54,6 +55,7 @@ class DespesaController extends Controller
      *
      * @return string
      */
+    // Método que vai para o index das despesas
     public function actionIndex()
     {
         $searchModel = new DespesaSearch();
@@ -75,11 +77,13 @@ class DespesaController extends Controller
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que vai para a view de uma despesa
     public function actionView($id)
     {
-        return $this->render('view', [
-            'despesa' => $this->findModel($id),
-        ]);
+        if (\Yii::$app->user->can('viewDespesa')) {
+            return $this->render('view', ['despesa' => $this->findModel($id)]);
+        }
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
 
     /**
@@ -87,23 +91,27 @@ class DespesaController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
+    // Método que permite criar uma nova despesa
     public function actionCreate()
     {
         $despesa = new Despesa();
         $estabelecimentoList = Estabelecimento::find()->all();
         $estabelecimentoItems = ArrayHelper::map($estabelecimentoList, 'id', 'nome');
 
-        if ($this->request->isPost) {
-            if ($despesa->load($this->request->post()) && $despesa->save()) {
-                return $this->redirect(['view', 'id' => $despesa->id]);
+        if (\Yii::$app->user->can('createDespesa')) {
+            if ($this->request->isPost) {
+                if ($despesa->load($this->request->post()) && $despesa->save()) {
+                    return $this->redirect(['view', 'id' => $despesa->id]);
+                }
+            } else {
+                $despesa->loadDefaultValues();
             }
-        } else {
-            $despesa->loadDefaultValues();
-        }
 
-        return $this->render('create', [
-            'despesa' => $despesa, 'estabelecimentoItems' => $estabelecimentoItems,
-        ]);
+            return $this->render('create', [
+                'despesa' => $despesa, 'estabelecimentoItems' => $estabelecimentoItems,
+            ]);
+        }
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
 
     /**
@@ -113,17 +121,19 @@ class DespesaController extends Controller
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite atualizar uma despesa
     public function actionUpdate($id)
     {
         $despesa = $this->findModel($id);
 
-        if ($this->request->isPost && $despesa->load($this->request->post()) && $despesa->save()) {
-            return $this->redirect(['view', 'id' => $despesa->id]);
-        }
+        if (\Yii::$app->user->can('updateDespesa')) {
+            if ($this->request->isPost && $despesa->load($this->request->post()) && $despesa->save()) {
+                return $this->redirect(['view', 'id' => $despesa->id]);
+            }
 
-        return $this->render('update', [
-            'despesa' => $despesa,
-        ]);
+            return $this->render('update', ['despesa' => $despesa]);
+        }
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
 
     /**
@@ -133,11 +143,15 @@ class DespesaController extends Controller
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite apagar uma despesa
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if (\Yii::$app->user->can('deleteCategorias')) {
+            $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+            return $this->redirect(['index']);
+        }
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
 
     /**
@@ -147,6 +161,7 @@ class DespesaController extends Controller
      * @return Despesa the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite encontrar a despesa selecionada
     protected function findModel($id)
     {
         if (($despesa = Despesa::findOne(['id' => $id])) !== null) {

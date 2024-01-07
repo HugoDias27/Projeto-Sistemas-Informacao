@@ -21,14 +21,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import pt.ipleiria.estg.dei.carolo_farmaceutica.LinhaCarrinhoFragment;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.CarrinhoListener;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.CheckoutListener;
+import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.FaturaCarrinhoListener;
+import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.FaturaListener;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.LinhaCarrinhoListener;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.LoginListener;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.MedicamentosListener;
+import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.QuantidadeListener;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.ReceitaMedicaListener;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.RegistarListener;
+import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.SubtotalListener;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.utils.CarrinhoJsonParser;
+import pt.ipleiria.estg.dei.carolo_farmaceutica.utils.FaturaJsonParser;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.utils.LinhaCarrinhoJsonParser;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.utils.LinhaJsonParser;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.utils.LoginJsonParser;
@@ -41,6 +47,7 @@ public class SingletonGestorFarmacia {
 
     private String login;
     private User dadosLogin;
+    private double subtotal;
     private ArrayList<User> users;
     private ArrayList<ReceitaMedica> receitasUser;
     private boolean user;
@@ -48,6 +55,8 @@ public class SingletonGestorFarmacia {
     private ArrayList<ReceitaMedica> receitaMedicas;
     private ArrayList<LinhaCarrinhoCompra> linhacarrinhoCompras;
     private ArrayList<LinhaCarrinhoCompra> linhaCarrinhoCompra;
+    private ArrayList<LinhaCarrinhoCompraFatura> linhaCarrinhoCompraFatura;
+    private ArrayList<Fatura> faturas;
     private boolean CarrinhoCompras;
     private static SingletonGestorFarmacia instance = null;
     private static RequestQueue volleyQueue = null;
@@ -58,6 +67,10 @@ public class SingletonGestorFarmacia {
     private CarrinhoListener carrinhoListener;
     private LinhaCarrinhoListener linhaCarrinhoListener;
     private CheckoutListener CheckoutListener;
+    private FaturaListener faturaListener;
+    private FaturaCarrinhoListener faturaCarrinhoListener;
+    private SubtotalListener subtotalListener;
+    private QuantidadeListener quantidadeListener;
     private String ipAddress;
     private String mURLAPIMedicamentos;
     private String mURLAPILogin;
@@ -69,6 +82,10 @@ public class SingletonGestorFarmacia {
     private String mURLAPIAtualizaQuantidade;
     private String mURLAPIRemoveLinhaCarrinho;
     private String mURLAPIQuantidadeProduto;
+    private String mURLAPIFaturaCliente;
+    private String mURLAPISubtotal;
+    private String mURLAPILinhaCarrinhoPorFatura;
+    private String mURLAPIMedicamentoCategoria;
     private FarmaciaBDHelper farmaciaBDHelper;
 
     public static synchronized SingletonGestorFarmacia getInstance(Context context) {
@@ -83,6 +100,8 @@ public class SingletonGestorFarmacia {
         medicamentos = new ArrayList<>();
         receitaMedicas = new ArrayList<>();
         receitasUser = new ArrayList<>();
+        linhaCarrinhoCompraFatura = new ArrayList<>();
+        faturas = new ArrayList<>();
         farmaciaBDHelper = new FarmaciaBDHelper(context);
     }
 
@@ -104,6 +123,10 @@ public class SingletonGestorFarmacia {
         mURLAPIAtualizaQuantidade = "http://" + ipAddress + "/projetoSIS/backend/web/api/linhacarrinhos/updatequantidade";
         mURLAPIRemoveLinhaCarrinho = "http://" + ipAddress + "/projetoSIS/backend/web/api/linhacarrinhos/removerlinhacarrinho";
         mURLAPIQuantidadeProduto = "http://" + ipAddress + "/projetoSIS/backend/web/api/linhacarrinhos/quantidadeproduto";
+        mURLAPIFaturaCliente = "http://" + ipAddress + "/projetoSIS/backend/web/api/faturas/faturacliente";
+        mURLAPILinhaCarrinhoPorFatura = "http://" + ipAddress + "/projetoSIS/backend/web/api/linhacarrinhos/linhascarrinho";
+        mURLAPISubtotal = "http://" + ipAddress + "/projetoSIS/backend/web/api/linhacarrinhos/subtotal";
+        mURLAPIMedicamentoCategoria = "http://" + ipAddress + "/projetoSIS/backend/web/api/produtos/categoria";
     }
 
     public void setLoginListener(LoginListener loginListener) {
@@ -134,6 +157,22 @@ public class SingletonGestorFarmacia {
 
     public void setCheckoutListener(CheckoutListener checkoutListener) {
         this.CheckoutListener = checkoutListener;
+    }
+
+    public void setFaturasListener(FaturaListener faturaListener) {
+        this.faturaListener = faturaListener;
+    }
+
+    public void setFaturaCarrinhoListener(FaturaCarrinhoListener faturaCarrinhoListener) {
+        this.faturaCarrinhoListener = faturaCarrinhoListener;
+    }
+
+    public void setSubtotalListener(SubtotalListener subtotalListener) {
+        this.subtotalListener = subtotalListener;
+    }
+
+    public void setQuantidadeListener(QuantidadeListener quantidadeListener) {
+        this.quantidadeListener = quantidadeListener;
     }
 
     public Medicamento getMedicamento(int id) {
@@ -290,7 +329,7 @@ public class SingletonGestorFarmacia {
 
     public void login(String username, String password, final Context context) {
         if (!LoginJsonParser.isConnectionInternet(context)) {
-
+            Toast.makeText(context, "Erro na autenticação.", Toast.LENGTH_SHORT).show();
         } else {
             StringRequest request = new StringRequest(Request.Method.POST, mURLAPILogin, new Response.Listener<String>() {
                 @Override
@@ -306,7 +345,6 @@ public class SingletonGestorFarmacia {
                         login = LoginJsonParser.parserJsonLogin(response);
                         dadosLogin = LoginJsonParser.parserJsonDadosLogin(response);
 
-                        // Adicione os dados do usuário na base de dados local
                         AdicionarUserBD(dadosLogin);
 
                         SharedPreferences sharedAuthKey = context.getSharedPreferences("DADOS_PESQUISA", Context.MODE_PRIVATE);
@@ -317,7 +355,7 @@ public class SingletonGestorFarmacia {
                         editor.apply();
 
                         if (loginListener != null) {
-                            loginListener.onRefreshLogin(login); // Notifica o loginListener após o login ser concluído
+                            loginListener.onRefreshLogin(login);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -401,7 +439,6 @@ public class SingletonGestorFarmacia {
                     return params;
                 }
             };
-
             volleyQueue.add(request);
         }
     }
@@ -427,7 +464,7 @@ public class SingletonGestorFarmacia {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(context, "Erro ao obter as linhas.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Sem produtos!", Toast.LENGTH_SHORT).show();
                 }
             }) {
             };
@@ -464,7 +501,7 @@ public class SingletonGestorFarmacia {
     }
 
     public void updateQuantidadeProdutoCarrinho(int quantidade, int linhaid, final Context context) {
-        if (!CarrinhoJsonParser.isConnectionInternet(context)) {
+        if (!LinhaCarrinhoJsonParser.isConnectionInternet(context)) {
             Toast.makeText(context, "Não tem ligação à internet", Toast.LENGTH_SHORT).show();
         } else {
             SharedPreferences preferences = context.getSharedPreferences("DADOS_PESQUISA", Context.MODE_PRIVATE);
@@ -479,7 +516,7 @@ public class SingletonGestorFarmacia {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(context, "Erro ao atualizar a quantidade do produto.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Não pode colocar mais quantidade no produto escolhido!", Toast.LENGTH_SHORT).show();
                 }
             }) {
                 @Override
@@ -494,8 +531,8 @@ public class SingletonGestorFarmacia {
     }
 
 
-    public void deleleLinhaCarrinho(int linhaid, Context context) {
-        if (!CarrinhoJsonParser.isConnectionInternet(context)) {
+    public void deleleLinhaCarrinho(int linhaid, final Context context) {
+        if (!LinhaCarrinhoJsonParser.isConnectionInternet(context)) {
             Toast.makeText(context, "Não tem ligação à internet", Toast.LENGTH_SHORT).show();
         } else {
             SharedPreferences preferences = context.getSharedPreferences("DADOS_PESQUISA", Context.MODE_PRIVATE);
@@ -518,8 +555,8 @@ public class SingletonGestorFarmacia {
         }
     }
 
-    public void QuantidadeProduto(int linhaid, Context context) {
-        if (!CarrinhoJsonParser.isConnectionInternet(context)) {
+    public void QuantidadeProduto(int linhaid, final Context context) {
+        if (!LinhaCarrinhoJsonParser.isConnectionInternet(context)) {
             Toast.makeText(context, "Não tem ligação à internet", Toast.LENGTH_SHORT).show();
         } else {
             SharedPreferences preferences = context.getSharedPreferences("DADOS_PESQUISA", Context.MODE_PRIVATE);
@@ -531,19 +568,10 @@ public class SingletonGestorFarmacia {
                 @Override
                 public void onResponse(String response) {
                     try {
-                        int[] quantidades = LinhaCarrinhoJsonParser.parserJsonQuantidadeProduto(response);
-
-                        // Acessando os valores do array de quantidades
-                        int quantidadeProduto = quantidades[0];
-                        int quantidadeLinha = quantidades[1];
-
-                        // Salvando as quantidades no SharedPreferences
-                        SharedPreferences sharedAuthKey = context.getSharedPreferences("QUANTIDADE_PRODUTO", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedAuthKey.edit();
-                        editor.putInt("quantidade", quantidadeProduto);
-                        editor.putInt("quantidadelinha", quantidadeLinha);
-                        editor.apply();
-
+                        double[] quantidades = LinhaCarrinhoJsonParser.parserJsonQuantidadeProduto(response);
+                        if (quantidadeListener != null) {
+                            quantidadeListener.onRefreshQuantidade(quantidades);
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                         Toast.makeText(context, "Erro ao processar a resposta JSON", Toast.LENGTH_SHORT).show();
@@ -559,6 +587,120 @@ public class SingletonGestorFarmacia {
             volleyQueue.add(request);
         }
     }
+
+    public void getFaturasAPI(final Context context) {
+        if (!FaturaJsonParser.isConnectionInternet(context)) {
+            Toast.makeText(context, "Não tem ligação à internet", Toast.LENGTH_SHORT).show();
+        } else {
+            SharedPreferences preferences = context.getSharedPreferences("DADOS_PESQUISA", Context.MODE_PRIVATE);
+            String authKey = preferences.getString("authKey", "");
+            int id = preferences.getInt("id", 0);
+
+            String mURLAPIFaturaClienteFinal = mURLAPIFaturaCliente + "/" + id + "?auth_key=" + authKey;
+
+            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, mURLAPIFaturaClienteFinal, null, new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray response) {
+                    faturas = FaturaJsonParser.parserJsonFaturaCliente(response);
+                    if (faturaListener != null) {
+                        faturaListener.onRefreshListaFatura(faturas);
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(context, "Erro ao obter a sua(s) receitas médicas.", Toast.LENGTH_SHORT).show();
+                }
+            }) {
+            };
+            volleyQueue.add(request);
+        }
+    }
+
+    public void getLinhasCarrinhoCompra(int id, final Context context) {
+        if (!FaturaJsonParser.isConnectionInternet(context)) {
+            Toast.makeText(context, "Não tem ligação à internet", Toast.LENGTH_SHORT).show();
+        } else {
+            SharedPreferences preferences = context.getSharedPreferences("DADOS_PESQUISA", Context.MODE_PRIVATE);
+            String authKey = preferences.getString("authKey", "");
+
+            String mURLAPILinhaCarrinhoPorFaturaFinal = mURLAPILinhaCarrinhoPorFatura + "/" + id + "?auth_key=" + authKey;
+
+            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, mURLAPILinhaCarrinhoPorFaturaFinal, null, new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray response) {
+                    linhaCarrinhoCompraFatura = FaturaJsonParser.parserJsonLinhasCarrinho(response);
+                    if (faturaCarrinhoListener != null) {
+                        faturaCarrinhoListener.onLinhasCarrinhoCarregadas(linhaCarrinhoCompraFatura);
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(context, "Erro ao obter linhas do carrinho.", Toast.LENGTH_SHORT).show();
+                }
+            });
+            volleyQueue.add(request);
+        }
+    }
+
+    public void getSubtotal(final Context context) {
+        if (!LinhaCarrinhoJsonParser.isConnectionInternet(context)) {
+            Toast.makeText(context, "Não tem ligação à internet", Toast.LENGTH_SHORT).show();
+        } else {
+            SharedPreferences preferences = context.getSharedPreferences("DADOS_PESQUISA", Context.MODE_PRIVATE);
+            String authKey = preferences.getString("authKey", "");
+            int id = preferences.getInt("id", 0);
+
+            String mURLAPISubtotalFinal = mURLAPISubtotal + "/" + id + "?auth_key=" + authKey;
+
+            StringRequest request = new StringRequest(Request.Method.GET, mURLAPISubtotalFinal, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    subtotal = LinhaCarrinhoJsonParser.parserJsonSubtotal(response);
+                    if (subtotalListener != null) {
+                        subtotalListener.onSubtotal(subtotal);
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(context, "Erro ao obter linhas do carrinho.", Toast.LENGTH_SHORT).show();
+                }
+            });
+            volleyQueue.add(request);
+        }
+    }
+
+
+    public void getMedicamentoCategoria(final Context context, String nomeCategoria) {
+        if (!MedicamentosJsonParser.isConnectionInternet(context)) {
+            medicamentos = farmaciaBDHelper.getMedicamentosCategoriaBD(nomeCategoria);
+           if (medicamentosListener != null) {
+                medicamentosListener.onRefreshListaMedicamento(medicamentos);
+            }
+        } else {
+            SharedPreferences preferences = context.getSharedPreferences("DADOS_PESQUISA", Context.MODE_PRIVATE);
+            String authKey = preferences.getString("authKey", "");
+            String mURLAPIMedicamentoCategoriaFinal = mURLAPIMedicamentoCategoria + "/" + nomeCategoria + "?auth_key=" + authKey;
+
+            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, mURLAPIMedicamentoCategoriaFinal, null, new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray response) {
+                    medicamentos = MedicamentosJsonParser.parserJsonMedicamentos(response);
+                    AdicionarAllMedicamentosBD(medicamentos);
+                    if (medicamentosListener != null) {
+                        medicamentosListener.onRefreshListaMedicamento(medicamentos);
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(context, "Erro ao obter os medicamentos.", Toast.LENGTH_SHORT).show();
+                }
+            }) {
+            };
+            volleyQueue.add(request);
+        }
+    }
 }
-
-

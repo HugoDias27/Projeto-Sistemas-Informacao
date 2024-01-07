@@ -15,7 +15,7 @@ public class FarmaciaBDHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "BDCaroloFarmaceutica", TABLE_PRODUTO = "produtos", TABLE_RECEITA = "receitamedica", TABLE_USER = "user";
     private static final String ID = "id", NOME = "nome", PRESCRICAO_MEDICA = "prescricao_medica", PRECO = "preco", QUANTIDADE = "quantidade", CATEGORIA_ID = "categoria_id", IVA_ID = "iva_id";
     private static final String CODIGO = "codigo", LOCAL_PRESCRICAO = "local_prescricao", MEDICO_PRESCRICAO = "medico_prescricao", DOSAGEM = "dosagem", DATA_VALIDADE = "data_validade", TELEFONE = "telefone", VALIDO = "valido", POSOLOGIA = "posologia", USER_ID = "user_id";
-    private static final String USERNAME = "username", EMAIL = "email";
+    private static final String USERNAME = "username", EMAIL = "email", IMAGENS = "imagens";
 
     private final SQLiteDatabase db;
 
@@ -34,7 +34,8 @@ public class FarmaciaBDHelper extends SQLiteOpenHelper {
                 PRECO + " REAL NOT NULL, " +
                 QUANTIDADE + " INTEGER NOT NULL, " +
                 CATEGORIA_ID + " TEXT, " +
-                IVA_ID + " INTEGER NOT NULL);";
+                IVA_ID + " INTEGER NOT NULL, " +
+                IMAGENS + " TEXT NOT NULL);";
         sqLiteDatabase.execSQL(sqlCreateTableProduto);
 
         String sqlCreateTableReceita = "CREATE TABLE " + TABLE_RECEITA + "(" +
@@ -73,6 +74,7 @@ public class FarmaciaBDHelper extends SQLiteOpenHelper {
         values.put(QUANTIDADE, medicamento.getQuantidade());
         values.put(CATEGORIA_ID, medicamento.getCategoriaId());
         values.put(IVA_ID, medicamento.getIvaId());
+        values.put(IMAGENS, medicamento.getImagem());
 
 
         this.db.insert(TABLE_PRODUTO, null, values);
@@ -98,16 +100,29 @@ public class FarmaciaBDHelper extends SQLiteOpenHelper {
 
     public ArrayList<Medicamento> getAllMedicamentosBD() {
         ArrayList<Medicamento> medicamentos = new ArrayList<>();
-        Cursor cursor = this.db.query(TABLE_PRODUTO, new String[]{ID, NOME, PRESCRICAO_MEDICA, PRECO, QUANTIDADE, CATEGORIA_ID, IVA_ID}, null, null, null, null, null);
+        Cursor cursor = this.db.query(TABLE_PRODUTO, new String[]{ID, NOME, PRESCRICAO_MEDICA, PRECO, QUANTIDADE, CATEGORIA_ID, IVA_ID, IMAGENS}, null, null, null, null, null);
+
         if (cursor.moveToFirst()) {
             do {
-                Medicamento medicamento = new Medicamento(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getDouble(3), cursor.getInt(4), cursor.getString(5), cursor.getInt(6));
+                int id = cursor.getInt(0);
+                String nome = cursor.getString(1);
+                String prescricaoMedica = cursor.getString(2);
+                double preco = cursor.getDouble(3);
+                int quantidade = cursor.getInt(4);
+                String categoriaId = cursor.getString(5);
+                int ivaId = cursor.getInt(6);
+                String imagens = cursor.getString(7);
+
+                // Cria o objeto Medicamento com os dados e a lista de imagens
+                Medicamento medicamento = new Medicamento(id, nome, prescricaoMedica, preco, quantidade, categoriaId, ivaId, imagens);
                 medicamentos.add(medicamento);
             } while (cursor.moveToNext());
         }
 
+        cursor.close();
         return medicamentos;
     }
+
 
     public void removerAllMedicamentosBD() {
         this.db.delete(TABLE_PRODUTO, null, null);
@@ -167,5 +182,33 @@ public class FarmaciaBDHelper extends SQLiteOpenHelper {
         values.put(EMAIL, user.getEmail());
 
         this.db.insert(TABLE_USER, null, values);
+    }
+
+    public ArrayList<Medicamento> getMedicamentosCategoriaBD(String nomeCategoria) {
+        ArrayList<Medicamento> medicamentos = new ArrayList<>();
+
+        String query = "SELECT * FROM " + TABLE_PRODUTO + " WHERE " + NOME + " LIKE ? AND " + CATEGORIA_ID + " = ?";
+        String[] selectionArgs = {"%", nomeCategoria};
+
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(0);
+                String nome = cursor.getString(1);
+                String prescricaoMedica = cursor.getString(2);
+                double preco = cursor.getDouble(3);
+                int quantidade = cursor.getInt(4);
+                String categoriaId = cursor.getString(5);
+                int ivaId = cursor.getInt(6);
+                String imagens = cursor.getString(7);
+
+                Medicamento medicamento = new Medicamento(id, nome, prescricaoMedica, preco, quantidade, categoriaId, ivaId, imagens);
+                medicamentos.add(medicamento);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return medicamentos;
     }
 }

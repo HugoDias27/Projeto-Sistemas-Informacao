@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
 
@@ -11,18 +11,15 @@
             android:title="@string/txt_menu_produtos" />
 
         <item
-            android:id="@+id/navLocalizacao"
-            android:title="@string/txt_menu_localizacao" />
-
-        <item
             android:id="@+id/navReceitaMedica"
             android:title="@string/txt_menu_receita_medica" />
 
         <item
-            android:id="@+id/navDesconto"
-            android:title="@string/txt_menu_descontos" />
+            android:id="@+id/navFatura"
+            android:icon="@drawable/ic_action_fatura"
+            android:title="@string/faturas" />
 
-             <item
+        <item
             android:id="@+id/navSettings"
             android:title="@string/definicoes" />
 
@@ -30,7 +27,12 @@
             android:id="@+id/navCarrinho"
             android:icon="@drawable/ic_action_carrinho"
             android:title="@string/txt_menu_carrinho"
-            app:showAsAction="always"/>
+            app:showAsAction="always" />
+
+        <item
+            android:id="@+id/navLogout"
+            android:icon="@drawable/ic_action_logout"
+            android:title="@string/logout" />
     </group>
 
 </menu>

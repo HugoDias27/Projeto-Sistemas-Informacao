@@ -16,9 +16,8 @@ public class MedicamentosJsonParser {
     public static ArrayList<Medicamento> parserJsonMedicamentos(JSONArray response) {
         ArrayList<Medicamento> listaMedicamentos = new ArrayList<>();
         try {
-            for (int i = 0;i < response.length(); i++)
-            {
-                JSONObject medicamentoJSON = (JSONObject) response.get(i);
+            for (int i = 0; i < response.length(); i++) {
+                JSONObject medicamentoJSON = response.getJSONObject(i);
                 int id = medicamentoJSON.getInt("id");
                 String nome = medicamentoJSON.getString("nome");
                 String prescricao_medica = medicamentoJSON.getString("prescricao_medica");
@@ -26,18 +25,17 @@ public class MedicamentosJsonParser {
                 int quantidade = medicamentoJSON.getInt("quantidade");
                 String categoria_id = medicamentoJSON.getString("categoria");
                 int iva_id = medicamentoJSON.getInt("iva");
+                String imagens = medicamentoJSON.getString("imagens");
 
-                Medicamento m = new Medicamento(id, nome, prescricao_medica, preco, quantidade, categoria_id, iva_id);
+                Medicamento m = new Medicamento(id, nome, prescricao_medica, preco, quantidade, categoria_id, iva_id, imagens);
                 listaMedicamentos.add(m);
-
             }
-
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
         return listaMedicamentos;
     }
+
 
     public static boolean isConnectionInternet(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

@@ -34,13 +34,11 @@
             android:exported="false">
         </activity>
         <activity
-            android:name=".ReceitaMedicaActivity"
-            android:exported="false">
-        </activity>
-        <activity
             android:name=".DetalhesReceitaActivity"
-            android:exported="false"
-            android:parentActivityName=".ReceitaMedicaActivity"/>
+            android:exported="false"/>
+        <activity
+            android:name=".DetalhesFaturaActivity"
+            android:exported="false"/>
         <activity
             android:name=".DetalhesMedicamentoActivity"
             android:exported="false"

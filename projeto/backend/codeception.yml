@@ -21,3 +21,4 @@ modules:
         PhpBrowser:
             url: 'http://localhost/projeto'
             auth: ['admin', 'admin*2024']
+

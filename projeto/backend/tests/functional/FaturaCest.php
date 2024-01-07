@@ -12,7 +12,7 @@ use common\models\User;
 class FaturaCest
 {
 
-
+    // Teste de inicialização antes de começar os testes
     public function _before(FunctionalTester $I)
     {
         $I->amOnRoute('/');
@@ -27,10 +27,9 @@ class FaturaCest
 
     }
 
-    // tests
+    // Teste para criar uma fatura com um serviço e uma receita médica
     public function CriarFaturaTest(FunctionalTester $I)
     {
-
         $I->see('Criar fatura');
         $I->click('Criar fatura');
         $I->selectOption('Fatura[cliente_id]', '3');

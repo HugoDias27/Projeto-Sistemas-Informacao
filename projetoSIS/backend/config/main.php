@@ -115,6 +115,7 @@ return [
                     'tokens' => [
                         '{precoMin}' => '<precoMin:\d+>',
                         '{precoMax}' => '<precoMax:\d+>',
+                        '{id}' => '<id:\\d+>',
                     ],
                 ],
                 [
@@ -131,7 +132,6 @@ return [
                     'class' => 'yii\rest\UrlRule', 'controller' => 'api/carrinhocompra',
                     'extraPatterns' => [
                         'POST carrinho/{userid}' => 'carrinhocompra',
-                        'POST carrinhos/{userid}' => 'carrinhos',
                     ],
                     'tokens' => [
                         '{userid}' => '<userid:\\d+>',

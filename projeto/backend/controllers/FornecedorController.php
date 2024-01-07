@@ -17,6 +17,7 @@ class FornecedorController extends Controller
     /**
      * @inheritDoc
      */
+    // Método que permite definir o que o utilizador tem permissão para fazer
     public function behaviors()
     {
         return array_merge(
@@ -53,6 +54,7 @@ class FornecedorController extends Controller
      *
      * @return string
      */
+    // Método que vai para o index dos fornecedores
     public function actionIndex()
     {
         $searchModel = new FornecedorSearch();
@@ -70,11 +72,14 @@ class FornecedorController extends Controller
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que vai para a view de um fornecedor
     public function actionView($id)
     {
-        return $this->render('view', [
-            'fornecedor' => $this->findModel($id),
-        ]);
+        if (\Yii::$app->user->can('viewFornecedor')) {
+            return $this->render('view', ['fornecedor' => $this->findModel($id),]);
+        }
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
+
     }
 
     /**
@@ -82,21 +87,25 @@ class FornecedorController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
+    // Método que permite criar um novo fornecedor
     public function actionCreate()
     {
         $fornecedor = new Fornecedor();
 
-        if ($this->request->isPost) {
-            if ($fornecedor->load($this->request->post()) && $fornecedor->save()) {
-                return $this->redirect(['view', 'id' => $fornecedor->id]);
+        if (\Yii::$app->user->can('createFornecedor')) {
+            if ($this->request->isPost) {
+                if ($fornecedor->load($this->request->post()) && $fornecedor->save()) {
+                    return $this->redirect(['view', 'id' => $fornecedor->id]);
+                }
+            } else {
+                $fornecedor->loadDefaultValues();
             }
-        } else {
-            $fornecedor->loadDefaultValues();
-        }
 
-        return $this->render('create', [
-            'fornecedor' => $fornecedor,
-        ]);
+            return $this->render('create', [
+                'fornecedor' => $fornecedor,
+            ]);
+        }
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
 
     /**
@@ -106,17 +115,21 @@ class FornecedorController extends Controller
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite atualizar um fornecedor
     public function actionUpdate($id)
     {
         $fornecedor = $this->findModel($id);
 
-        if ($this->request->isPost && $fornecedor->load($this->request->post()) && $fornecedor->save()) {
-            return $this->redirect(['view', 'id' => $fornecedor->id]);
-        }
+        if (\Yii::$app->user->can('updateFornecedor')) {
+            if ($this->request->isPost && $fornecedor->load($this->request->post()) && $fornecedor->save()) {
+                return $this->redirect(['view', 'id' => $fornecedor->id]);
+            }
 
-        return $this->render('update', [
-            'fornecedor' => $fornecedor,
-        ]);
+            return $this->render('update', [
+                'fornecedor' => $fornecedor,
+            ]);
+        }
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
 
     /**
@@ -126,11 +139,15 @@ class FornecedorController extends Controller
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite apagar um fornecedor
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if (\Yii::$app->user->can('deleteFornecedor')) {
+            $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+            return $this->redirect(['index']);
+        }
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
 
     /**
@@ -140,6 +157,7 @@ class FornecedorController extends Controller
      * @return Fornecedor the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite encontrar o fornecedor selecionado
     protected function findModel($id)
     {
         if (($fornecedor = Fornecedor::findOne(['id' => $id])) !== null) {

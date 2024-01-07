@@ -3,8 +3,10 @@
 namespace backend\modules\api\controllers;
 
 use backend\modules\api\components\CustomAuth;
+use common\models\User;
 use Yii;
 use yii\rest\ActiveController;
+use yii\web\ForbiddenHttpException;
 
 class DespesaController extends ActiveController
 {
@@ -18,6 +20,16 @@ class DespesaController extends ActiveController
             'class' => CustomAuth::className(),
         ];
         return $behaviors;
+    }
+
+
+    public function checkAccess($action, $model = null, $params = [])
+    {
+        if (Yii::$app->params['id'] == 1 || Yii::$app->params['id'] == 2) {
+            if ($action === "create") {
+                throw new \yii\web\ForbiddenHttpException('Proibido');
+            }
+        }
     }
 
     public function actionIndex()

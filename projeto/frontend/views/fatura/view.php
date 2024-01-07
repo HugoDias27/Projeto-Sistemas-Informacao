@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="row">
                             <div class="col-12">
                                 <h4>
-                                    <small class="float-right"><?= date('d-m-Y'); ?></small>
+                                    <small class="float-right"><?= date('Y-m-d', strtotime($fatura->dta_emissao)); ?></small>
                                 </h4>
                             </div>
                         </div>
@@ -90,26 +90,33 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <?php } ?>
                                         <?php }
                                     } ?>
-                                    <?php foreach ($linhasCarrinho as $linhaCarrinho) : ?>
-                                        <tr>
-                                            <td>
-                                                <?php
-                                                $produtoEncontrado = null;
-                                                foreach ($produtos as $produto) {
-                                                    $produtoEncontrado = $produto;
-                                                }
-                                                echo Html::encode($produtoEncontrado->nome); // Suponha que 'nome' seja um atributo do produto
-                                                ?>
-                                            </td>
-                                            <td><?= Html::encode($linhaCarrinho->quantidade) ?></td>
-                                            <td><?= Html::encode($linhaCarrinho->precounit) ?></td>
-                                            <td><?= Html::encode($linhaCarrinho->valoriva) ?></td>
-                                            <td><?= Html::encode($linhaCarrinho->valorcomiva) ?></td>
-                                            <td><?= Html::encode($linhaCarrinho->subtotal) ?></td>
-
-                                        </tr>
-                                    <?php endforeach; ?>
-
+                                    <?php if (!empty($linhasCarrinho)): ?>
+                                        <?php foreach ($linhasCarrinho as $linhaCarrinho): ?>
+                                            <tr>
+                                                <td>
+                                                    <?php
+                                                    $produtoEncontrado = null;
+                                                    foreach ($produtos as $produto) {
+                                                        if ($produto->id === $linhaCarrinho->produto_id) {
+                                                            $produtoEncontrado = $produto;
+                                                            break;
+                                                        }
+                                                    }
+                                                    if ($produtoEncontrado) {
+                                                        echo Html::encode($produtoEncontrado->nome);
+                                                    } else {
+                                                        echo "Produto não encontrado";
+                                                    }
+                                                    ?>
+                                                </td>
+                                                <td><?= Html::encode($linhaCarrinho->quantidade) ?></td>
+                                                <td><?= Html::encode($linhaCarrinho->precounit) ?></td>
+                                                <td><?= Html::encode($linhaCarrinho->valoriva) ?></td>
+                                                <td><?= Html::encode($linhaCarrinho->valorcomiva) ?></td>
+                                                <td><?= Html::encode($linhaCarrinho->subtotal) ?></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
                                     </tbody>
                                 </table>
                             </div>

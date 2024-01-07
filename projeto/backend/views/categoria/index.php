@@ -15,6 +15,15 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="categoria-index">
 
+    <?php foreach (Yii::$app->session->getAllFlashes() as $type => $messages) : ?>
+        <?php foreach ($messages as $message) : ?>
+            <?= \yii\bootstrap4\Alert::widget([
+                'options' => ['class' => 'alert-' . $type],
+                'body' => $message,
+            ]); ?>
+        <?php endforeach; ?>
+    <?php endforeach; ?>
+
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>

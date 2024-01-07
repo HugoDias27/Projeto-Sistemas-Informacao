@@ -4,6 +4,8 @@ namespace backend\controllers;
 
 use common\models\Categoria;
 use common\models\CategoriaSearch;
+use PhpParser\Node\Expr\Throw_;
+use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -17,6 +19,7 @@ class CategoriaController extends Controller
     /**
      * @inheritDoc
      */
+    // Método que permite definir o que o utilizador tem permissão para fazer
     public function behaviors()
     {
         return array_merge(
@@ -52,6 +55,7 @@ class CategoriaController extends Controller
      *
      * @return string
      */
+    // Método que vai para o index das categorias
     public function actionIndex()
     {
         $searchModel = new CategoriaSearch();
@@ -69,11 +73,13 @@ class CategoriaController extends Controller
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que vai para a view de uma categoria
     public function actionView($id)
     {
-        return $this->render('view', [
-            'categoria' => $this->findModel($id),
-        ]);
+        if (\Yii::$app->user->can('viewCategorias')) {
+            return $this->render('view', ['categoria' => $this->findModel($id)]);
+        }
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
 
     /**
@@ -81,21 +87,25 @@ class CategoriaController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
+    // Método que permite criar uma nova categoria
     public function actionCreate()
     {
         $categoria = new Categoria();
 
-        if ($this->request->isPost) {
-            if ($categoria->load($this->request->post()) && $categoria->save()) {
-                return $this->redirect(['view', 'id' => $categoria->id]);
+        if (\Yii::$app->user->can('createCategorias')) {
+            if ($this->request->isPost) {
+                if ($categoria->load($this->request->post()) && $categoria->save()) {
+                    return $this->redirect(['view', 'id' => $categoria->id]);
+                }
+            } else {
+                $categoria->loadDefaultValues();
             }
-        } else {
-            $categoria->loadDefaultValues();
-        }
 
-        return $this->render('create', [
-            'categoria' => $categoria,
-        ]);
+            return $this->render('create', [
+                'categoria' => $categoria,
+            ]);
+        }
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
 
     /**
@@ -105,17 +115,18 @@ class CategoriaController extends Controller
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite atualizar uma categoria
     public function actionUpdate($id)
     {
         $categoria = $this->findModel($id);
 
-        if ($this->request->isPost && $categoria->load($this->request->post()) && $categoria->save()) {
-            return $this->redirect(['view', 'id' => $categoria->id]);
+        if (\Yii::$app->user->can('updateCategorias')) {
+            if ($this->request->isPost && $categoria->load($this->request->post()) && $categoria->save()) {
+                return $this->redirect(['view', 'id' => $categoria->id]);
+            }
+            return $this->render('update', ['categoria' => $categoria]);
         }
-
-        return $this->render('update', [
-            'categoria' => $categoria,
-        ]);
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
 
     /**
@@ -125,12 +136,17 @@ class CategoriaController extends Controller
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite apagar uma categoria
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if (\Yii::$app->user->can('deleteCategorias')) {
+            $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+            return $this->redirect(['index']);
+        }
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
+
 
     /**
      * Finds the Categoria model based on its primary key value.
@@ -139,6 +155,7 @@ class CategoriaController extends Controller
      * @return Categoria the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite encontrar a categoria selecionada
     protected function findModel($id)
     {
         if (($categoria = Categoria::findOne(['id' => $id])) !== null) {

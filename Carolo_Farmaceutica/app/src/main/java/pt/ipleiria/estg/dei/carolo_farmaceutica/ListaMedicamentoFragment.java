@@ -1,12 +1,18 @@
 package pt.ipleiria.estg.dei.carolo_farmaceutica;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -24,9 +30,10 @@ import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.SingletonGestorFarmacia;
 
 public class ListaMedicamentoFragment extends Fragment implements MedicamentosListener {
 
-
     private ListView lvMedicamentos;
     private SearchView searchView;
+    private FragmentManager fragmentManager;
+
     public ListaMedicamentoFragment() {
         // Required empty public constructor
     }
@@ -49,14 +56,20 @@ public class ListaMedicamentoFragment extends Fragment implements MedicamentosLi
                 startActivity(intent);
             }
         });
+
+        fragmentManager = requireActivity().getSupportFragmentManager();
+
         return view;
     }
 
     @Override
     public void onCreateOptionsMenu(android.view.Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_pesquisa, menu);
+        inflater.inflate(R.menu.menu_categoria, menu);
         super.onCreateOptionsMenu(menu, inflater);
-        searchView = (SearchView) menu.findItem(R.id.itemPesquisa).getActionView();
+
+        MenuItem itemPesquisa = menu.findItem(R.id.itemPesquisa);
+        searchView = (SearchView) itemPesquisa.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String newText) {
@@ -76,6 +89,69 @@ public class ListaMedicamentoFragment extends Fragment implements MedicamentosLi
             }
         });
 
+        MenuItem categoriaOral = menu.findItem(R.id.categoriaOral);
+        MenuItem categoriaBeleza = menu.findItem(R.id.categoriaBeleza);
+        MenuItem categoriaHigiene = menu.findItem(R.id.categoriaHigiene);
+
+        categoriaOral.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                String nomeCategoria = "saude_oral";
+                String nomeCategoriaTitulo = "Saúde Oral";
+
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("NOME_CATEGORIA", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("nome_categoria", nomeCategoria);
+                editor.apply();
+
+                Fragment fragment = new ListaProdutoCategoriaFragment();
+                Bundle args = new Bundle();
+                args.putString("nome_categoria", nomeCategoriaTitulo);
+                fragment.setArguments(args);
+                fragmentManager.beginTransaction().replace(R.id.contentFragment, fragment).commit();
+                return true;
+            }
+        });
+
+        categoriaBeleza.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                String nomeCategoria = "bens_beleza";
+                String nomeCategoriaTitulo = "Bens de Beleza";
+
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("NOME_CATEGORIA", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("nome_categoria", nomeCategoria);
+                editor.apply();
+
+                Fragment fragment = new ListaProdutoCategoriaFragment();
+                Bundle args = new Bundle();
+                args.putString("nome_categoria", nomeCategoriaTitulo);
+                fragment.setArguments(args);
+                fragmentManager.beginTransaction().replace(R.id.contentFragment, fragment).commit();
+                return true;
+            }
+        });
+
+        categoriaHigiene.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                String nomeCategoria = "higiene";
+                String nomeCategoriaTitulo = "Higiene";
+
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("NOME_CATEGORIA", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("nome_categoria", nomeCategoria);
+                editor.apply();
+
+                Fragment fragment = new ListaProdutoCategoriaFragment();
+                Bundle args = new Bundle();
+                args.putString("nome_categoria", nomeCategoriaTitulo);
+                fragment.setArguments(args);
+                fragmentManager.beginTransaction().replace(R.id.contentFragment, fragment).commit();
+                return true;
+            }
+        });
     }
 
     @Override

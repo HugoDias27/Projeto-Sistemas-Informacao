@@ -1,6 +1,8 @@
 package pt.ipleiria.estg.dei.carolo_farmaceutica;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,28 +15,30 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import pt.ipleiria.estg.dei.carolo_farmaceutica.adaptadores.ListaCarrinhoAdaptador;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.CheckoutListener;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.LinhaCarrinhoListener;
+import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.QuantidadeAlteradaListener;
+import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.SubtotalListener;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.LinhaCarrinhoCompra;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.SingletonGestorFarmacia;
 
 
-public class LinhaCarrinhoFragment extends Fragment implements LinhaCarrinhoListener, CheckoutListener {
+public class LinhaCarrinhoFragment extends Fragment implements LinhaCarrinhoListener, CheckoutListener, SubtotalListener, QuantidadeAlteradaListener {
 
     private ListView lvCarrinho;
     private Button btnCheckout;
-    private ImageButton btRemover;
-    private ImageButton btnAdicionar;
-    private ImageButton btReduzir;
     public static final String USERNAME = "USERNAME";
-
-
+    private double subtotalValor = 0.0;
+    private AlertDialog alertDialog;
+    private ArrayList<LinhaCarrinhoCompra> listaCarrinho = new ArrayList<>();
 
     public LinhaCarrinhoFragment() {
         // Required empty public constructor
@@ -45,31 +49,59 @@ public class LinhaCarrinhoFragment extends Fragment implements LinhaCarrinhoList
         View view = inflater.inflate(R.layout.fragment_carrinho, container, false);
         setHasOptionsMenu(true);
         lvCarrinho = view.findViewById(R.id.lvCarrinho);
+        btnCheckout = view.findViewById(R.id.btCheckout);
 
         SingletonGestorFarmacia.getInstance(getContext()).setLinhaCarrinhoCompraListener(this);
         SingletonGestorFarmacia.getInstance(getContext()).getLinhasCarrinho(getContext());
         SingletonGestorFarmacia.getInstance(getContext()).setCheckoutListener(this);
+        SingletonGestorFarmacia.getInstance(getContext()).setSubtotalListener(this);
+        SingletonGestorFarmacia.getInstance(getContext()).getSubtotal(getContext());
 
-        btnCheckout = view.findViewById(R.id.btCheckout);
+        ListaCarrinhoAdaptador adaptador = new ListaCarrinhoAdaptador(getContext(), listaCarrinho);
+        adaptador.setQuantidadeAlteradaListener(this);
+
 
         btnCheckout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SingletonGestorFarmacia.getInstance(getContext()).fazFatura(getContext());
+                SingletonGestorFarmacia.getInstance(getContext()).getSubtotal(getContext());
+
+                String subtotalText = String.format("%.2f€", subtotalValor);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Confirmação de Compra");
+
+                builder.setMessage("Subtotal: " + subtotalText + "\nDeseja confirmar a compra?");
+
+                builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SingletonGestorFarmacia.getInstance(getContext()).fazFatura(getContext());
+                    }
+                });
+
+                builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                alertDialog = builder.create();
+                alertDialog.show();
             }
         });
 
         return view;
     }
 
-
     @Override
     public void onRefreshLinhaCarrinho(ArrayList<LinhaCarrinhoCompra> linhas) {
         if (linhas != null) {
             lvCarrinho.setAdapter(new ListaCarrinhoAdaptador(getContext(), linhas));
+            btnCheckout.setVisibility(View.VISIBLE);
         }
     }
-
 
     @Override
     public void onRefreshCheckout(boolean resposta) {
@@ -83,5 +115,20 @@ public class LinhaCarrinhoFragment extends Fragment implements LinhaCarrinhoList
         } else {
             Toast.makeText(getContext(), "Erro ao efetuar a compra", Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void onSubtotal(double subtotal) {
+        subtotalValor = subtotal;
+
+        if (alertDialog != null && alertDialog.isShowing()) {
+            String subtotalText = String.format("%.2f€", subtotalValor);
+            alertDialog.setMessage("Subtotal: " + subtotalText + "\nDeseja confirmar a compra?");
+        }
+    }
+
+    @Override
+    public void onQuantidadeAlterada() {
+        SingletonGestorFarmacia.getInstance(getContext()).getSubtotal(getContext());
     }
 }

@@ -17,6 +17,7 @@ class SiteController extends Controller
     /**
      * {@inheritdoc}
      */
+    // Método que permite definir o que o utilizador tem permissão para fazer
     public function behaviors()
     {
         return [
@@ -65,6 +66,7 @@ class SiteController extends Controller
      *
      * @return string
      */
+    // Método que vai para o index da página principal
     public function actionIndex()
     {
         return $this->render('index');
@@ -75,6 +77,7 @@ class SiteController extends Controller
      *
      * @return string|Response
      */
+    // Método que faz o login
     public function actionLogin()
     {
         if (!Yii::$app->user->isGuest) {
@@ -100,9 +103,7 @@ class SiteController extends Controller
 
         $model->password = '';
 
-        return $this->render('login', [
-            'model' => $model,
-        ]);
+        return $this->render('login', ['model' => $model]);
     }
 
     /**
@@ -110,6 +111,7 @@ class SiteController extends Controller
      *
      * @return Response
      */
+    // Método que faz o logout
     public function actionLogout()
     {
         Yii::$app->user->logout();

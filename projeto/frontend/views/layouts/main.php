@@ -73,14 +73,13 @@ AppAsset::register($this);
                     ['label' => 'Bens de beleza', 'url' => ['produto/categoriabensbeleza']],
                     ['label' => 'Higiene', 'url' => ['produto/categoriahigiene']],
                     ['label' => 'Serviços', 'url' => ['servico/index']],
-                    ['label' => 'Encontrar farmácia', 'url' => ['site/search']]
                 ],
             ],
         ];
 
         if (!Yii::$app->user->isGuest) {
             $menuItems[] = [
-                'label' => '<i class="fa fa-user"></i>',
+                'label' => '<i class="fa fa-user" title="menu-cliente" ></i>',
                 'items' => [
                     ['label' => 'Definições do perfil', 'url' => ['profile/view', 'id' => Yii::$app->user->identity->getId()]],
                     ['label' => 'Editar perfil', 'url' => ['profile/update', 'id' => Yii::$app->user->identity->getId()]],
@@ -88,6 +87,7 @@ AppAsset::register($this);
                     ['label' => 'Faturas', 'url' => ['fatura/index', 'id' => Yii::$app->user->identity->getId()]],
                 ],
                 'encode' => false,
+
             ];
         }
 

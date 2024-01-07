@@ -1,7 +1,11 @@
-
+suite_namespace: frontend\tests\acceptance
 actor: AcceptanceTester
 modules:
     enabled:
-        - PhpBrowser:
-              url: 'http://localhost/projeto'
-              auth: [ 'admin', 'admin*2024' ]
+
+        - WebDriver:
+              url: 'http://localhost/projeto/frontend/web'
+              browser: chrome
+              window_size: maximize
+        - Yii2:
+              part: init

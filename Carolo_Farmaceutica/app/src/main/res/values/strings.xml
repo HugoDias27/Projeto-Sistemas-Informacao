@@ -22,7 +22,7 @@
     <string name="email">Email:</string>
     <string name="telefone">Telefone:</string>
     <string name="password">Password:</string>
-    <string name="data_contratacao">Data contratação:</string>
+    <string name="data_fatura">Data de emissão:</string>
     <string name="data">data</string>
     <string name="username">Username:</string>
     <string name="numero_utente">Número de utente</string>
@@ -73,7 +73,7 @@
     <string name="imagem_produto">Imagem Produto</string>
     <string name="remove_produto_do_carrinho">Remove produto do carrinho</string>
     <string name="reduz_quantidade_do_produto">Reduz quantidade do produto</string>
-    <string name="adicionar_quandtidade_ao_produto">Adicionar quandtidade ao produto</string>
+    <string name="adicionar_quantidade_ao_produto">Adicionar quantidade ao produto</string>
     <string name="imagem_medicamento_desconto">Imagem Medicamento desconto</string>
     <string name="imagem_medicamento">Imagem Medicamento</string>
     <string name="imagem_receita">Imagem Receita</string>
@@ -81,4 +81,16 @@
     <string name="pesquisa">Pesquisa</string>
     <string name="remover">Remover</string>
     <string name="guardar_receita">Guardar Receita</string>
+    <string name="logout">Logout</string>
+    <string name="faturas">Faturas:</string>
+    <string name="txt_valor_total">Valor Total:</string>
+    <string name="txt_nr_fatura">Número da Fatura:</string>
+    <string name="txt_imagem_fatura">Imagem Fatura</string>
+    <string name="txt_preco_unitario">Preço Unitário:</string>
+    <string name="txt_valor_com_iva">Valor com IVA:</string>
+    <string name="txt_subtotal">Subtotal:</string>
+    <string name="txt_nome_do_produto">Nome do Produto:</string>
+    <string name="txt_saude_oral">Saúde Oral</string>
+    <string name="txt_bens_beleza">Bens de Beleza</string>
+    <string name="txt_higiene">Higiene</string>
 </resources>

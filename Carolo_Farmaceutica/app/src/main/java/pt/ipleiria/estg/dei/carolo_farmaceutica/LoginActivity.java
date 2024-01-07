@@ -25,7 +25,6 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
     private EditText etUsername, etPassword;
 
     public static final String USERNAME = "USERNAME";
-    private ReceitaMedicaListener receitaMedicaListener;
 
 
     @Override
@@ -48,17 +47,6 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
 
         SingletonGestorFarmacia singletonGestorFarmacia = SingletonGestorFarmacia.getInstance(getApplicationContext());
         singletonGestorFarmacia.setLoginListener(this);
-
-        if (!LoginJsonParser.isConnectionInternet(this)) {
-            // Criação de um novo ReceitaMedicaListener para ser definido no Singleton
-            ReceitaMedicaListener receitaMedicaListener = new ReceitaMedicaListener() {
-                @Override
-                public void onRefreshReceitaMedica(ArrayList<ReceitaMedica> receitaMedicas) {
-                    // Implemente a lógica necessária aqui quando a receita médica for atualizada
-                }
-            };
-            singletonGestorFarmacia.setReceitaMedicaListener(receitaMedicaListener);
-        }
 
         singletonGestorFarmacia.login(username, password, getApplicationContext());
     }

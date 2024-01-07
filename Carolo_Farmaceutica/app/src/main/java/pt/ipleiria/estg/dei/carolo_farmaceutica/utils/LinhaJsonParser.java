@@ -29,8 +29,9 @@ public class LinhaJsonParser {
                 double subtotal = CarrinhoJSON.getDouble("subtotal");
                 int carrinho_compra_id = CarrinhoJSON.getInt("carrinho_compra_id");
                 String produto_id = CarrinhoJSON.getString("produto_id");
+                String imagem = CarrinhoJSON.getString("imagens");
 
-                LinhaCarrinhoCompra m = new LinhaCarrinhoCompra(id, quantidade, precounit, valoriva, valorcomiva, subtotal, carrinho_compra_id, produto_id);
+                LinhaCarrinhoCompra m = new LinhaCarrinhoCompra(id, quantidade, precounit, valoriva, valorcomiva, subtotal, carrinho_compra_id, produto_id, imagem);
                 listaCarrinhoCompras.add(m);
 
             }

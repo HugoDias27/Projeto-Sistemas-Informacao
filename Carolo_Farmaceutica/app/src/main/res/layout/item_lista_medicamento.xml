@@ -5,7 +5,7 @@
     android:layout_margin="5dp">
 
     <ImageView
-        android:id="@+id/imgCapa"
+        android:id="@+id/imgProduto"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="0.3"

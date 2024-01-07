@@ -17,6 +17,7 @@ class EstabelecimentoController extends Controller
     /**
      * @inheritDoc
      */
+    // Método que permite definir o que o utilizador tem permissão para fazer
     public function behaviors()
     {
         return array_merge(
@@ -52,6 +53,7 @@ class EstabelecimentoController extends Controller
      *
      * @return string
      */
+    // Método que vai para o index dos estabelecimentos
     public function actionIndex()
     {
         $searchModel = new EstabelecimentoSearch();
@@ -69,11 +71,13 @@ class EstabelecimentoController extends Controller
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que vai para a view de um estabelecimento
     public function actionView($id)
     {
-        return $this->render('view', [
-            'estabelecimento' => $this->findModel($id),
-        ]);
+        if (\Yii::$app->user->can('viewEstabelecimento')) {
+            return $this->render('view', ['estabelecimento' => $this->findModel($id)]);
+        }
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
 
     /**
@@ -81,21 +85,23 @@ class EstabelecimentoController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
+    // Método que permite criar um novo estabelecimento
     public function actionCreate()
     {
         $estabelecimento = new Estabelecimento();
 
-        if ($this->request->isPost) {
-            if ($estabelecimento->load($this->request->post()) && $estabelecimento->save()) {
-                return $this->redirect(['view', 'id' => $estabelecimento->id]);
+        if (\Yii::$app->user->can('createEstabelecimento')) {
+            if ($this->request->isPost) {
+                if ($estabelecimento->load($this->request->post()) && $estabelecimento->save()) {
+                    return $this->redirect(['view', 'id' => $estabelecimento->id]);
+                }
+            } else {
+                $estabelecimento->loadDefaultValues();
             }
-        } else {
-            $estabelecimento->loadDefaultValues();
-        }
 
-        return $this->render('create', [
-            'estabelecimento' => $estabelecimento,
-        ]);
+            return $this->render('create', ['estabelecimento' => $estabelecimento]);
+        }
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
 
     /**
@@ -105,17 +111,21 @@ class EstabelecimentoController extends Controller
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite atualizar um estabelecimento
     public function actionUpdate($id)
     {
         $estabelecimento = $this->findModel($id);
 
-        if ($this->request->isPost && $estabelecimento->load($this->request->post()) && $estabelecimento->save()) {
-            return $this->redirect(['view', 'id' => $estabelecimento->id]);
-        }
+        if (\Yii::$app->user->can('updateEstabelecimento')) {
+            if ($this->request->isPost && $estabelecimento->load($this->request->post()) && $estabelecimento->save()) {
+                return $this->redirect(['view', 'id' => $estabelecimento->id]);
+            }
 
-        return $this->render('update', [
-            'estabelecimento' => $estabelecimento,
-        ]);
+            return $this->render('update', [
+                'estabelecimento' => $estabelecimento,
+            ]);
+        }
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
 
     /**
@@ -125,11 +135,15 @@ class EstabelecimentoController extends Controller
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite apagar um estabelecimento
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if (\Yii::$app->user->can('deleteEstabelecimento')) {
+            $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+            return $this->redirect(['index']);
+        }
+        throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
 
     /**
@@ -139,6 +153,7 @@ class EstabelecimentoController extends Controller
      * @return Estabelecimento the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
+    // Método que permite encontrar o estabelecimento selecionado
     protected function findModel($id)
     {
         if (($estabelecimento = Estabelecimento::findOne(['id' => $id])) !== null) {

@@ -296,7 +296,7 @@ class LinhacarrinhoController extends ActiveController
             $produtoQuantidade = $produto::findOne(['id' => $produto_id]);
 
             if ($produtoQuantidade !== null) {
-                return ['quantidade' => $produtoQuantidade->quantidade, 'quantidadelinha' => $linhaCarrinho->quantidade];
+                return ['quantidade' => $produtoQuantidade->quantidade, 'quantidadelinha' => $linhaCarrinho->quantidade, 'preco' => $linhaCarrinho->subtotal];
             } else {
                 return ['resposta' => false];
             }

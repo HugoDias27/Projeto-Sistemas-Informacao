@@ -8,7 +8,7 @@ use yii\helpers\Html;
 $this->title = 'Verificar Receita Medica';
 $this->params['breadcrumbs'][] = ['label' => 'Receita Medicas', 'url' => ['site/index']];
 $this->params['breadcrumbs'][] = $this->title;
-$flashMessages = Yii::$app->session->getAllFlashes();
+//$flashMessages = Yii::$app->session->getAllFlashes();
 
 ?>
 <div class="receita-medica-create">
