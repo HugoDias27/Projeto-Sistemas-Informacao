@@ -86,7 +86,7 @@ class ProfileController extends Controller
 
             if ($this->request->isPost) {
                 if ($perfil->load($this->request->post()) && $perfil->save()) {
-                    return $this->redirect(['view', 'id' => $perfil->user_id]);
+                    return $this->redirect(['user/view', 'id' => $perfil->user_id]);
                 }
             } else {
                 $perfil->loadDefaultValues();

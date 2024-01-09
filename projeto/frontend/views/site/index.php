@@ -41,9 +41,9 @@ $this->title = 'Carolo Farmacêutica';
                                     <img src="<?= Yii::getAlias('@web') . '/uploads/' . $imagens[$produto->id]->filename ?>"
                                          class="img-fluid" style="max-width: 200px; max-height: 200px;">
                                 <?php endif; ?>
-                                <h4 class="mb-3"><a href="<?= 'produto/detalhes?id=' . $produto->id?>"><?= $produto->nome; ?></a></h4>
+                                <h4 class="mb-3"><a href="<?= Yii::$app->urlManager->createAbsoluteUrl(['produto/detalhes', 'id' => $produto->id])?>"><?= $produto->nome; ?></a></h4>
                                 <a class="btn btn-lg btn-primary rounded-pill"
-                                   href="<?= 'produto/detalhes?id=' . $produto->id ?>">
+                                   href="<?= Yii::$app->urlManager->createAbsoluteUrl(['produto/detalhes', 'id' => $produto->id]) ?>">
                                     <i class="bi bi-arrow-right"></i>
                                 </a>
                             </div>

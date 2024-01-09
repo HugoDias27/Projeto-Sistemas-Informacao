@@ -39,7 +39,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]))
                         . Html::endForm();
                 },
-
             ],
             'precounit',
             'valoriva',

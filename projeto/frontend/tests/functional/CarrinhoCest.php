@@ -21,19 +21,21 @@ class CarrinhoCest
         $I->fillField('#password', 'tiago.saramago2023');
         $I->click('login-button');
         $I->see('Logout (Tiago Saramago)');
-        $I->click('Brufens');
-        $I->see('Brufens');
+
+        $I->click('Brufen Sem Açúcar, 20 mg/mL-200mL');
+        $I->see('Brufen Sem Açúcar, 20 mg/mL-200mL');
         $I->see('Informações Técnicas');
         $I->click('Adicionar ao Carrinho');
 
-        $I->fillField('ReceitaMedica[codigo]', '4789');
+        $I->fillField('ReceitaMedica[codigo]', '5678');
         $I->see('Verificar');
         $I->click('Verificar');
         $I->click('Carrinho');
 
         $I->see('Carrinho Compras');
+        $I->see('Concluir Carrinho');
         $I->click('Concluir Carrinho');
-        $I->see('Concluir Compra');
+        $I->see('Dados de Entrega');
         $I->click('Concluir Compra');
     }
 
@@ -48,8 +50,8 @@ class CarrinhoCest
         $I->fillField('#password', 'tiago.saramago2023');
         $I->click('login-button');
         $I->see('Logout (Tiago Saramago)');
-        $I->see('Ben-U-Ron');
-        $I->click('Ben-U-Ron');
+        $I->see('Ben-U-Ron, 500 mg x 20 comp');
+        $I->click('Ben-U-Ron, 500 mg x 20 comp');
         $I->see('Informações Técnicas');
         $I->click('Adicionar ao Carrinho');
         $I->see('Carrinho');

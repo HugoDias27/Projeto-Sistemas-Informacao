@@ -93,21 +93,22 @@ class ProdutoController extends Controller
             $fornecedorProduto = FornecedorProduto::find()->where(['produto_id' => $id])->with('fornecedor')->all();
 
             $imagens = Imagem::find()->where(['produto_id' => $id])->all();
+            $imagemArray = [];
+
             if (!empty($imagens)) {
                 foreach ($imagens as $imagem) {
-                    $imagemid = $imagem->id;
-                    $imagem->filename = Yii::getAlias('@web') . '/uploads/' . $imagem->filename;
-                    $imagemArray[] = $imagem->filename;
+                    $imagemPath = Yii::getAlias('@web') . '/uploads/' . $imagem->filename;
+                    $imagemArray[] = [
+                        'id' => $imagem->id,
+                        'filename' => $imagemPath,
+                    ];
                 }
-            } else {
-                $imagemid = null;
             }
 
             return $this->render('view', [
                 'produto' => $this->findModel($id),
                 'imagemArray' => $imagemArray,
                 'fornecedorProduto' => $fornecedorProduto,
-                'imagemid' => $imagemid
             ]);
         }
         throw new NotFoundHttpException('Não tem permissões para aceder a esta página');

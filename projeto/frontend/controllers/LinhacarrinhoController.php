@@ -127,7 +127,6 @@ class LinhacarrinhoController extends Controller
         if ($receitamedica->valido == 0) {
             return $this->redirect(Yii::$app->homeUrl);
         } else {
-
             if($produto->quantidade >= $receitamedica->dosagem) {
                 $LinhaCarrinho->quantidade = $quantidade;
                 $LinhaCarrinho->precounit = $produto->preco;

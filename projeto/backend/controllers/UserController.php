@@ -110,7 +110,7 @@ class UserController extends Controller
     {
         $model = new User();
 
-        if (\Yii::$app->user->can('createUser')) {
+        if (\Yii::$app->user->can('createUser') || \Yii::$app->user->can('createUtente')) {
 
             $modelProfile = new Profile();
             $modelSignup = new SignupForm();
@@ -180,7 +180,7 @@ class UserController extends Controller
     {
         $modelProfile = $this->findModelProfile($id);
 
-        if (\Yii::$app->user->can('updateUser')) {
+        if (\Yii::$app->user->can('updateUser') || \Yii::$app->user->can('updateUtente')) {
 
             if ($modelProfile !== null) {
                 return $this->redirect(['profile/update', 'id' => $id]);

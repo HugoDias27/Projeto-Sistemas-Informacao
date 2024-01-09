@@ -38,22 +38,24 @@ class DespesaTest extends \Codeception\Test\Unit
     {
         //Teste de inserção dos dados na tabela despesas
         $despesa = new Despesa();
-        $despesa->preco = 20;
+        $despesa->preco = 20.0;
         $despesa->dta_despesa = '2021-05-05';
         $despesa->descricao = 'teste';
-        $despesa->estabelecimento_id = 2;
+        $despesa->estabelecimento_id = 1;
         $despesa->save();
 
         //Teste de atualização dos dados na tabela despesas
+
         $despesa = Despesa::find()->where(['descricao' => 'teste'])->one();
-        $despesa->preco = 40;
+        $despesa->preco = 40.0;
         $despesa->dta_despesa = '2021-06-06';
         $despesa->descricao = 'testeupdate';
-        $despesa->estabelecimento_id = 2;
+        $despesa->estabelecimento_id = 1;
         $despesa->save();
 
         //Teste de apagar os dados na tabela despesas
         $deletedRows = Despesa::deleteAll(['descricao' => 'testeupdate']);
         $this->tester->assertGreaterThan(0, $deletedRows, 'Nenhum registo foi apagado');
+
     }
 }

@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use common\models\LoginForm;
+use common\models\ReceitaMedica;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -69,6 +70,17 @@ class SiteController extends Controller
     // Método que vai para o index da página principal
     public function actionIndex()
     {
+        if (!Yii::$app->user->isGuest) {
+            $receitasMedicas = ReceitaMedica::find()->all();
+
+            foreach ($receitasMedicas as $receitaMedica) {
+                if (!empty($receitaMedica->data_validade) && strtotime($receitaMedica->data_validade) < strtotime(date('Y-m-d'))) {
+                    $receitaMedica->valido = 0;
+                    $receitaMedica->save();
+                }
+            }
+        }
+
         return $this->render('index');
     }
 

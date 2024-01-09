@@ -134,10 +134,10 @@ class ProdutoController extends Controller
     // Método que vai para a página onde mostra todos os produtos com receita médica
     public function actionCategoriasaudeoral()
     {
-        $categoria = Categoria::find()->where(['descricao' => 'saudeoral'])->one();
+        $categoria = Categoria::find()->where(['descricao' => 'saude_oral'])->one();
 
         if ($categoria != null) {
-            $categoriaMedicamentos = Categoria::findOne(['descricao' => 'saudeoral']);
+            $categoriaMedicamentos = Categoria::findOne(['descricao' => 'saude_oral']);
 
             $queryProdutos = Produto::find()
                 ->where(['categoria_id' => $categoriaMedicamentos->id]);

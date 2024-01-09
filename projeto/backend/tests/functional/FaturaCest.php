@@ -33,10 +33,10 @@ class FaturaCest
         $I->see('Criar fatura');
         $I->click('Criar fatura');
         $I->selectOption('Fatura[cliente_id]', '3');
-        $I->selectOption('Fatura[estabelecimento_id]', '2');
+        $I->selectOption('Fatura[estabelecimento_id]', '1');
         $I->click('Guardar');
         $I->fillField('LinhaFatura[quantidade]', '2');
-        $I->selectOption('LinhaFatura[servico_id]', '1');
+        $I->selectOption('LinhaFatura[servico_id]', '3');
         $I->click('Adicionar servico');
         $I->click('Criar Linha');
         $I->selectOption('LinhaFatura[receita_medica_id]', '1');
@@ -45,7 +45,7 @@ class FaturaCest
         $I->click('Atualizar Quantidade');
         $I->click('Criar Linha');
         $I->fillField('LinhaFatura[quantidade]', '2');
-        $I->selectOption('LinhaFatura[servico_id]', '1');
+        $I->selectOption('LinhaFatura[servico_id]', '3');
         $I->click('Adicionar servico');
         $I->click('Eliminar');
         $I->click('Concluir Fatura');

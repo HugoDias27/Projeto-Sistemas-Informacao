@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use common\models\Imagem;
+use common\models\ReceitaMedica;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
@@ -98,9 +99,20 @@ class SiteController extends Controller
             }
         }
 
+        if (!Yii::$app->user->isGuest) {
+            $user_id = Yii::$app->user->identity->getId();
+
+            $receitasMedicas = ReceitaMedica::find()->where(['user_id' => $user_id])->all();
+
+            foreach ($receitasMedicas as $receitaMedica) {
+                if (!empty($receitaMedica->data_validade) && strtotime($receitaMedica->data_validade) < strtotime(date('Y-m-d'))) {
+                    $receitaMedica->valido = 0;
+                    $receitaMedica->save();
+                }
+            }
+        }
         return $this->render('index', ['produtos' => $produtos, 'paginacao' => $paginacao, 'imagens' => $imagens]);
     }
-
 
     /**
      * Logs in a user.

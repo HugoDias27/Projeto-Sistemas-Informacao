@@ -119,11 +119,15 @@ class ReceitamedicaController extends Controller
 
 
             if ($this->request->isPost) {
-                if ($receita->load($this->request->post()) && $receita->save()) {
-                    return $this->redirect(['view', 'id' => $receita->id]);
+                if ($receita->load($this->request->post())) {
+                    if ($receita->data_validade > date('Y-m-d')) {
+                        if ($receita->save()) {
+                            return $this->redirect(['view', 'id' => $receita->id]);
+                        }
+                    } else {
+                        $receita->loadDefaultValues();
+                    }
                 }
-            } else {
-                $receita->loadDefaultValues();
             }
 
             return $this->render('create', [
