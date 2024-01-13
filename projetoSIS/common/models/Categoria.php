@@ -64,12 +64,13 @@ class Categoria extends \yii\db\ActiveRecord
         $myObj = new \stdClass();
         $myObj->id = $id;
         $myObj->descricao = $descricao;
-        $myJSON = json_encode($myObj);
 
         if ($insert) {
+            $myJSON = "Foi inserido uma nova categoria!" . json_encode($myObj->descricao);
             $this->FazPublishMosquitto("INSERT_CATEGORIA", $myJSON);
         }
         else {
+            $myJSON = "Foi atualizado uma categoria!" . json_encode($myObj->descricao);
             $this->FazPublishMosquitto("UPDATE_CATEGORIA", $myJSON);
         }
     }
@@ -81,7 +82,7 @@ class Categoria extends \yii\db\ActiveRecord
         $id = $this->id;
         $myObj = new \stdClass();
         $myObj->id = $id;
-        $myJSON = json_encode($myObj);
+        $myJSON = "Foi apagado uma categoria!";
 
         $this->FazPublishMosquitto("DELETE_CATEGORIA", $myJSON);
     }

@@ -115,12 +115,13 @@ class Servico extends \yii\db\ActiveRecord
         $myObj->preco = $preco;
         $myObj->iva_id = $iva_id;
 
-        $myJSON = json_encode($myObj);
 
         if ($insert) {
+            $myJSON = "Foi inserido um novo serviço!" . json_encode($myObj->nome);
             $this->FazPublishMosquitto("INSERT_SERVICO", $myJSON);
         }
         else {
+            $myJSON = "Foi atualizado um serviço!" . json_encode($myObj->nome);
             $this->FazPublishMosquitto("UPDATE_SERVICO", $myJSON);
         }
 
@@ -135,7 +136,7 @@ class Servico extends \yii\db\ActiveRecord
         $myObj = new \stdClass();
         $myObj->id = $id;
 
-        $myJSON = json_encode($myObj);
+        $myJSON = "Foi apagado um serviço!";
 
         $this->FazPublishMosquitto("DELETE_SERVICO", $myJSON);
     }

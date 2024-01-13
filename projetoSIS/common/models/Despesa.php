@@ -36,7 +36,7 @@ class Despesa extends \yii\db\ActiveRecord
             [['dta_despesa'], 'safe'],
             [['estabelecimento_id'], 'integer'],
             [['descricao'], 'string', 'max' => 60],
-            [['estabelecimento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Estabelecimentos::class, 'targetAttribute' => ['estabelecimento_id' => 'id']],
+            [['estabelecimento_id'], 'exist', 'skipOnError' => true, 'targetClass' => Estabelecimento::class, 'targetAttribute' => ['estabelecimento_id' => 'id']],
         ];
     }
 
@@ -61,6 +61,6 @@ class Despesa extends \yii\db\ActiveRecord
      */
     public function getEstabelecimento()
     {
-        return $this->hasOne(Estabelecimentos::class, ['id' => 'estabelecimento_id']);
+        return $this->hasOne(Estabelecimento::class, ['id' => 'estabelecimento_id']);
     }
 }

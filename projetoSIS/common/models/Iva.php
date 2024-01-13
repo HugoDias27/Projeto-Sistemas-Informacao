@@ -85,13 +85,14 @@ class Iva extends \yii\db\ActiveRecord
         $myObj->percentagem = $percentagem;
         $myObj->vigor = $vigor;
         $myObj->descricao = $descricao;
-        $myObj = json_encode($myObj);
 
         if ($insert) {
-            $this->FazPublishMosquitto("INSERT_IVA", $myObj);
+            $myJSON = "Foi inserido um novo iva!" . json_encode($myObj->descricao);
+            $this->FazPublishMosquitto("INSERT_IVA", $myJSON);
         }
         else {
-            $this->FazPublishMosquitto("UPDATE_IVA", $myObj);
+            $myJSON = "Foi atualizado um iva!" . json_encode($myObj->descricao);
+            $this->FazPublishMosquitto("UPDATE_IVA", $myJSON);
         }
     }
 
@@ -103,9 +104,9 @@ class Iva extends \yii\db\ActiveRecord
 
         $myObj = new \stdClass();
         $myObj->id = $id;
-        $myObj = json_encode($myObj);
+        $myJSON = "Foi apagado um iva!";
 
-        $this->FazPublishMosquitto("DELETE_IVA", $myObj);
+        $this->FazPublishMosquitto("DELETE_IVA", $myJSON);
     }
 
     public function FazPublishMosquitto($canal, $msg)

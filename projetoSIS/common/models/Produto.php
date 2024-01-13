@@ -4,8 +4,6 @@ namespace common\models;
 
 
 use common\mosquitto\phpMQTT;
-use common\models\Fornecedor;
-use common\models\FornecedorProduto;
 use Exception;
 use Yii;
 
@@ -149,12 +147,13 @@ class Produto extends \yii\db\ActiveRecord
         $myObj->categoria_id = $categoria;
         $myObj->iva_id = $iva;
 
-        $myJSON = json_encode($myObj);
 
         if ($insert) {
+            $myJSON = "Foi inserido um novo produto!" . json_encode($myObj->nome);
             $this->FazPublishMosquitto("INSERT_PRODUTO", $myJSON);
         }
         else {
+            $myJSON = "Foi atualizado um produto!" . json_encode($myObj->nome);;
             $this->FazPublishMosquitto("UPDATE_PRODUTO", $myJSON);
         }
 
@@ -167,7 +166,7 @@ class Produto extends \yii\db\ActiveRecord
         $prod_id = $this->id;
         $myObj = new \stdClass();
         $myObj->id = $prod_id;
-        $myJSON = json_encode($myObj);
+        $myJSON = "Foi apagado um produto!";
 
         $this->FazPublishMosquitto("DELETE_PRODUTO", $myJSON);
     }

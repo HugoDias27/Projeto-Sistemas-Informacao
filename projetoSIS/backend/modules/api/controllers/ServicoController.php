@@ -8,10 +8,12 @@ use yii\rest\ActiveController;
 
 class ServicoController extends ActiveController
 {
+    //Variáveis dos modelos
     public $modelClass = 'common\models\Servico';
     public $estabelecimentoModelClass = 'common\models\Estabelecimento';
     public $ivaModelClass = 'common\models\Iva';
 
+    //Método que chama o método de autenticação da API
     public function behaviors()
     {
         Yii::$app->params['id'] = 0;
@@ -22,11 +24,23 @@ class ServicoController extends ActiveController
         return $behaviors;
     }
 
+    //Método de autorização de o utilizador pode ou não aceder a uma determinada ação
+    public function checkAccess($action, $model = null, $params = [])
+    {
+        if (Yii::$app->params['id'] == 1 || Yii::$app->params['id'] == 2) {
+            if ($action === "create" || $action === "update" || $action === "delete" || $action === "index") {
+                throw new \yii\web\ForbiddenHttpException('Proibido');
+            }
+        }
+    }
+
+    //Método que retorna o index
     public function actionIndex()
     {
         return $this->render('index');
     }
 
+    //Método onde mostra os serviços de um estabelecimento
     public function actionServicosporestabelecimento($nomeEstabelecimento)
     {
         $estabelecimentoModel = new $this->estabelecimentoModelClass;

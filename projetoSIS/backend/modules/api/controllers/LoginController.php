@@ -8,13 +8,16 @@ use yii\web\ForbiddenHttpException;
 
 class LoginController extends ActiveController
 {
+    //Variável do Modelo
     public $modelClass = 'common\models\User';
 
+    //Método que retorna o index
     public function actionIndex()
     {
         return $this->render('index');
     }
 
+    //Método de login
     public function actionLogin()
     {
         $userModel = new $this->modelClass;
@@ -39,8 +42,6 @@ class LoginController extends ActiveController
             throw new \yii\web\ServerErrorHttpException('Erro ao recuperar a chave de autenticação');
         }
 
-        return ['id' => $id,'username' => $username, 'auth_key' => $auth_key, 'password_hash' => $user->password_hash, 'password_reset_token' => $user->password_reset_token, 'email' => $user->email,
-            'status' => $user->status, 'created_at' => $user->created_at, 'updated_at' => $user->updated_at, 'verification_token' => $user->verification_token,
-            ];
+        return ['id' => $id,'username' => $username, 'email' => $user->email, 'auth_key' => $auth_key];
     }
 }

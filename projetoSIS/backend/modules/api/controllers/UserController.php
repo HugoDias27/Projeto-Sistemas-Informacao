@@ -8,7 +8,7 @@ use yii\rest\ActiveController;
 
 class UserController extends ActiveController
 {
-
+    //Variáveis dos modelos
     public $modelClass = 'common\models\User';
     public $modelFaturaClass = 'common\models\Fatura';
     public $modelLinhaFaturaClass = 'common\models\LinhaFatura';
@@ -17,6 +17,7 @@ class UserController extends ActiveController
     public $modelProdutoClass = 'common\models\Produto';
     public $modelServicoClass = 'common\models\Servico';
 
+    //Método que chama o método de autenticação da API
     public function behaviors()
     {
         $behaviors = parent::behaviors();
@@ -24,7 +25,6 @@ class UserController extends ActiveController
             'class' => CustomAuth::className(),
         ];
 
-        // Desabilitar o autenticador para a ação de criar usuários
         if (Yii::$app->controller->action->id === 'criarusers') {
             unset($behaviors['authenticator']);
         }
@@ -37,6 +37,7 @@ class UserController extends ActiveController
         return $this->render('index');
     }
 
+    //Método para registar novos utilizadores
     public function actionCriarusers()
     {
         $userModel = new $this->modelClass;
@@ -53,6 +54,29 @@ class UserController extends ActiveController
         $userModel->email = $email;
         $userModel->status = 10;
 
+        if ($userModel->save()) {
+            return ['resposta' => true];
+        } else {
+            return ['resposta' => false];
+        }
+    }
+
+    //Método para registar novos utilizadores pelo cURL
+    public function actionCriaruserscurl($username, $password, $email)
+    {
+        $userModel = new $this->modelClass;
+        $request = Yii::$app->request;
+
+        $user = $username;
+        $pass = $password;
+        $mail = $email;
+
+
+        $userModel->username = $user;
+        $userModel->setPassword($pass);
+        $userModel->generateAuthKey();
+        $userModel->email = $mail;
+        $userModel->status = 10;
 
         if ($userModel->save()) {
             return ['resposta' => true];
@@ -61,7 +85,7 @@ class UserController extends ActiveController
         }
     }
 
-
+    //Método onde mostra todos os clientes
     public function actionClientes()
     {
         $clienteModel = new $this->modelClass;
@@ -82,6 +106,7 @@ class UserController extends ActiveController
         }
     }
 
+    //Método onde mostra todos os funcionários
     public function actionFuncionarios()
     {
         $clienteModel = new $this->modelClass;
@@ -101,6 +126,7 @@ class UserController extends ActiveController
         }
     }
 
+    //Método onde mostra as estatisticas de um cliente
     public function actionEstatisticas($id)
     {
         $userModel = new $this->modelClass;
@@ -154,13 +180,14 @@ class UserController extends ActiveController
         throw new \yii\web\NotFoundHttpException('Dados não encontrado.');
     }
 
+    //Método onde mostra o número de compras de um cliente
     public function actionContarcompras($id)
     {
         $faturaModel = new $this->modelFaturaClass;
 
         $numeroFaturas = $faturaModel::find()->where(['cliente_id' => $id])->count();
 
-        if($numeroFaturas) {
+        if ($numeroFaturas) {
 
             return $numeroFaturas;
         }

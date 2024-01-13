@@ -6,13 +6,17 @@ use backend\modules\api\components\CustomAuth;
 use common\models\Fatura;
 use Yii;
 use yii\rest\ActiveController;
+use yii\web\ForbiddenHttpException;
+use yii\web\NotFoundHttpException;
 
 class FaturaController extends ActiveController
 {
+    //Variáveis dos Modelos
     public $modelClass = 'common\models\Fatura';
     public $modelClassCarrinho = 'common\models\CarrinhoCompra';
     public $modelClassLinhaCarrinho = 'common\models\LinhaCarrinho';
 
+    //Método que chama o método de autenticação da API
     public function behaviors()
     {
         Yii::$app->params['id'] = 0;
@@ -23,27 +27,44 @@ class FaturaController extends ActiveController
         return $behaviors;
     }
 
+    //Método de autorização de o utilizador pode ou não aceder a uma determinada ação
+    public function checkAccess($action, $model = null, $params = [])
+    {
+        if (Yii::$app->params['id'] == 1 || Yii::$app->params['id'] == 2) {
+            if ($action === "create" || $action === "update" || $action === "delete" || $action === "index") {
+                throw new \yii\web\ForbiddenHttpException('Proibido');
+            }
+        }
+    }
+
+    //Método que retorna o index
     public function actionIndex()
     {
         return $this->render('index');
     }
 
+    //Método onde mostra as faturas do cliente logado
     public function actionFaturasporcliente($id)
     {
-        $faturaModel = new $this->modelClass;
-        $faturas = $faturaModel::find()
-            ->select(['id', 'dta_emissao', 'valortotal', 'ivatotal'])
-            ->where(['cliente_id' => $id])
-            ->all();
+        if (Yii::$app->params['id'] != 1 || Yii::$app->params['id'] != 2) {
+            $faturaModel = new $this->modelClass;
+            $faturas = $faturaModel::find()
+                ->select(['id', 'dta_emissao', 'valortotal', 'ivatotal'])
+                ->where(['cliente_id' => $id])
+                ->all();
 
-        if ($faturas) {
-            return $faturas;
-        } else {
-            throw new \yii\web\NotFoundHttpException('Fatura(s) não encontrada(s).');
+            if ($faturas) {
+                return $faturas;
+            } else {
+                throw new \yii\web\NotFoundHttpException('Fatura(s) não encontrada(s).');
+            }
+        }
+        else{
+            throw new \yii\web\ForbiddenHttpException('Proibido');
         }
     }
 
-
+   //Método onde cria a fatura quando o utilizador logado finaliza a compra
     public function actionCarrinhofatura($userid)
     {
         $carrinhoModel = new $this->modelClassCarrinho;
@@ -90,5 +111,4 @@ class FaturaController extends ActiveController
 
         throw new \yii\web\NotFoundHttpException('Erro no carrinho.');
     }
-
 }

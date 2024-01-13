@@ -55,6 +55,7 @@ return [
                         'GET categoria/{nomecategoria}' => 'produtoporcategoria',
                         'GET receita/{valor}' => 'produtoreceita',
                         'GET medicamentos' => 'medicamentos',
+                        'GET fornecedorproduto/{nomeproduto}' => 'fornecedorproduto',
                     ],
                     'tokens' => [
                         '{id}' => '<id:\\d+>',
@@ -73,6 +74,24 @@ return [
                     'tokens' => [
                         '{id}' => '<id:\\d+>',
                         '{userid}' => '<userid:\\d+>',
+                    ],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule', 'controller' => 'api/estabelecimento',
+                    'extraPatterns' => [
+                        'GET maisvendas' => 'estabelecimentocommaisvendas',
+                    ],
+                    'tokens' => [
+
+                    ],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule', 'controller' => 'api/iva',
+                    'extraPatterns' => [
+                        'GET ativos' => 'ivasativos',
+                    ],
+                    'tokens' => [
+
                     ],
                 ],
                 [
@@ -111,10 +130,13 @@ return [
                     'class' => 'yii\rest\UrlRule', 'controller' => 'api/despesa',
                     'extraPatterns' => [
                         'GET despesaestabelecimento/{precoMin}/{precoMax}' => 'despesasentreprecos',
+                        'GET despesaestabelecimentodata/{datainicial}/{datafinal}' => 'despesasentredatas',
                     ],
                     'tokens' => [
                         '{precoMin}' => '<precoMin:\d+>',
                         '{precoMax}' => '<precoMax:\d+>',
+                        '{datainicial}' => '<datainicial:\d{4}-\d{2}-\d{2}>',
+                        '{datafinal}' => '<datafinal:\d{4}-\d{2}-\d{2}>',
                         '{id}' => '<id:\\d+>',
                     ],
                 ],
@@ -132,6 +154,7 @@ return [
                     'class' => 'yii\rest\UrlRule', 'controller' => 'api/carrinhocompra',
                     'extraPatterns' => [
                         'POST carrinho/{userid}' => 'carrinhocompra',
+                        'GET  ultimomes/{userid}' => 'utilizadorescompraultimomes',
                     ],
                     'tokens' => [
                         '{userid}' => '<userid:\\d+>',
