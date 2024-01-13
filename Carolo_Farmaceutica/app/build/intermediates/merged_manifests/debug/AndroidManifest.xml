@@ -50,7 +50,8 @@
         </activity>
         <activity
             android:name="pt.ipleiria.estg.dei.carolo_farmaceutica.DetalhesReceitaActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName="pt.ipleiria.estg.dei.carolo_farmaceutica.MenuMainActivity" />
         <activity
             android:name="pt.ipleiria.estg.dei.carolo_farmaceutica.DetalhesFaturaActivity"
             android:exported="false" />

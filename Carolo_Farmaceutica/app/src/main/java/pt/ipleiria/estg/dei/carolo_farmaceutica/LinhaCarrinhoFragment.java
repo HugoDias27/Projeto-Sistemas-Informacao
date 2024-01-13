@@ -26,6 +26,7 @@ import pt.ipleiria.estg.dei.carolo_farmaceutica.adaptadores.ListaCarrinhoAdaptad
 import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.CheckoutListener;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.LinhaCarrinhoListener;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.QuantidadeAlteradaListener;
+import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.QuantidadeListener;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.SubtotalListener;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.LinhaCarrinhoCompra;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.SingletonGestorFarmacia;
@@ -39,6 +40,7 @@ public class LinhaCarrinhoFragment extends Fragment implements LinhaCarrinhoList
     private double subtotalValor = 0.0;
     private AlertDialog alertDialog;
     private ArrayList<LinhaCarrinhoCompra> listaCarrinho = new ArrayList<>();
+    private boolean btnCheckoutClicked = false;
 
     public LinhaCarrinhoFragment() {
         // Required empty public constructor
@@ -64,31 +66,8 @@ public class LinhaCarrinhoFragment extends Fragment implements LinhaCarrinhoList
         btnCheckout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnCheckoutClicked = true;
                 SingletonGestorFarmacia.getInstance(getContext()).getSubtotal(getContext());
-
-                String subtotalText = String.format("%.2f€", subtotalValor);
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Confirmação de Compra");
-
-                builder.setMessage("Subtotal: " + subtotalText + "\nDeseja confirmar a compra?");
-
-                builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        SingletonGestorFarmacia.getInstance(getContext()).fazFatura(getContext());
-                    }
-                });
-
-                builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-
-                alertDialog = builder.create();
-                alertDialog.show();
             }
         });
 
@@ -97,9 +76,8 @@ public class LinhaCarrinhoFragment extends Fragment implements LinhaCarrinhoList
 
     @Override
     public void onRefreshLinhaCarrinho(ArrayList<LinhaCarrinhoCompra> linhas) {
-        if (linhas != null) {
+        if (linhas.size() != 0) {
             lvCarrinho.setAdapter(new ListaCarrinhoAdaptador(getContext(), linhas));
-            btnCheckout.setVisibility(View.VISIBLE);
         }
     }
 
@@ -121,12 +99,38 @@ public class LinhaCarrinhoFragment extends Fragment implements LinhaCarrinhoList
     public void onSubtotal(double subtotal) {
         subtotalValor = subtotal;
 
-        if (alertDialog != null && alertDialog.isShowing()) {
-            String subtotalText = String.format("%.2f€", subtotalValor);
-            alertDialog.setMessage("Subtotal: " + subtotalText + "\nDeseja confirmar a compra?");
+        if (btnCheckoutClicked && subtotalValor > 0) {
+            exibirDialogoConfirmacao();
+        } else if (btnCheckoutClicked) {
+            Toast.makeText(getContext(), "Não tem produtos no carrinho", Toast.LENGTH_LONG).show();
         }
     }
 
+    private void exibirDialogoConfirmacao() {
+        String subtotalText = String.format("%.2f€", subtotalValor);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Confirmação de Compra");
+
+        builder.setMessage("Subtotal: " + subtotalText + "\nDeseja confirmar a compra?");
+
+        builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SingletonGestorFarmacia.getInstance(getContext()).fazFatura(getContext());
+            }
+        });
+
+        builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        alertDialog = builder.create();
+        alertDialog.show();
+    }
     @Override
     public void onQuantidadeAlterada() {
         SingletonGestorFarmacia.getInstance(getContext()).getSubtotal(getContext());

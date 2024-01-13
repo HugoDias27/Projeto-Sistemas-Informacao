@@ -18,6 +18,7 @@ import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.CarrinhoListener;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.LinhaCarrinhoCompra;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.Medicamento;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.SingletonGestorFarmacia;
+import pt.ipleiria.estg.dei.carolo_farmaceutica.utils.MedicamentosJsonParser;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.utils.ReceitaMedicaJsonParser;
 
 public class DetalhesMedicamentoActivity extends AppCompatActivity implements CarrinhoListener {
@@ -55,19 +56,19 @@ public class DetalhesMedicamentoActivity extends AppCompatActivity implements Ca
                 finish();
         }
 
-        if (ReceitaMedicaJsonParser.isConnectionInternet(getApplicationContext())) {
+        if (MedicamentosJsonParser.isConnectionInternet(getApplicationContext())) {
             fabAdicionarProdutoCarrinho.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (medicamento != null) {
+                    if (medicamento != null && !etQuantidadeCarrinho.getText().toString().equals("0")) {
                         int quantidade = Integer.parseInt(etQuantidadeCarrinho.getText().toString());
                         SingletonGestorFarmacia.getInstance(getApplicationContext()).adicionarProdutoCarrinho(medicamento.getId(), quantidade, getApplicationContext());
+                    } else {
+                        Toast.makeText(getApplicationContext(), "A quantidade não pode ser igual ou inferior a 0!", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
-        }
-        else
-        {
+        } else {
             fabAdicionarProdutoCarrinho.hide();
             etQuantidadeCarrinho.setVisibility(View.INVISIBLE);
             tvQuantidadeCarrinho.setVisibility(View.INVISIBLE);

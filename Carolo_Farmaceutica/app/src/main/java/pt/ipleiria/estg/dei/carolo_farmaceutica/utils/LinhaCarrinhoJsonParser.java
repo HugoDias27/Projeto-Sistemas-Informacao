@@ -26,10 +26,16 @@ public class LinhaCarrinhoJsonParser {
     }
 
     public static boolean isConnectionInternet(Context context) {
+        if (context == null) {
+            // Handle null context, return false or take appropriate action
+            return false;
+        }
+
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
         return ni != null && ni.isConnected();
     }
+
 
 
     public static ArrayList<LinhaCarrinhoCompra> parserJsonLinhaCarrinhoUpdate(String response) {
@@ -84,4 +90,14 @@ public class LinhaCarrinhoJsonParser {
         return subtotal;
     }
 
+    public static boolean parserJsonLinhaCarrinhoDelete(String response) {
+        Boolean resposta = null;
+        try {
+            JSONObject linhaCarrinhoJson = new JSONObject(response);
+            resposta = linhaCarrinhoJson.getBoolean("resposta");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return resposta;
+    }
 }

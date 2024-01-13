@@ -8,24 +8,24 @@
         "source": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-main-34:\\layout\\activity_detalhes_medicamento.xml"
     },
     {
-        "merged": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-merged_res-32:\\drawable-hdpi_ic_action_adicionar.png.flat",
-        "source": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-main-34:\\drawable-hdpi\\ic_action_adicionar.png"
-    },
-    {
         "merged": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-merged_res-32:\\layout_fragment_descontos.xml.flat",
         "source": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-main-34:\\layout\\fragment_descontos.xml"
+    },
+    {
+        "merged": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-merged_res-32:\\drawable-hdpi_ic_action_adicionar.png.flat",
+        "source": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-main-34:\\drawable-hdpi\\ic_action_adicionar.png"
     },
     {
         "merged": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-merged_res-32:\\layout_activity_receita_medica.xml.flat",
         "source": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-main-34:\\layout\\activity_receita_medica.xml"
     },
     {
-        "merged": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-merged_res-32:\\drawable_ic_launcher_foreground.xml.flat",
-        "source": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-main-34:\\drawable\\ic_launcher_foreground.xml"
-    },
-    {
         "merged": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-merged_res-32:\\mipmap-xxhdpi_ic_receita.webp.flat",
         "source": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-main-34:\\mipmap-xxhdpi\\ic_receita.webp"
+    },
+    {
+        "merged": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-merged_res-32:\\drawable_ic_launcher_foreground.xml.flat",
+        "source": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-main-34:\\drawable\\ic_launcher_foreground.xml"
     },
     {
         "merged": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-merged_res-32:\\drawable-mdpi_ic_action_adicionar.png.flat",
@@ -40,12 +40,12 @@
         "source": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-main-34:\\drawable-xhdpi\\ic_action_back.png"
     },
     {
-        "merged": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-merged_res-32:\\mipmap-hdpi_ic_receita.webp.flat",
-        "source": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-main-34:\\mipmap-hdpi\\ic_receita.webp"
-    },
-    {
         "merged": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-merged_res-32:\\drawable_carrinho.png.flat",
         "source": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-main-34:\\drawable\\carrinho.png"
+    },
+    {
+        "merged": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-merged_res-32:\\mipmap-hdpi_ic_receita.webp.flat",
+        "source": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-main-34:\\mipmap-hdpi\\ic_receita.webp"
     },
     {
         "merged": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-merged_res-32:\\mipmap-mdpi_ic_search_round.webp.flat",
@@ -114,6 +114,10 @@
     {
         "merged": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-merged_res-32:\\drawable-anydpi_ic_action_adicionar.xml.flat",
         "source": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-main-34:\\drawable-anydpi\\ic_action_adicionar.xml"
+    },
+    {
+        "merged": "pt.ipleiria.estg.dei.carolo_farmaceutica.app-merged_res-32:/layout_fragment_carrinho.xml.flat",
+        "source": "pt.ipleiria.estg.dei.carolo_farmaceutica.app-main-34:/layout/fragment_carrinho.xml"
     },
     {
         "merged": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-merged_res-32:\\menu_menu_remover.xml.flat",
@@ -552,6 +556,10 @@
         "source": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-main-34:\\drawable-xxhdpi\\ic_action_back.png"
     },
     {
+        "merged": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-merged_res-32:\\menu_menu_categoria.xml.flat",
+        "source": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-main-34:\\menu\\menu_categoria.xml"
+    },
+    {
         "merged": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-merged_res-32:\\mipmap-xhdpi_ic_receita_round.webp.flat",
         "source": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-main-34:\\mipmap-xhdpi\\ic_receita_round.webp"
     },
@@ -590,10 +598,6 @@
     {
         "merged": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-merged_res-32:\\mipmap-xxxhdpi_ic_receita.webp.flat",
         "source": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-main-34:\\mipmap-xxxhdpi\\ic_receita.webp"
-    },
-    {
-        "merged": "pt.ipleiria.estg.dei.carolo_farmaceutica.app-merged_res-32:/menu_menu_categoria.xml.flat",
-        "source": "pt.ipleiria.estg.dei.carolo_farmaceutica.app-main-34:/menu/menu_categoria.xml"
     },
     {
         "merged": "C:\\Users\\tsc20\\.gradle\\daemon\\8.0\\pt.ipleiria.estg.dei.carolo_farmaceutica.app-merged_res-32:\\drawable_ic_search_foreground.xml.flat",

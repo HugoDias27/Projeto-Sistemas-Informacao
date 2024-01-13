@@ -1,4 +1,4 @@
-#Thu Jan 04 19:24:47 WET 2024
+#Fri Jan 12 15:19:36 WET 2024
 base.0=C\:\\Users\\tsc20\\OneDrive\\Documents\\IPL\\AcessoMovel\\Carolo_Farmaceutica\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
 base.1=C\:\\Users\\tsc20\\OneDrive\\Documents\\IPL\\AcessoMovel\\Carolo_Farmaceutica\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
 base.2=C\:\\Users\\tsc20\\OneDrive\\Documents\\IPL\\AcessoMovel\\Carolo_Farmaceutica\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\11\\classes.dex

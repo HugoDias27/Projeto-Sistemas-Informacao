@@ -194,14 +194,6 @@ public class SingletonGestorFarmacia {
 
     }
 
-    public User getUserBD(int id) {
-        for (User user : users) {
-            if (user.getId() == id) {
-                return user;
-            }
-        }
-        return null;
-    }
 
     public ArrayList<Medicamento> getMedicamentosBD() {
         medicamentos = farmaciaBDHelper.getAllMedicamentosBD();
@@ -380,7 +372,6 @@ public class SingletonGestorFarmacia {
         }
     }
 
-
     public void registar(String username, String password, String email, final Context context) {
         StringRequest request = new StringRequest(Request.Method.POST, mURLAPIRegistar, new Response.Listener<String>() {
             @Override
@@ -542,7 +533,10 @@ public class SingletonGestorFarmacia {
             StringRequest request = new StringRequest(Request.Method.DELETE, mURLAPIRemoveLinhaCarrinhoFinal, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    linhaCarrinhoCompra = LinhaCarrinhoJsonParser.parserJsonLinhaCarrinhoUpdate(response);
+                   boolean resposta = LinhaCarrinhoJsonParser.parserJsonLinhaCarrinhoDelete(response);
+                    if (quantidadeListener != null) {
+                        quantidadeListener.onRefreshDeleteLinhaCarrinho(resposta);
+                    }
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -676,7 +670,7 @@ public class SingletonGestorFarmacia {
     public void getMedicamentoCategoria(final Context context, String nomeCategoria) {
         if (!MedicamentosJsonParser.isConnectionInternet(context)) {
             medicamentos = farmaciaBDHelper.getMedicamentosCategoriaBD(nomeCategoria);
-           if (medicamentosListener != null) {
+            if (medicamentosListener != null) {
                 medicamentosListener.onRefreshListaMedicamento(medicamentos);
             }
         } else {
