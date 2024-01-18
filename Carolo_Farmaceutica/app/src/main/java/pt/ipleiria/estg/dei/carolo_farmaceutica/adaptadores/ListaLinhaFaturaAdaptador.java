@@ -21,30 +21,36 @@ import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.LinhaCarrinhoCompraFatura
 
 public class ListaLinhaFaturaAdaptador extends BaseAdapter {
 
+    // Declaração de variáveis
     private Context context;
     private LayoutInflater inflater;
-    private ArrayList<LinhaCarrinhoCompraFatura> linhacarrinhoCompras;
+    private ArrayList<LinhaCarrinhoCompraFatura> linhacarrinhoComprasFatura;
 
-    public ListaLinhaFaturaAdaptador(Context context, ArrayList<LinhaCarrinhoCompraFatura> linhacarrinhoCompras) {
+    // Construtor
+    public ListaLinhaFaturaAdaptador(Context context, ArrayList<LinhaCarrinhoCompraFatura> linhacarrinhoComprasFatura) {
         this.context = context;
-        this.linhacarrinhoCompras = linhacarrinhoCompras;
+        this.linhacarrinhoComprasFatura = linhacarrinhoComprasFatura;
     }
 
+    // Método que retorna o número de linhas de carrinho de compras
     @Override
     public int getCount() {
-        return linhacarrinhoCompras.size();
+        return linhacarrinhoComprasFatura.size();
     }
 
+    // Método que retorna o item da linha de carrinho de compras
     @Override
     public Object getItem(int i) {
-        return linhacarrinhoCompras.get(i);
+        return linhacarrinhoComprasFatura.get(i);
     }
 
+    // Método que retorna o item da linha de carrinho de compras pelo seu id
     @Override
     public long getItemId(int i) {
-        return linhacarrinhoCompras.get(i).getId();
+        return linhacarrinhoComprasFatura.get(i).getId();
     }
 
+    // Método que retorna a view da fatura
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         if (inflater == null)
@@ -52,20 +58,19 @@ public class ListaLinhaFaturaAdaptador extends BaseAdapter {
         if (view == null)
             view = inflater.inflate(R.layout.item_lista_fatura_linhas, null);
 
-        //otimização
         ViewHolderLista viewHolder = (ViewHolderLista) view.getTag();
 
         if (viewHolder == null) {
             viewHolder = new ViewHolderLista(view);
             view.setTag(viewHolder);
         }
-        viewHolder.update(linhacarrinhoCompras.get(i));
+        viewHolder.update(linhacarrinhoComprasFatura.get(i));
 
         return view;
     }
 
+    // Método que apresenta os dados na view da fatura
     private class ViewHolderLista {
-
         private TextView tvNomeProduto, tvQuantidade, tvPrecoUnitario, tvIVA, tvValorComIVA, tvSubTotal;
         private ImageView imgProduto;
 

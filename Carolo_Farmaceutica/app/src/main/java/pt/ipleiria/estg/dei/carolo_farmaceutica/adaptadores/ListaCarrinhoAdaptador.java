@@ -25,9 +25,12 @@ import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.SubtotalListener;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.LinhaCarrinhoCompra;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.Medicamento;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.SingletonGestorFarmacia;
+import pt.ipleiria.estg.dei.carolo_farmaceutica.utils.LinhaCarrinhoJsonParser;
+import pt.ipleiria.estg.dei.carolo_farmaceutica.utils.MedicamentosJsonParser;
 
 public class ListaCarrinhoAdaptador extends BaseAdapter implements QuantidadeListener {
 
+    // Declaração de variáveis
     private Context context;
     private LayoutInflater inflater;
     private ArrayList<LinhaCarrinhoCompra> linhacarrinhoCompras;
@@ -36,34 +39,39 @@ public class ListaCarrinhoAdaptador extends BaseAdapter implements QuantidadeLis
     private TextView tvPreco;
     private ArrayList<EditText> listaEditTextQuantidade = new ArrayList<>();
     private ArrayList<TextView> listaTextViewPreco = new ArrayList<>();
-
     private int posicaoAtual, novaQuantidade;
     private double novoPreco;
 
+    // Construtor
     public ListaCarrinhoAdaptador(Context context, ArrayList<LinhaCarrinhoCompra> linhacarrinhoCompras) {
         this.context = context;
         this.linhacarrinhoCompras = linhacarrinhoCompras;
     }
 
+    // Set do listener da quantidade, para atualizar a quantidade do produto na linha do carrinho
     public void setQuantidadeAlteradaListener(QuantidadeAlteradaListener quantidadeAlteradaListener) {
         this.quantidadeAlteradaListener = quantidadeAlteradaListener;
     }
 
+    // Método que retorna o número de linhas do carrinho
     @Override
     public int getCount() {
         return linhacarrinhoCompras.size();
     }
 
+    // Método que retorna o item da linha do carrinho
     @Override
     public Object getItem(int i) {
         return linhacarrinhoCompras.get(i);
     }
 
+    // Método que retorna o item da linha do carrinho pelo seu id
     @Override
     public long getItemId(int i) {
         return linhacarrinhoCompras.get(i).getId();
     }
 
+    // Método que retorna a view da linha do carrinho
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
         if (inflater == null)
@@ -85,12 +93,14 @@ public class ListaCarrinhoAdaptador extends BaseAdapter implements QuantidadeLis
         tvPreco = view.findViewById(R.id.tvPreco);
         etQuantidade = view.findViewById(R.id.etQuantidade);
 
+        // Busca a posição da edit Text da quantidade que é pretendido atualizar a quantidade
         if (listaEditTextQuantidade.size() <= position) {
             listaEditTextQuantidade.add(position, etQuantidade);
         } else {
             listaEditTextQuantidade.set(position, etQuantidade);
         }
 
+        // Busca a posição da Text View do preço que é pretendido atualizar a quantidade
         if (listaTextViewPreco.size() <= position) {
             listaTextViewPreco.add(position, tvPreco);
         } else {
@@ -99,124 +109,147 @@ public class ListaCarrinhoAdaptador extends BaseAdapter implements QuantidadeLis
 
         SingletonGestorFarmacia.getInstance(context.getApplicationContext()).setQuantidadeListener(this);
 
-
-        // Configurar o OnClickListener do botão "Adicionar"
+        // Botão para adicionar a quantidade à linha do carrinho do respetivo produto
         viewHolder.btAdicionar.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                posicaoAtual = position;
-                LinhaCarrinhoCompra linhaAtual = linhacarrinhoCompras.get(position);
-                SingletonGestorFarmacia.getInstance(context.getApplicationContext()).QuantidadeProduto(linhaAtual.getId(), context);
-                int quantidadeAtual = linhaAtual.getQuantidade();
+                if (LinhaCarrinhoJsonParser.isConnectionInternet(context)) {
+                    posicaoAtual = position;
+                    LinhaCarrinhoCompra linhaAtual = linhacarrinhoCompras.get(position);
 
-                novaQuantidade = quantidadeAtual + 1;
-                linhaAtual.setQuantidade(novaQuantidade);
+                    // Verifica se a quantidade pode ser aumentar
+                    SingletonGestorFarmacia.getInstance(context.getApplicationContext()).QuantidadeProduto(linhaAtual.getId(), context);
+                    int quantidadeAtual = linhaAtual.getQuantidade();
 
-                finalViewHolder.etQuantidade.setText(String.valueOf(novaQuantidade));
-                SingletonGestorFarmacia.getInstance(context.getApplicationContext()).updateQuantidadeProdutoCarrinho(novaQuantidade, linhaAtual.getId(), context);
+                    novaQuantidade = quantidadeAtual + 1;
+                    linhaAtual.setQuantidade(novaQuantidade);
+                    finalViewHolder.etQuantidade.setText(novaQuantidade + "");
 
-                novoPreco = linhaAtual.getValorcomiva() * novaQuantidade;
-                String novoPrecoFormatado = String.format("%.2f€", novoPreco);
+                    // Atualiza a quantidade do produto na linha do carrinho na base de dados
+                    SingletonGestorFarmacia.getInstance(context.getApplicationContext()).updateQuantidadeProdutoCarrinho(novaQuantidade, linhaAtual.getId(), context);
 
-                linhaAtual.setSubtotal(novoPreco);
+                    novoPreco = linhaAtual.getValorcomiva() * novaQuantidade;
+                    String novoPrecoFormatado = String.format("%.2f€", novoPreco);
+                    linhaAtual.setSubtotal(novoPreco);
+                    finalViewHolder.tvPreco.setText(novoPrecoFormatado);
 
-                finalViewHolder.tvPreco.setText(novoPrecoFormatado);
-
+                }
+                else {
+                    Toast.makeText(context, R.string.txt_sem_conexao, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
+        // Botão para reduzir a quantidade à linha do carrinho do respetivo produto
         viewHolder.btReduzir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LinhaCarrinhoCompra linhaAtual = linhacarrinhoCompras.get(position);
-                SingletonGestorFarmacia.getInstance(context.getApplicationContext()).QuantidadeProduto(linhaAtual.getId(), context);
-                int quantidadeAtual = linhaAtual.getQuantidade();
+                if (LinhaCarrinhoJsonParser.isConnectionInternet(context)) {
+                    posicaoAtual = position;
+                    LinhaCarrinhoCompra linhaAtual = linhacarrinhoCompras.get(position);
+                    // Verifica se a quantidade pode ser reduzida
+                    SingletonGestorFarmacia.getInstance(context.getApplicationContext()).QuantidadeProduto(linhaAtual.getId(), context);
+                    int quantidadeAtual = linhaAtual.getQuantidade();
 
-                novaQuantidade = quantidadeAtual - 1;
+                    novaQuantidade = quantidadeAtual - 1;
+                    linhaAtual.setQuantidade(novaQuantidade);
+                    finalViewHolder.etQuantidade.setText(novaQuantidade + "");
 
-                linhaAtual.setQuantidade(novaQuantidade);
+                    // Atualiza a quantidade do produto na linha do carrinho na base de dados
+                    SingletonGestorFarmacia.getInstance(context.getApplicationContext()).updateQuantidadeProdutoCarrinho(novaQuantidade, linhaAtual.getId(), context);
 
-                finalViewHolder.etQuantidade.setText(String.valueOf(novaQuantidade));
-
-                SingletonGestorFarmacia.getInstance(context.getApplicationContext()).updateQuantidadeProdutoCarrinho(novaQuantidade, linhacarrinhoCompras.get(position).getId(), context);
-
-                novoPreco = linhacarrinhoCompras.get(position).getValorcomiva() * novaQuantidade;
-                String novoPrecoFormatado = String.format("%.2f€", novoPreco);
-
-                linhaAtual.setSubtotal(novoPreco);
-
-                finalViewHolder.tvPreco.setText(novoPrecoFormatado);
-
+                    novoPreco = linhacarrinhoCompras.get(position).getValorcomiva() * novaQuantidade;
+                    String novoPrecoFormatado = String.format("%.2f€", novoPreco);
+                    linhaAtual.setSubtotal(novoPreco);
+                    finalViewHolder.tvPreco.setText(novoPrecoFormatado);
+                }
+                else {
+                    Toast.makeText(context, R.string.txt_sem_conexao, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
+        // Botão para remover o produto da respetiva linha do carrinho
         viewHolder.btRemover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int positionToRemove = position;
+                if (LinhaCarrinhoJsonParser.isConnectionInternet(context)) {
+                    int posicaoRemover = position;
 
-                if (positionToRemove >= 0 && positionToRemove < linhacarrinhoCompras.size()) {
-                    int linhaIdToRemove = linhacarrinhoCompras.get(positionToRemove).getId();
+                    if (posicaoRemover >= 0 && posicaoRemover < linhacarrinhoCompras.size()) {
+                        int apagarLinha = linhacarrinhoCompras.get(posicaoRemover).getId();
+                        linhacarrinhoCompras.remove(posicaoRemover);
 
-                    linhacarrinhoCompras.remove(positionToRemove);
-
-                    SingletonGestorFarmacia.getInstance(context.getApplicationContext()).deleleLinhaCarrinho(linhaIdToRemove, context);
+                        SingletonGestorFarmacia.getInstance(context.getApplicationContext()).deleleLinhaCarrinho(apagarLinha, context);
+                    }
+                }
+                else {
+                    Toast.makeText(context, R.string.txt_sem_conexao, Toast.LENGTH_SHORT).show();
                 }
             }
         });
         return view;
     }
 
+    // Método que verifica se a quantidade que o utilizador está a inserir é válida
     @Override
-    public void onRefreshQuantidade(double[] quantidade) {
-        double quantidadeProduto = quantidade[0];
-        double quantidadeLinha = quantidade[1];
-        double preco = quantidade[2];
+    public void onRefreshProduto(double[] dadosProduto) {
+        double quantidadeProduto = dadosProduto[0];
+        double quantidadeLinha = dadosProduto[1];
+        double preco = dadosProduto[2];
 
         double quantidadeFinal = quantidadeProduto + quantidadeLinha;
 
+        // Se a nova quantidade que o utilizador está a inserir for maior que o stock existente produto
         if (quantidadeFinal < novaQuantidade && posicaoAtual < listaEditTextQuantidade.size()) {
             EditText etQuantidade = listaEditTextQuantidade.get(posicaoAtual);
             TextView tvPreco = listaTextViewPreco.get(posicaoAtual);
 
-            String textoPersonalizado = String.valueOf((int) quantidadeLinha);
-            String precotext = String.format("%.2f€", preco);
-
             LinhaCarrinhoCompra linhaAtual = linhacarrinhoCompras.get(posicaoAtual);
-            linhaAtual.setQuantidade((int) quantidadeLinha);
-            linhaAtual.setSubtotal(preco);
 
-            etQuantidade.setText(textoPersonalizado);
+            linhaAtual.setQuantidade((int) quantidadeLinha);
+            String novaQuantidade = String.valueOf((int) quantidadeLinha);
+            etQuantidade.setText(novaQuantidade);
+
+            linhaAtual.setSubtotal(preco);
+            String precotext = String.format("%.2f€", preco);
             tvPreco.setText(precotext);
-        } else if (novaQuantidade < 1 && posicaoAtual < listaEditTextQuantidade.size()) {
+
+            Toast.makeText(context, R.string.txt_quantidade_add_check, Toast.LENGTH_SHORT).show();
+
+        }
+        // Se a nova quantidade que o utilizador está a inserir for menor que a quantidade de compra mínima
+        else if (novaQuantidade < 1 && posicaoAtual < listaEditTextQuantidade.size()) {
             EditText etQuantidade = listaEditTextQuantidade.get(posicaoAtual);
+            TextView tvPreco = listaTextViewPreco.get(posicaoAtual);
+
             LinhaCarrinhoCompra linhaAtual = linhacarrinhoCompras.get(posicaoAtual);
 
             linhaAtual.setQuantidade(1);
-            etQuantidade.setText(String.valueOf(1));
+            etQuantidade.setText(1 + "");
 
-            String precotext = String.format("%.2f€", preco);
             linhaAtual.setSubtotal(preco);
-
+            String precotext = String.format("%.2f€", preco);
             tvPreco.setText(precotext);
 
-            Toast.makeText(context, "Não é possível reduzir mais a quantidade!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.txt_quantidade_reduce_check, Toast.LENGTH_SHORT).show();
         }
     }
 
-
+    // Método onRefresh quando a linha do carrinho é removida
     @Override
     public void onRefreshDeleteLinhaCarrinho(boolean resposta) {
         if (resposta) {
             notifyDataSetChanged();
-            Toast.makeText(context, "Item removido do carrinho com sucesso!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.txt_remover_sucesso, Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(context, "Não foi possível remover o item do carrinho!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.text_remover_fail, Toast.LENGTH_SHORT).show();
         }
     }
 
+    // Método que apresenta os dados na view da linha do carrinho
     private class ViewHolderLista {
-
         private TextView tvProduto, tvPreco;
         private EditText etQuantidade;
         private ImageButton btReduzir, btAdicionar, btRemover;

@@ -21,12 +21,14 @@ import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.SingletonGestorFarmacia;
 
 public class ListaFaturaFragment extends Fragment implements FaturaListener {
 
+    // Declaração de variáveis
     private ListView lvFaturas;
 
+    // Construtor
     public ListaFaturaFragment() {
     }
 
-    @Nullable
+    // Método para carregar o fragmento das faturas
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lista_fatura, container, false);
@@ -48,6 +50,7 @@ public class ListaFaturaFragment extends Fragment implements FaturaListener {
         return view;
     }
 
+    // Método para carregar as faturas
     @Override
     public void onRefreshListaFatura(ArrayList<Fatura> listaFatura) {
         if(listaFatura != null){

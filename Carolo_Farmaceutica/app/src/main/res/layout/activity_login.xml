@@ -31,8 +31,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="text"
-        android:hint="@string/txt_username"
-        android:text="Tiago Saramago"/>
+        android:hint="@string/txt_username" />
 
     <EditText
         android:id="@+id/etPassword"
@@ -40,8 +39,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPassword"
-        android:hint="@string/txt_pass"
-        android:text="tiago.saramago2023"/>
+        android:hint="@string/txt_pass" />
 
     <TextView
         android:id="@+id/textViewRegistar"

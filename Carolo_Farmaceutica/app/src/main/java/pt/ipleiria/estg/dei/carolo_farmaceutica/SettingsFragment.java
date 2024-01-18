@@ -18,14 +18,17 @@ import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.SingletonGestorFarmacia;
 
 public class SettingsFragment extends Fragment {
 
+    // Declaração de variáveis
     private TextView tvIp;
     private EditText etIp;
     private Button btMudarIp;
 
+    // Construtor
     public SettingsFragment() {
         // Required empty public constructor
     }
 
+    // Método para carregar o fragmento das definições
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
@@ -44,12 +47,11 @@ public class SettingsFragment extends Fragment {
             return view;
         }
 
+    // Método para guardar o IP
     private void GuardarIp() {
         String ip = etIp.getText().toString();
 
         SingletonGestorFarmacia.getInstance(getContext()).setIpAddress(ip);
-        Toast.makeText(getContext(), "IP alterado com sucesso", Toast.LENGTH_SHORT).show();
-
-
+        Toast.makeText(getContext(), R.string.txt_ip_alterado, Toast.LENGTH_SHORT).show();
     }
 }

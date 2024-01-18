@@ -14,6 +14,7 @@ import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.ReceitaMedica;
 
 public class ReceitaMedicaJsonParser {
 
+    // Método que faz o parse do JSON para um Array de Medicamentos
     public static ArrayList<ReceitaMedica> parserJsonReceitaMedica(JSONArray response) {
         ArrayList<ReceitaMedica> listareceitaMedica = new ArrayList<>();
         try {
@@ -40,6 +41,7 @@ public class ReceitaMedicaJsonParser {
         return listareceitaMedica;
     }
 
+    // Método que verifica o estado da ligação à internet
     public static boolean isConnectionInternet(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();

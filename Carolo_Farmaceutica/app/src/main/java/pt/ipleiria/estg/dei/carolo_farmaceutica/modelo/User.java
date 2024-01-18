@@ -2,16 +2,18 @@ package pt.ipleiria.estg.dei.carolo_farmaceutica.modelo;
 
 public class User {
 
+    // Declaração de variáveis
     private int id;
-
     private String username, email;
 
+    // Construtor
     public User(int id, String username,String email) {
         this.id = id;
         this.username = username;
         this.email = email;
     }
 
+    // Métodos getters e setters
     public int getId() {
         return id;
     }

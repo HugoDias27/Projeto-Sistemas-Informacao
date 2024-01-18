@@ -7,5 +7,6 @@ import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.LinhaCarrinhoCompraFatura
 
 public interface FaturaCarrinhoListener {
 
+    // Método que carrega as linhas do carrinho nos detalhes da fatura
     void onLinhasCarrinhoCarregadas(ArrayList<LinhaCarrinhoCompraFatura> linhas);
 }

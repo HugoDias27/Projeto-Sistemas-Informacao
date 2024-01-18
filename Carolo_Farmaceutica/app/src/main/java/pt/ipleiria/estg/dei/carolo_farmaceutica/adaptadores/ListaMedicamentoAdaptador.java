@@ -18,30 +18,36 @@ import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.Medicamento;
 
 public class ListaMedicamentoAdaptador extends BaseAdapter {
 
+    // Declaração de variáveis
     private Context context;
     private LayoutInflater inflater;
     private ArrayList<Medicamento> medicamentos;
 
+    // Construtor
     public ListaMedicamentoAdaptador(Context context, ArrayList<Medicamento> medicamentos) {
         this.context = context;
         this.medicamentos = medicamentos;
     }
 
+    // Método que retorna o número de medicamentos
     @Override
     public int getCount() {
         return medicamentos.size();
     }
 
+    // Método que retorna o item do medicamento
     @Override
     public Object getItem(int i) {
         return medicamentos.get(i);
     }
 
+    // Método que retorna o item do medicamento pelo seu id
     @Override
     public long getItemId(int i) {
         return medicamentos.get(i).getId();
     }
 
+    // Método que retorna a view do medicamento
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         if (inflater == null)
@@ -49,7 +55,6 @@ public class ListaMedicamentoAdaptador extends BaseAdapter {
         if (view == null)
             view = inflater.inflate(R.layout.item_lista_medicamento, null);
 
-        //otimização
         ViewHolderLista viewHolder = (ViewHolderLista) view.getTag();
 
         if (viewHolder == null) {
@@ -61,8 +66,8 @@ public class ListaMedicamentoAdaptador extends BaseAdapter {
         return view;
     }
 
+    // Método que apresenta os dados na view do medicamento
     private class ViewHolderLista {
-
         private TextView tvNome, tvPrescricao, tvPreco, tvQuantidade, tvCategoria, tvIVA;
         private ImageView imgProduto;
 

@@ -11,20 +11,23 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 
 public class FarmaciaBDHelper extends SQLiteOpenHelper {
+
+    // Declaração de variáveis
     private static final int DB_VERSION = 1;
     private static final String DB_NAME = "BDCaroloFarmaceutica", TABLE_PRODUTO = "produtos", TABLE_RECEITA = "receitamedica", TABLE_USER = "user";
     private static final String ID = "id", NOME = "nome", PRESCRICAO_MEDICA = "prescricao_medica", PRECO = "preco", QUANTIDADE = "quantidade", CATEGORIA_ID = "categoria_id", IVA_ID = "iva_id";
     private static final String CODIGO = "codigo", LOCAL_PRESCRICAO = "local_prescricao", MEDICO_PRESCRICAO = "medico_prescricao", DOSAGEM = "dosagem", DATA_VALIDADE = "data_validade", TELEFONE = "telefone", VALIDO = "valido", POSOLOGIA = "posologia", USER_ID = "user_id";
     private static final String USERNAME = "username", EMAIL = "email", IMAGENS = "imagens";
-
     private final SQLiteDatabase db;
 
+    // Construtor
     public FarmaciaBDHelper(@Nullable Context context) {
         super(context, DB_NAME, null, DB_VERSION);
 
         this.db = getWritableDatabase();
     }
 
+    // Método que cria as tabelas da base de dados(SQLite)
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String sqlCreateTableProduto = "CREATE TABLE " + TABLE_PRODUTO + "(" +
@@ -59,12 +62,14 @@ public class FarmaciaBDHelper extends SQLiteOpenHelper {
 
     }
 
+    // Método que atualiza a estrutura da base de dados(SQLite)
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUTO);
         this.onCreate(sqLiteDatabase);
     }
 
+    // Método que adiciona os medicamentos à base de dados(SQLite)
     public void adicionarMedicamentoBD(Medicamento medicamento) {
         ContentValues values = new ContentValues();
         values.put(ID, medicamento.getId());
@@ -76,11 +81,10 @@ public class FarmaciaBDHelper extends SQLiteOpenHelper {
         values.put(IVA_ID, medicamento.getIvaId());
         values.put(IMAGENS, medicamento.getImagem());
 
-
         this.db.insert(TABLE_PRODUTO, null, values);
-
     }
 
+    // Método que edita o medicamento da base de dados(SQLite)
     public void editarMedicamentoBD(Medicamento medicamento) {
         ContentValues values = new ContentValues();
         values.put(NOME, medicamento.getNome());
@@ -90,14 +94,15 @@ public class FarmaciaBDHelper extends SQLiteOpenHelper {
         values.put(CATEGORIA_ID, medicamento.getCategoriaId());
         values.put(IVA_ID, medicamento.getIvaId());
 
-
         this.db.update(TABLE_PRODUTO, values, ID + " = ?", new String[]{String.valueOf(medicamento.getId())});
     }
 
+    // Método que remove o medicamento da base de dados(SQLite)
     public void removerMedicamentoBD(Medicamento medicamento) {
         this.db.delete(TABLE_PRODUTO, ID + " = ?", new String[]{String.valueOf(medicamento.getId())});
     }
 
+    // Método que retorna todos os medicamentos da base de dados(SQLite)
     public ArrayList<Medicamento> getAllMedicamentosBD() {
         ArrayList<Medicamento> medicamentos = new ArrayList<>();
         Cursor cursor = this.db.query(TABLE_PRODUTO, new String[]{ID, NOME, PRESCRICAO_MEDICA, PRECO, QUANTIDADE, CATEGORIA_ID, IVA_ID, IMAGENS}, null, null, null, null, null);
@@ -113,21 +118,20 @@ public class FarmaciaBDHelper extends SQLiteOpenHelper {
                 int ivaId = cursor.getInt(6);
                 String imagens = cursor.getString(7);
 
-                // Cria o objeto Medicamento com os dados e a lista de imagens
                 Medicamento medicamento = new Medicamento(id, nome, prescricaoMedica, preco, quantidade, categoriaId, ivaId, imagens);
                 medicamentos.add(medicamento);
             } while (cursor.moveToNext());
         }
-
         cursor.close();
         return medicamentos;
     }
 
-
+    // Método que apaga todos os medicamentos da base de dados(SQLite)
     public void removerAllMedicamentosBD() {
         this.db.delete(TABLE_PRODUTO, null, null);
     }
 
+    // Método que adiciona as receitas médicas à base de dados(SQLite)
     public void adicionarReceitaMedicaBD(ReceitaMedica receita) {
         ContentValues values = new ContentValues();
         values.put(ID, receita.getId());
@@ -144,6 +148,7 @@ public class FarmaciaBDHelper extends SQLiteOpenHelper {
         this.db.insert(TABLE_RECEITA, null, values);
     }
 
+    // Método que retorna todas as receitas médicas do utilizador logado da base de dados(SQLite)
     public ArrayList<ReceitaMedica> getAllReceitaMedicaBD() {
         ArrayList<ReceitaMedica> receitas = new ArrayList<>();
         Cursor cursor = this.db.query(TABLE_RECEITA, new String[]{ID, CODIGO, LOCAL_PRESCRICAO, MEDICO_PRESCRICAO, DOSAGEM, DATA_VALIDADE, TELEFONE, VALIDO, POSOLOGIA, USER_ID}, null, null, null, null, null);
@@ -157,11 +162,12 @@ public class FarmaciaBDHelper extends SQLiteOpenHelper {
         return receitas;
     }
 
-
+    // Método que apaga todos os medicamentos da base de dados(SQLite)
     public void removerAllReceitaMedicaBD() {
         this.db.delete(TABLE_RECEITA, null, null);
     }
 
+    // Método que retorna todos os utilizadores da base de dados(SQLite)
     public ArrayList<User> getAllUserBD() {
         ArrayList<User> users = new ArrayList<>();
         Cursor cursor = this.db.query(TABLE_USER, new String[]{ID, USERNAME, EMAIL}, null, null, null, null, null);
@@ -175,6 +181,7 @@ public class FarmaciaBDHelper extends SQLiteOpenHelper {
         return users;
     }
 
+    // Método que adiciona os utilizadores à base de dados(SQLite)
     public void adicionarUserBD(User user) {
         ContentValues values = new ContentValues();
         values.put(ID, user.getId());
@@ -184,6 +191,11 @@ public class FarmaciaBDHelper extends SQLiteOpenHelper {
         this.db.insert(TABLE_USER, null, values);
     }
 
+    public void removerAllUsersBD() {
+        this.db.delete(TABLE_USER, null, null);
+    }
+
+    // Método que retorna os medicamentos da base de dados(SQLite) de uma determinada categoria
     public ArrayList<Medicamento> getMedicamentosCategoriaBD(String nomeCategoria) {
         ArrayList<Medicamento> medicamentos = new ArrayList<>();
 
@@ -207,7 +219,6 @@ public class FarmaciaBDHelper extends SQLiteOpenHelper {
                 medicamentos.add(medicamento);
             } while (cursor.moveToNext());
         }
-
         cursor.close();
         return medicamentos;
     }

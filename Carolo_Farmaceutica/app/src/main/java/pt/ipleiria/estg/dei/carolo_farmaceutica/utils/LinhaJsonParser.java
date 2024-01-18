@@ -15,6 +15,7 @@ import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.Medicamento;
 
 public class LinhaJsonParser {
 
+    // Método que faz o parse do JSON para um Array de Linhas de Carrinho de Compra
     public static ArrayList<LinhaCarrinhoCompra> parserJsonLinha(JSONArray response) {
         ArrayList<LinhaCarrinhoCompra> listaCarrinhoCompras = new ArrayList<>();
         try {
@@ -33,7 +34,6 @@ public class LinhaJsonParser {
 
                 LinhaCarrinhoCompra m = new LinhaCarrinhoCompra(id, quantidade, precounit, valoriva, valorcomiva, subtotal, carrinho_compra_id, produto_id, imagem);
                 listaCarrinhoCompras.add(m);
-
             }
 
         }catch (Exception e){
@@ -43,6 +43,7 @@ public class LinhaJsonParser {
         return listaCarrinhoCompras;
     }
 
+    // Método que verifica o estado da ligação à internet
     public static boolean isConnectionInternet(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();

@@ -18,11 +18,12 @@ import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.SingletonGestorFarmacia;
 
 public class DetalhesReceitaActivity extends AppCompatActivity {
 
+    // Declaração de variáveis
     public static final String ID_RECEITA = "id";
     private TextView tvCodigo, tvLocalPrescricao, tvMedicoPrescricao, tvDosagem, tvDataValidade, tvTelefone, tvValido, tvPosologia;
     private ReceitaMedica receitaMedica;
 
-
+    // Método para carregar a atividade dos detalhes da receita médica
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +48,7 @@ public class DetalhesReceitaActivity extends AppCompatActivity {
         }
     }
 
+    // Método para carregar os detalhes da receita médica
     private void carregarReceitaMedica() {
         tvCodigo.setText(receitaMedica.getCodigo() + "");
         tvLocalPrescricao.setText(receitaMedica.getLocalPrescricao());

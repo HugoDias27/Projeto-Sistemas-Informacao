@@ -23,6 +23,7 @@ import pt.ipleiria.estg.dei.carolo_farmaceutica.utils.ReceitaMedicaJsonParser;
 
 public class DetalhesMedicamentoActivity extends AppCompatActivity implements CarrinhoListener {
 
+    // Declaração de variáveis
     public static final String ID_MEDICAMENTO = "id";
     private TextView tvNomeMedicamento, tvPrescricaoMedica, tvPreco, tvQuantidadeMedicamento, tvCategoriaMedicamento, tvIvaMedicamento, tvQuantidadeCarrinho;
     private EditText etQuantidadeCarrinho;
@@ -30,6 +31,7 @@ public class DetalhesMedicamentoActivity extends AppCompatActivity implements Ca
     private FloatingActionButton fabAdicionarProdutoCarrinho;
     public static final String USERNAME = "USERNAME";
 
+    // Método para carregar a atividade dos detalhes do medicamento
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +66,7 @@ public class DetalhesMedicamentoActivity extends AppCompatActivity implements Ca
                         int quantidade = Integer.parseInt(etQuantidadeCarrinho.getText().toString());
                         SingletonGestorFarmacia.getInstance(getApplicationContext()).adicionarProdutoCarrinho(medicamento.getId(), quantidade, getApplicationContext());
                     } else {
-                        Toast.makeText(getApplicationContext(), "A quantidade não pode ser igual ou inferior a 0!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.txt_quantidade_0, Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -72,10 +74,11 @@ public class DetalhesMedicamentoActivity extends AppCompatActivity implements Ca
             fabAdicionarProdutoCarrinho.hide();
             etQuantidadeCarrinho.setVisibility(View.INVISIBLE);
             tvQuantidadeCarrinho.setVisibility(View.INVISIBLE);
-            Toast.makeText(this, "Não tem ligação à internet. Ligue-se à internet para realizar compras", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.txt_sem_conexao, Toast.LENGTH_SHORT).show();
         }
     }
 
+    // Método para carregar os dados do medicamento
     private void carregarMedicamento() {
         tvNomeMedicamento.setText(medicamento.getNome());
         tvPrescricaoMedica.setText(medicamento.getPrescricaoMedica());
@@ -85,10 +88,11 @@ public class DetalhesMedicamentoActivity extends AppCompatActivity implements Ca
         tvIvaMedicamento.setText(medicamento.getIvaId() + "");
     }
 
+    // Método quando o medicamento é adicionado ao carrinho
     @Override
     public void onRefreshCarrinho(boolean resposta) {
         if (resposta) {
-            Toast.makeText(this, "Produto adicionado ao carrinho com sucesso!.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.txt_produto_adicionado_carrinho, Toast.LENGTH_SHORT).show();
             SharedPreferences preferences = getSharedPreferences("LOGIN", Context.MODE_PRIVATE);
             String username = preferences.getString("USERNAME", "");
             Intent intent = new Intent(getApplicationContext(), MenuMainActivity.class);

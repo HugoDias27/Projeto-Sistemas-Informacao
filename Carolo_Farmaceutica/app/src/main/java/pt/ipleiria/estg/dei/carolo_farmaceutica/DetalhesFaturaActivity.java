@@ -17,34 +17,32 @@ import java.util.ArrayList;
 
 public class DetalhesFaturaActivity extends AppCompatActivity {
 
+    // Declaração de variáveis
     public static final String ID_FATURA = "id";
 
+    // Método para carregar a atividade dos detalhes da fatura
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carrinho);
 
-
-        carregarFragmentoCarrinho();
+        carregarFragmentoDetalhesFatura();
     }
 
-    private void carregarFragmentoCarrinho() {
+    // Método para carregar o fragmento dos detalhes da fatura
+    private void carregarFragmentoDetalhesFatura() {
         FaturaLinhasFragment faturaLinhasFragment = new FaturaLinhasFragment();
 
         int id = getIntent().getIntExtra(ID_FATURA, 0);
 
-        // Configurando o ID da fatura no fragmento
         faturaLinhasFragment.setIdFatura(id);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        // Substituir o fragmentContainer com FaturaLinhasFragment
         fragmentTransaction.replace(R.id.fragmentContainer, faturaLinhasFragment);
 
         fragmentTransaction.commit();
     }
-
-
 }
 

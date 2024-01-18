@@ -20,31 +20,36 @@ import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.Medicamento;
 
 public class ListaFaturaAdaptador extends BaseAdapter {
 
+    // Declaração de variáveis
     private Context context;
     private LayoutInflater inflater;
     private ArrayList<Fatura> faturas;
 
-
+    // Construtor
     public ListaFaturaAdaptador(Context context, ArrayList<Fatura> faturas) {
         this.context = context;
         this.faturas = faturas;
     }
 
+    // Método que retorna o número de faturas
     @Override
     public int getCount() {
         return faturas.size();
     }
 
+    // Método que retorna o item da fatura
     @Override
     public Object getItem(int i) {
         return faturas.get(i);
     }
 
+    // Método que retorna o item da fatura pelo seu id
     @Override
     public long getItemId(int i) {
         return faturas.get(i).getId();
     }
 
+    // Método que retorna a view da fatura
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         if (inflater == null)
@@ -52,7 +57,6 @@ public class ListaFaturaAdaptador extends BaseAdapter {
         if (view == null)
             view = inflater.inflate(R.layout.item_lista_fatura, null);
 
-        //otimização
         ViewHolderLista viewHolder = (ViewHolderLista) view.getTag();
 
         if (viewHolder == null) {
@@ -64,6 +68,7 @@ public class ListaFaturaAdaptador extends BaseAdapter {
         return view;
     }
 
+    // Método que apresenta os dados na view da fatura
     private class ViewHolderLista {
 
         private TextView tvNumeroFatura, tvDataFatura, tvValorTotal, tvIVA;
@@ -80,7 +85,6 @@ public class ListaFaturaAdaptador extends BaseAdapter {
             tvDataFatura.setText(fatura.getDtaEmissao());
             tvValorTotal.setText(fatura.getValortotal() + "");
             tvIVA.setText(fatura.getIvatotal() + "");
-
         }
     }
 }

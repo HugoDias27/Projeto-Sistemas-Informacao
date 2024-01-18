@@ -28,18 +28,15 @@ import com.google.android.material.navigation.NavigationView;
 
 public class MenuMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    // Declaração de variáveis
     private NavigationView navigationView;
     private DrawerLayout drawer;
     private String username;
-
     private FragmentManager fragmentManager;
-
     private static final String USERNAME = "USERNAME";
 
-    public static final int ADD = 100, EDIT = 200, DELETE = 300;
-    public static final String OP_CODE = "op_detalhes";
 
-
+    // Método para carregar a atividade principal
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +54,6 @@ public class MenuMainActivity extends AppCompatActivity implements NavigationVie
 
         carregarCabecalho();
 
-
         navigationView.setNavigationItemSelectedListener(this);
 
         fragmentManager = getSupportFragmentManager();
@@ -69,6 +65,7 @@ public class MenuMainActivity extends AppCompatActivity implements NavigationVie
         getSupportFragmentManager().beginTransaction().replace(R.id.contentFragment, new SettingsFragment()).addToBackStack(null).commit();
     }
 
+    // Método para carregar o fragmento incial
     private boolean carregarFragmentoInicial() {
         Menu menu = navigationView.getMenu();
 
@@ -77,6 +74,7 @@ public class MenuMainActivity extends AppCompatActivity implements NavigationVie
         return onNavigationItemSelected(menuItem);
     }
 
+    // Método para carregar o cabeçalho
     private void carregarCabecalho() {
         Intent intent = getIntent();
         username = intent.getStringExtra(LoginActivity.USERNAME);
@@ -96,6 +94,7 @@ public class MenuMainActivity extends AppCompatActivity implements NavigationVie
     }
 
 
+    // Método que carrega as opções da sidebar
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment = null;
@@ -107,6 +106,7 @@ public class MenuMainActivity extends AppCompatActivity implements NavigationVie
             setTitle(item.getTitle());
         } else if (item.getItemId() == R.id.navSettings) {
             fragment = new SettingsFragment();
+            setTitle(item.getTitle());
         } else if (item.getItemId() == R.id.navCarrinho) {
             fragment = new LinhaCarrinhoFragment();
             setTitle(item.getTitle());

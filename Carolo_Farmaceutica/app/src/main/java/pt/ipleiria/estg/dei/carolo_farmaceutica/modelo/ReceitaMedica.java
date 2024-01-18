@@ -4,9 +4,11 @@ import java.util.Date;
 
 public class ReceitaMedica {
 
+    // Declaração de variáveis
     private int id, codigo, user_id, dosagem, telefone;
     private String local_prescricao, valido, medico_prescicao, posologia, data_validade;
 
+    // Construtor
     public ReceitaMedica(int id, int codigo, String local_prescricao, String medico_prescicao, int dosagem, String data_validade, int telefone, String valido, String posologia, int user_id) {
         this.id = id;
         this.codigo = codigo;
@@ -20,6 +22,7 @@ public class ReceitaMedica {
         this.data_validade = data_validade;
     }
 
+    // Métodos getters e setters
     public int getId() {
         return id;
     }

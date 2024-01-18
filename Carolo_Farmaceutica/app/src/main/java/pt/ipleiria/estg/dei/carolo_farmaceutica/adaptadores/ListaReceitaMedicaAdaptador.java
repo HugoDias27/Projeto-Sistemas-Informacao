@@ -14,38 +14,43 @@ import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.ReceitaMedica;
 
 public class ListaReceitaMedicaAdaptador extends BaseAdapter {
 
+    // Declaração de variáveis
     private Context context;
     private LayoutInflater inflater;
     private ArrayList<ReceitaMedica> receitaMedicas;
 
+    // Construtor
     public ListaReceitaMedicaAdaptador(Context context, ArrayList<ReceitaMedica> receitaMedicas) {
         this.context = context;
         this.receitaMedicas = receitaMedicas;
     }
 
+    // Método que retorna o número de receitas médicas
     @Override
     public int getCount() {
         return receitaMedicas.size();
     }
 
+    // Método que retorna o item da receita médica
     @Override
     public Object getItem(int i) {
         return receitaMedicas.get(i);
     }
 
+    // Método que retorna o item da receita médica pelo seu id
     @Override
     public long getItemId(int i) {
         return receitaMedicas.get(i).getId();
     }
 
+    // Método que retorna a view da receita médica
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        if(inflater == null)
+        if (inflater == null)
             inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (view == null)
             view = inflater.inflate(R.layout.item_lista_receita, null);
 
-       //otimização
         ViewHolderLista viewHolder = (ViewHolderLista) view.getTag();
 
         if (viewHolder == null) {
@@ -57,8 +62,8 @@ public class ListaReceitaMedicaAdaptador extends BaseAdapter {
         return view;
     }
 
+    // Método que apresenta os dados na view da receita médica
     private class ViewHolderLista {
-
         private TextView tvCodigo, tvDosagem, tvDataValidade, tvValido, tvPosologia;
 
         public ViewHolderLista(View view) {

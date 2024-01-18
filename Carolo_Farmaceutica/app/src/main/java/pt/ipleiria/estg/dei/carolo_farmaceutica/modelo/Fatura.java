@@ -2,10 +2,12 @@ package pt.ipleiria.estg.dei.carolo_farmaceutica.modelo;
 
 public class Fatura {
 
+    // Declaração de variáveis
     private int id;
     private String dta_emissao;
     private double valortotal, ivatotal;
 
+    // Construtor
     public Fatura(int id, String dta_emissao, double valortotal, double ivatotal) {
         this.id = id;
         this.dta_emissao = dta_emissao;
@@ -13,6 +15,7 @@ public class Fatura {
         this.ivatotal = ivatotal;
     }
 
+    // Métodos getters e setters
     public int getId() {
         return id;
     }

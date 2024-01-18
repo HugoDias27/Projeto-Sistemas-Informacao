@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,29 +22,33 @@ import pt.ipleiria.estg.dei.carolo_farmaceutica.utils.LoginJsonParser;
 
 public class LoginActivity extends AppCompatActivity implements LoginListener {
 
-    //declaração
+    // Declaração de variáveis
     private EditText etUsername, etPassword;
-
     public static final String USERNAME = "USERNAME";
 
 
+    // Método para carregar a atividade do login
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setTitle("Login");
 
-        //inicialização
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
-
 
         onClickRegistar();
     }
 
+    // Método que é utilizado quando o utilizador clica no botão de login
     public void onClickLogin(View view) {
         String username = etUsername.getText().toString();
         String password = etPassword.getText().toString();
+
+        if(username.isEmpty() || password.isEmpty()){
+            Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         SingletonGestorFarmacia singletonGestorFarmacia = SingletonGestorFarmacia.getInstance(getApplicationContext());
         singletonGestorFarmacia.setLoginListener(this);
@@ -52,6 +57,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
     }
 
 
+    // Método que é utilizado quando o utilizador clica no botão de registar
     public void onClickRegistar() {
         TextView textViewRegistar = findViewById(R.id.textViewRegistar);
         textViewRegistar.setOnClickListener(new View.OnClickListener() {
@@ -64,6 +70,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
         });
     }
 
+    // Método que é utilizado após o login ser efetuado com sucesso
     @Override
     public void onRefreshLogin(String token) {
         if(token!=null){

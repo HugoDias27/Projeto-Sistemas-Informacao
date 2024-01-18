@@ -15,28 +15,24 @@ import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.SingletonGestorFarmacia;
 
 public class CarrinhoActivity extends AppCompatActivity {
 
+    // Método para carregar a atividade do carrinho de compras
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carrinho);
 
-
         carregarFragmentoCarrinho();
     }
 
+    // Método para carregar o fragmento do carrinho de compras
     private void carregarFragmentoCarrinho() {
         LinhaCarrinhoFragment linhacarrinhoFragment = new LinhaCarrinhoFragment();
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        // Only replace the fragmentContainer with LinhaCarrinhoFragment
         fragmentTransaction.replace(R.id.fragmentContainer, linhacarrinhoFragment);
-
-        // Remove the line below, as it's unnecessary and might be causing the issue
-        // fragmentTransaction.replace(R.id.lvCarrinho, linhacarrinhoFragment);
 
         fragmentTransaction.commit();
     }
-
 }

@@ -2,10 +2,12 @@ package pt.ipleiria.estg.dei.carolo_farmaceutica.modelo;
 
 public class LinhaCarrinhoCompra {
 
+    // Declaração de variáveis
     private int id, quantidade, carrinho_compra_id;
     private String produto_id, imagem;
     private double precounit, valoriva, valorcomiva, subtotal;
 
+    // Construtor
     public LinhaCarrinhoCompra(int id, int quantidade, double precounit, double valoriva, double valorcomiva, double subtotal, int carrinho_compra_id, String produto_id, String imagem) {
         this.id = id;
         this.quantidade = quantidade;
@@ -18,6 +20,7 @@ public class LinhaCarrinhoCompra {
         this.imagem = imagem;
     }
 
+    // Métodos getters e setters
     public int getId() {
         return id;
     }

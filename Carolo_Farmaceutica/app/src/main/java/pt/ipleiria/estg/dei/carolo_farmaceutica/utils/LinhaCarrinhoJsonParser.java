@@ -14,30 +14,8 @@ import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.Medicamento;
 
 public class LinhaCarrinhoJsonParser {
 
-    public static Boolean parserJsonLinhaCarrinho(String response) {
-        Boolean resposta = null;
-        try {
-            JSONObject linhaCarrinhoJson = new JSONObject(response);
-            resposta = linhaCarrinhoJson.getBoolean("resposta");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        return resposta;
-    }
 
-    public static boolean isConnectionInternet(Context context) {
-        if (context == null) {
-            // Handle null context, return false or take appropriate action
-            return false;
-        }
-
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo ni = cm.getActiveNetworkInfo();
-        return ni != null && ni.isConnected();
-    }
-
-
-
+    // Método que faz o parse do JSON para um Array de Linhas de Carrinho de Compra
     public static ArrayList<LinhaCarrinhoCompra> parserJsonLinhaCarrinhoUpdate(String response) {
         ArrayList<LinhaCarrinhoCompra> linhasCarrinho = new ArrayList<>();
         try {
@@ -65,24 +43,26 @@ public class LinhaCarrinhoJsonParser {
         return linhasCarrinho;
     }
 
-    public static double[] parserJsonQuantidadeProduto(String response) {
-        double[] quantidades = new double[3];
+    // Método que faz o parse do JSON dos dados do produto para podever verificar a alteração da quantidade na linha do carrinho
+    public static double[] parserJsonDadosProduto(String response) {
+        double[] dadosProduto = new double[3];
         try {
             JSONObject quantidadeProdutoJson = new JSONObject(response);
-            quantidades[0] = quantidadeProdutoJson.getDouble("quantidade");
-            quantidades[1] = quantidadeProdutoJson.getDouble("quantidadelinha");
-            quantidades[2] = quantidadeProdutoJson.getDouble("preco");
+            dadosProduto[0] = quantidadeProdutoJson.getDouble("quantidade");
+            dadosProduto[1] = quantidadeProdutoJson.getDouble("quantidadelinha");
+            dadosProduto[2] = quantidadeProdutoJson.getDouble("preco");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return quantidades;
+        return dadosProduto;
     }
 
+    // Método que faz o parse do JSON do subtotal das linhas do carrinho de compras
     public static double parserJsonSubtotal(String response) {
         double subtotal = 0;
         try {
-                JSONObject subtotalJson = new JSONObject(response);
-                subtotal += subtotalJson.getDouble("subtotal");
+            JSONObject subtotalJson = new JSONObject(response);
+            subtotal = subtotalJson.getDouble("subtotal");
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -90,6 +70,7 @@ public class LinhaCarrinhoJsonParser {
         return subtotal;
     }
 
+    // Método que faz o parse do JSON que recebe a resposta de quando é apagado uma linha do carrinho de compras
     public static boolean parserJsonLinhaCarrinhoDelete(String response) {
         Boolean resposta = null;
         try {
@@ -99,5 +80,16 @@ public class LinhaCarrinhoJsonParser {
             throw new RuntimeException(e);
         }
         return resposta;
+    }
+
+    // Método que verifica o estado da ligação à internet
+    public static boolean isConnectionInternet(Context context) {
+        if (context == null) {
+            return false;
+        }
+
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo ni = cm.getActiveNetworkInfo();
+        return ni != null && ni.isConnected();
     }
 }

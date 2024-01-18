@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 public class RegistarJsonParser {
 
+    // Método que faz o parse do JSON onde recebe a resposta de registar
     public static Boolean parserJsonRegistar(String response) {
         Boolean resposta = null;
         try {
@@ -20,6 +21,7 @@ public class RegistarJsonParser {
         return resposta;
     }
 
+    // Método que verifica o estado da ligação à internet
     public static boolean isConnectionInternet(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();

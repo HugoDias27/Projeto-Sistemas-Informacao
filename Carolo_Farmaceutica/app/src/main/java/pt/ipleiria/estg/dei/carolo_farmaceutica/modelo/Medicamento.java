@@ -4,11 +4,13 @@ import java.util.ArrayList;
 
 public class Medicamento {
 
+    // Declaração de variáveis
     private int id, quantidade, iva_id;
     private String nome, categoria_id, prescricao_medica;
     private double preco;
     private String imagem;
 
+    // Construtor
     public Medicamento(int id, String nome, String prescricao_medica, double preco, int quantidade, String categoria_id, int iva_id, String imagem) {
         this.id = id;
         this.nome = nome;
@@ -20,6 +22,7 @@ public class Medicamento {
         this.imagem = imagem;
     }
 
+    // Métodos getters e setters
     public int getId() {
         return id;
     }

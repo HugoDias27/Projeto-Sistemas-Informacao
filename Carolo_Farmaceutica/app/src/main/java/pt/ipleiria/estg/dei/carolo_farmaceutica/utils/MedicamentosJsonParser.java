@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.Medicamento;
 
 public class MedicamentosJsonParser {
+
+    // Método que faz o parse do JSON para um Array de Medicamentos
     public static ArrayList<Medicamento> parserJsonMedicamentos(JSONArray response) {
         ArrayList<Medicamento> listaMedicamentos = new ArrayList<>();
         try {
@@ -36,7 +38,7 @@ public class MedicamentosJsonParser {
         return listaMedicamentos;
     }
 
-
+    // Método que verifica o estado da ligação à internet
     public static boolean isConnectionInternet(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();

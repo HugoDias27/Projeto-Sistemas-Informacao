@@ -24,31 +24,35 @@ import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.SingletonGestorFarmacia;
 
 public class FaturaLinhasFragment extends Fragment implements FaturaCarrinhoListener {
 
+    // Declaração de variáveis
     private ListView lvLinhasFatura;
     private int idFatura;
 
+    // Construtor
     public FaturaLinhasFragment() {
     }
 
+    // Método que recebe o id da fatura da selecionada
     public void setIdFatura(int idFatura) {
         this.idFatura = idFatura;
     }
 
-    @Nullable
+    // Método para carregar o fragmento das linhas da fatura
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lista_fatura_linhas, container, false);
         setHasOptionsMenu(true);
         lvLinhasFatura = view.findViewById(R.id.lvLinhasFatura);
 
         if (idFatura != 0) {
             SingletonGestorFarmacia.getInstance(getContext()).setFaturaCarrinhoListener(this);
-            SingletonGestorFarmacia.getInstance(getContext()).getLinhasCarrinhoCompra(idFatura, getContext());
+            SingletonGestorFarmacia.getInstance(getContext()).getLinhasCarrinhoCompraFatura(idFatura, getContext());
         }
 
         return view;
     }
 
+    // Método para carregar as linhas da fatura
     @Override
     public void onLinhasCarrinhoCarregadas(ArrayList<LinhaCarrinhoCompraFatura> linhas) {
         if (linhas != null) {

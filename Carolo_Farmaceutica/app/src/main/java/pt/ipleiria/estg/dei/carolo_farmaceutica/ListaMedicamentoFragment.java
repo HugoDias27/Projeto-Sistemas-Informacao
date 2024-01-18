@@ -30,14 +30,17 @@ import pt.ipleiria.estg.dei.carolo_farmaceutica.modelo.SingletonGestorFarmacia;
 
 public class ListaMedicamentoFragment extends Fragment implements MedicamentosListener {
 
+    // Declaração de variáveis
     private ListView lvMedicamentos;
     private SearchView searchView;
     private FragmentManager fragmentManager;
 
+    // Construtor
     public ListaMedicamentoFragment() {
         // Required empty public constructor
     }
 
+    // Método para carregar o fragmento da lista dos medicamentos
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -62,6 +65,7 @@ public class ListaMedicamentoFragment extends Fragment implements MedicamentosLi
         return view;
     }
 
+    // Método para carregar o menu de pesquisa e o menu de categorias
     @Override
     public void onCreateOptionsMenu(android.view.Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_pesquisa, menu);
@@ -96,8 +100,8 @@ public class ListaMedicamentoFragment extends Fragment implements MedicamentosLi
         categoriaOral.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                String nomeCategoria = "saude_oral";
-                String nomeCategoriaTitulo = "Saúde Oral";
+                String nomeCategoria = getString(R.string.txt_titulo_saude_oral);
+                String nomeCategoriaTitulo = getString(R.string.txt_saude_oral);
 
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("NOME_CATEGORIA", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -116,8 +120,8 @@ public class ListaMedicamentoFragment extends Fragment implements MedicamentosLi
         categoriaBeleza.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                String nomeCategoria = "bens_beleza";
-                String nomeCategoriaTitulo = "Bens de Beleza";
+                String nomeCategoria = getString(R.string.txt_titulo_bens_beleza);
+                String nomeCategoriaTitulo = getString(R.string.txt_bens_beleza);
 
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("NOME_CATEGORIA", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -136,8 +140,8 @@ public class ListaMedicamentoFragment extends Fragment implements MedicamentosLi
         categoriaHigiene.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                String nomeCategoria = "higiene";
-                String nomeCategoriaTitulo = "Higiene";
+                String nomeCategoria = getString(R.string.txt_titulo_higiene);
+                String nomeCategoriaTitulo = getString(R.string.txt_higiene);;
 
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("NOME_CATEGORIA", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -154,6 +158,7 @@ public class ListaMedicamentoFragment extends Fragment implements MedicamentosLi
         });
     }
 
+    // Método para carregar os medicamentos
     @Override
     public void onRefreshListaMedicamento(ArrayList<Medicamento> listaMedicamentos) {
         if(listaMedicamentos != null) {
