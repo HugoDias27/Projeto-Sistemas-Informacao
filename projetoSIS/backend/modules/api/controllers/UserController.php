@@ -16,6 +16,7 @@ class UserController extends ActiveController
     public $modelCarrinhoClass = 'common\models\CarrinhoCompra';
     public $modelProdutoClass = 'common\models\Produto';
     public $modelServicoClass = 'common\models\Servico';
+    public $modelPerfilClass = 'common\models\Profile';
 
     //Método que chama o método de autenticação da API
     public function behaviors()
@@ -41,11 +42,16 @@ class UserController extends ActiveController
     public function actionCriarusers()
     {
         $userModel = new $this->modelClass;
+        $profileModel = new $this->modelPerfilClass;
         $request = Yii::$app->request;
 
         $username = $request->getBodyParam('username');
         $password = $request->getBodyParam('password');
         $email = $request->getBodyParam('email');
+        $n_utente = $request->getBodyParam('nUtente');
+        $nif = $request->getBodyParam('nif');
+        $morada = $request->getBodyParam('morada');
+        $telefone = $request->getBodyParam('telefone');
 
 
         $userModel->username = $username;
@@ -53,9 +59,17 @@ class UserController extends ActiveController
         $userModel->generateAuthKey();
         $userModel->email = $email;
         $userModel->status = 10;
+        $profileModel->n_utente = $n_utente;
+        $profileModel->nif = $nif;
+        $profileModel->morada = $morada;
+        $profileModel->telefone = $telefone;
+
 
         if ($userModel->save()) {
-            return ['resposta' => true];
+            $profileModel->user_id = $userModel->id;
+            if ($profileModel->save()) {
+                return ['resposta' => true];
+            }
         } else {
             return ['resposta' => false];
         }

@@ -54,6 +54,7 @@ class ReceitamedicaController extends ActiveController
             foreach ($receitas as $receita) {
                 if ($receita->data_validade <= $dataAtual || $receita->valido == 0) {
                     $receita->valido = 'Não';
+                    $receita->save($receita->valido = 0);
                 } else {
                     $receita->valido = 'Sim';
                 }
