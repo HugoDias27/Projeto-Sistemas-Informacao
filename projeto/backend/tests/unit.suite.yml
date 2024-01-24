@@ -1,0 +1,13 @@
+suite_namespace: backend\tests\unit
+actor: UnitTester
+bootstrap: false
+modules:
+  enabled:
+    - Asserts
+    - Yii2:
+        part: ORM
+    - Db:
+      dsn: 'mysql:host=localhost;dbname=projetofinal_test'
+      user: 'root'
+      password: ''
+      dump: 'tests/_data/dump.sql'
