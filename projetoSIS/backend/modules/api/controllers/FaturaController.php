@@ -56,7 +56,7 @@ class FaturaController extends ActiveController
             if ($faturas) {
                 return $faturas;
             } else {
-                throw new \yii\web\NotFoundHttpException('Fatura(s) não encontrada(s).');
+                return [];
             }
         }
         else{

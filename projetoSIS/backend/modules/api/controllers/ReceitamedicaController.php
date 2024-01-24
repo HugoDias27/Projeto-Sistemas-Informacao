@@ -72,7 +72,7 @@ class ReceitamedicaController extends ActiveController
             if ($receitas) {
                 return $receitas;
             } else {
-                throw new \yii\web\NotFoundHttpException('Dados não encontrados.');
+                return [];
             }
         } else {
             throw new \yii\web\ForbiddenHttpException('Proibido');
