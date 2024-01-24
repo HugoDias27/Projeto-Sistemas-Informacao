@@ -61,7 +61,6 @@ id fabAdicionarProdutoCarrinho
 id fragmentContainer
 id imageView
 id imgCapa
-id imgFatura
 id imgPerson
 id imgProduto
 id imgProdutoFatura
@@ -222,6 +221,7 @@ string telefone
 string text_entidade
 string text_numero_cartao
 string text_remover_fail
+string text_sem_faturas
 string tv_prescricao
 string tvcategoria
 string tviva
@@ -233,6 +233,7 @@ string txt_bens_beleza
 string txt_botao_cartao
 string txt_botao_multibanco
 string txt_carrinho_vazio
+string txt_cliente_sem_receita
 string txt_compra_sucesso
 string txt_confirmacao_compra
 string txt_confirmar_compra
@@ -270,6 +271,7 @@ string txt_nr_fatura
 string txt_pass
 string txt_posologia
 string txt_preco_unitario
+string txt_preencha_campos
 string txt_produto_adicionado_carrinho
 string txt_quantidade_0
 string txt_quantidade_add_check
@@ -277,6 +279,7 @@ string txt_quantidade_reduce_check
 string txt_referencia
 string txt_registar
 string txt_registo_hint
+string txt_registo_sucesso
 string txt_remover_sucesso
 string txt_saude_oral
 string txt_sem_conexao

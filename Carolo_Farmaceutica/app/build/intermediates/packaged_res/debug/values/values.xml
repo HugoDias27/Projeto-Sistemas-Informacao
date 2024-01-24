@@ -64,6 +64,7 @@
     <string name="text_entidade">Entidade: 1234</string>
     <string name="text_numero_cartao">Número do Cartão</string>
     <string name="text_remover_fail">Não foi possível remover o produto do carrinho de compras!</string>
+    <string name="text_sem_faturas">O cliente não tem faturas!</string>
     <string name="tv_prescricao">Prescrição Médica:</string>
     <string name="tvcategoria">Categoria:</string>
     <string name="tviva">IVA:</string>
@@ -75,6 +76,7 @@
     <string name="txt_botao_cartao">Pagar com Cartão de Crédito</string>
     <string name="txt_botao_multibanco">Pagar com Multibanco</string>
     <string name="txt_carrinho_vazio">Sem produtos no carrinho!</string>
+    <string name="txt_cliente_sem_receita">O cliente não tem receitas médicas!</string>
     <string name="txt_compra_sucesso">Compra efetuada com sucesso!</string>
     <string name="txt_confirmacao_compra">Deseja confirmar a compra?</string>
     <string name="txt_confirmar_compra">Confirmação de Compra</string>
@@ -112,6 +114,7 @@
     <string name="txt_pass">Introduza a password</string>
     <string name="txt_posologia">Posologia:</string>
     <string name="txt_preco_unitario">Preço Unitário:</string>
+    <string name="txt_preencha_campos">Preencha todos os campos!</string>
     <string name="txt_produto_adicionado_carrinho">Produto adicionado ao carrinho com sucesso!</string>
     <string name="txt_quantidade_0">A quantidade não pode ser igual ou inferior a 0!</string>
     <string name="txt_quantidade_add_check">Não é possível aumentar mais a quantidade!</string>
@@ -119,6 +122,7 @@
     <string name="txt_referencia">Referência: 123456789</string>
     <string name="txt_registar">Registar</string>
     <string name="txt_registo_hint">Não tem conta? Registe-se aqui</string>
+    <string name="txt_registo_sucesso">Registo efetuado com sucesso!</string>
     <string name="txt_remover_sucesso">O produto foi removido do carrinho de compras!</string>
     <string name="txt_saude_oral">Saúde Oral</string>
     <string name="txt_sem_conexao">Não tem ligação à internet! Verifique se está conectado.</string>

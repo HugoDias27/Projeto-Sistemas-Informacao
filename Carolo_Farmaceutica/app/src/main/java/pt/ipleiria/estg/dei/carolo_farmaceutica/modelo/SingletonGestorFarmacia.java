@@ -30,6 +30,7 @@ import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.FaturaListener;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.LinhaCarrinhoListener;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.LoginListener;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.MedicamentosListener;
+import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.ProvaOralListener;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.QuantidadeListener;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.ReceitaMedicaListener;
 import pt.ipleiria.estg.dei.carolo_farmaceutica.listeners.RegistarListener;
@@ -74,6 +75,7 @@ public class SingletonGestorFarmacia {
     private FaturaCarrinhoListener faturaCarrinhoListener;
     private SubtotalListener subtotalListener;
     private QuantidadeListener quantidadeListener;
+    private ProvaOralListener provaOralListener;
     private String ipAddress;
     private String mURLAPIMedicamentos;
     private String mURLAPILogin;
@@ -190,6 +192,10 @@ public class SingletonGestorFarmacia {
     public void setQuantidadeListener(QuantidadeListener quantidadeListener) {
         this.quantidadeListener = quantidadeListener;
     }
+
+    public void setProvaOralListener(ProvaOralListener provaOralListener) {
+        this.provaOralListener = provaOralListener;
+    }
     //endregion
 
 
@@ -213,7 +219,6 @@ public class SingletonGestorFarmacia {
             }
         }
         return null;
-
     }
     // endregion
 
@@ -455,10 +460,14 @@ public class SingletonGestorFarmacia {
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, mURLAPIReceitaMedicaFinal, null, new Response.Listener<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray response) {
-                    receitaMedicas = ReceitaMedicaJsonParser.parserJsonReceitaMedica(response);
-                    AdicionarReceitaMedicaBD(receitaMedicas);
-                    if (receitaMedicaListener != null) {
-                        receitaMedicaListener.onRefreshReceitaMedica(receitaMedicas);
+                    if (response != null && response.length() > 0) {
+                        receitaMedicas = ReceitaMedicaJsonParser.parserJsonReceitaMedica(response);
+                        AdicionarReceitaMedicaBD(receitaMedicas);
+                        if (receitaMedicaListener != null) {
+                            receitaMedicaListener.onRefreshReceitaMedica(receitaMedicas);
+                        }
+                    } else {
+                        Toast.makeText(context, R.string.txt_cliente_sem_receita, Toast.LENGTH_SHORT).show();
                     }
                 }
             }, new Response.ErrorListener() {
@@ -658,7 +667,7 @@ public class SingletonGestorFarmacia {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                   // Toast.makeText(context, R.string.txt_erro_subtotal, Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(context, R.string.txt_erro_subtotal, Toast.LENGTH_SHORT).show();
                 }
             });
             volleyQueue.add(request);
@@ -712,9 +721,13 @@ public class SingletonGestorFarmacia {
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, mURLAPIFaturaClienteFinal, null, new Response.Listener<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray response) {
-                    faturas = FaturaJsonParser.parserJsonFaturaCliente(response);
-                    if (faturaListener != null) {
-                        faturaListener.onRefreshListaFatura(faturas);
+                    if (response != null && response.length() > 0) {
+                        faturas = FaturaJsonParser.parserJsonFaturaCliente(response);
+                        if (faturaListener != null) {
+                            faturaListener.onRefreshListaFatura(faturas);
+                        }
+                    } else {
+                        Toast.makeText(context, R.string.text_sem_faturas, Toast.LENGTH_SHORT).show();
                     }
                 }
             }, new Response.ErrorListener() {
@@ -726,6 +739,7 @@ public class SingletonGestorFarmacia {
             };
             volleyQueue.add(request);
         }
+
     }
 
     // Método para obter as linhas da respetiva fatura
@@ -756,4 +770,36 @@ public class SingletonGestorFarmacia {
         }
     }
     //endregion
+
+    public void obterProvaOral(final Context context) {
+        if (!MedicamentosJsonParser.isConnectionInternet(context)) {
+            medicamentos = farmaciaBDHelper.getAllMedicamentosBD();
+            if (medicamentosListener != null) {
+                medicamentosListener.onRefreshListaMedicamento(medicamentos);
+            }
+        } else {
+            SharedPreferences preferences = context.getSharedPreferences("DADOS_PESQUISA", Context.MODE_PRIVATE);
+            String authKey = preferences.getString("authKey", "");
+
+            String mURLAPIMedicamentosFinal = mURLAPIMedicamentos + "?auth_key=" + authKey;
+
+            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, mURLAPIMedicamentosFinal, null, new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray response) {
+                    medicamentos = MedicamentosJsonParser.parserJsonOral(response);
+                    AdicionarAllMedicamentosBD(medicamentos);
+                    if (provaOralListener != null) {
+                        provaOralListener.onRefreshProvaOral(medicamentos);
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(context, R.string.txt_erro_medicamentos, Toast.LENGTH_SHORT).show();
+                }
+            }) {
+            };
+            volleyQueue.add(request);
+        }
+    }
 }

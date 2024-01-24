@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener {
         String password = etPassword.getText().toString();
 
         if(username.isEmpty() || password.isEmpty()){
-            Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.txt_preencha_campos, Toast.LENGTH_SHORT).show();
             return;
         }
 

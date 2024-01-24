@@ -78,7 +78,7 @@ public class RegistarActivity extends AppCompatActivity implements RegistarListe
         String telefone = etTelefone.getText().toString();
 
         if (username.isEmpty() || password.isEmpty() || email.isEmpty() || nUtente.isEmpty() || morada.isEmpty() || nif.isEmpty() || telefone.isEmpty()) {
-            Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.txt_preencha_campos, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -110,7 +110,7 @@ public class RegistarActivity extends AppCompatActivity implements RegistarListe
     @Override
     public void onRefreshRegistar(boolean resposta) {
         if (resposta) {
-            Toast.makeText(this, "Registo efetuado com sucesso.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.txt_registo_sucesso, Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
             finish();

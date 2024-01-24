@@ -129,4 +129,8 @@
     <string name="txt_botao_multibanco">Pagar com Multibanco</string>
     <string name="txt_dados_cartao_vazios">Preencha todos os campos do cartão de crédito!</string>
     <string name="txt_metodo_pagamento_vazio">Escolha um método de pagamento!</string>
+    <string name="txt_preencha_campos">Preencha todos os campos!</string>
+    <string name="txt_registo_sucesso">Registo efetuado com sucesso!</string>
+    <string name="text_sem_faturas">O cliente não tem faturas!</string>
+    <string name="txt_cliente_sem_receita">O cliente não tem receitas médicas!</string>
 </resources>

@@ -53,7 +53,6 @@ public class ListaReceitaFragment extends Fragment implements ReceitaMedicaListe
         lvReceitas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-
                 Intent intent = new Intent(getContext(), DetalhesReceitaActivity.class);
                 intent.putExtra(DetalhesReceitaActivity.ID_RECEITA, (int) id);
                 startActivity(intent);

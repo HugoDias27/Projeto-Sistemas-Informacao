@@ -3344,7 +3344,6 @@ int id ignoreRequest 0x7f0800f3
 int id image 0x7f0800f4
 int id imageView 0x7f0800f5
 int id imgCapa 0x7f0800f6
-int id imgFatura 0x7f0800f7
 int id imgPerson 0x7f0800f8
 int id imgProduto 0x7f0800f9
 int id imgProdutoFatura 0x7f0800fa
@@ -4132,6 +4131,7 @@ int string telefone 0x7f1000d5
 int string text_entidade 0x7f100118
 int string text_numero_cartao 0x7f100119
 int string text_remover_fail 0x7f1000d6
+int string text_sem_faturas 0x7f100123
 int string tv_prescricao 0x7f1000d7
 int string tvcategoria 0x7f1000d8
 int string tviva 0x7f1000d9
@@ -4143,6 +4143,7 @@ int string txt_bens_beleza 0x7f1000de
 int string txt_botao_cartao 0x7f10011a
 int string txt_botao_multibanco 0x7f10011b
 int string txt_carrinho_vazio 0x7f1000df
+int string txt_cliente_sem_receita 0x7f100124
 int string txt_compra_sucesso 0x7f1000e0
 int string txt_confirmacao_compra 0x7f1000e1
 int string txt_confirmar_compra 0x7f1000e2
@@ -4180,6 +4181,7 @@ int string txt_nr_fatura 0x7f1000fd
 int string txt_pass 0x7f1000fe
 int string txt_posologia 0x7f1000ff
 int string txt_preco_unitario 0x7f100100
+int string txt_preencha_campos 0x7f100121
 int string txt_produto_adicionado_carrinho 0x7f100101
 int string txt_quantidade_0 0x7f100102
 int string txt_quantidade_add_check 0x7f100103
@@ -4187,6 +4189,7 @@ int string txt_quantidade_reduce_check 0x7f100104
 int string txt_referencia 0x7f100120
 int string txt_registar 0x7f100105
 int string txt_registo_hint 0x7f100106
+int string txt_registo_sucesso 0x7f100122
 int string txt_remover_sucesso 0x7f100107
 int string txt_saude_oral 0x7f100108
 int string txt_sem_conexao 0x7f100109
