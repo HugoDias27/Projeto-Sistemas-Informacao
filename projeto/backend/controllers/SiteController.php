@@ -88,7 +88,8 @@ class SiteController extends Controller
         $totalGanho = Fatura::find()
             ->where(['between', 'dta_emissao', $primeiroDiaMesAtual, $ultimoDiaMesAtual])
             ->sum('valortotal');
-        $totalGanhoArredondado = round($totalGanho, 2);
+
+        $totalGanhoArredondado = ($totalGanho !== null) ? round($totalGanho, 2) : 0.00; // Set a default value or handle it accordingly
 
         $nomeEstabelecimentoComMaisVendas = Fatura::find()
             ->select(['estabelecimentos.nome'])
@@ -97,7 +98,6 @@ class SiteController extends Controller
             ->groupBy(['estabelecimentos.nome'])
             ->limit(1)
             ->scalar();
-
 
         $produtoVendido = LinhaCarrinho::find()
             ->select(['produtos.nome'])
@@ -108,7 +108,7 @@ class SiteController extends Controller
             ->asArray()
             ->one();
 
-        $produtoMaisVendido = $produtoVendido['nome'];
+        $produtoMaisVendido = !empty($produtoVendido['nome']) ? $produtoVendido['nome'] : 'N/A';
 
         if (!Yii::$app->user->isGuest) {
             $receitasMedicas = ReceitaMedica::find()->all();
@@ -129,6 +129,8 @@ class SiteController extends Controller
             'produtoMaisVendido' => $produtoMaisVendido,
         ]);
     }
+
+
     /**
      * Login action.
      *

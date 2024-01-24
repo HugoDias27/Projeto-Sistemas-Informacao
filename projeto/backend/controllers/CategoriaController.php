@@ -91,35 +91,30 @@ class CategoriaController extends Controller
     // Método que permite criar uma nova categoria
     public function actionCreate()
     {
-        $categoriasExistentes = Categoria::find()->all();
-
-        if (count($categoriasExistentes) >= count(['saude_oral', 'bens_beleza', 'higiene'])) {
-            throw new ForbiddenHttpException('Não é possível criar mais categorias, todas as categorias já existem.');
-        }
-        if (count($categoriasExistentes) >= count(['saude_oral'])) {
-            $Lista = ['bens_beleza' => 'Bens de Beleza', 'higiene' => 'Higiene'];
-        }
-        if (count($categoriasExistentes) >= count(['bens_beleza'])) {
-            $Lista = ['higiene' => 'Higiene'];
-        }
-
+        $Lista = ['saude_oral' => 'Saúde Oral', 'bens_beleza' => 'Bens de Beleza', 'higiene' => 'Higiene'];
 
         if (\Yii::$app->user->can('createCategorias')) {
             $categoria = new Categoria();
 
             if ($this->request->isPost) {
-                if ($categoria->load($this->request->post()) && $categoria->save()) {
-                    return $this->redirect(['view', 'id' => $categoria->id]);
+                if ($categoria->load($this->request->post())) {
+                    $CategoriaExiste = Categoria::findOne(['descricao' => $categoria->descricao]);
+
+                    if ($CategoriaExiste) {
+                        return $this->redirect('index');
+                    }
+
+                    if ($categoria->save()) {
+                        return $this->redirect('index');
+                    }
                 }
             } else {
                 $categoria->loadDefaultValues();
             }
 
-            return $this->render('create', [
-                'categoria' => $categoria, 'categorias' => $Lista
-            ]);
+            return $this->render('create', ['categoria' => $categoria, 'categorias' => $Lista,]);
         } else {
-            throw new ForbiddenHttpException('Você não tem permissões para acessar esta página');
+            throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
         }
     }
 
