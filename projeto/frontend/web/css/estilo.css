@@ -1,0 +1,26 @@
+.carrinho-compra-index {
+    margin: 20px;
+}
+
+.produto-form label {
+    font-weight: bold;
+}
+
+.produto-form input {
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.btn-cartao,
+.btn-multibanco {
+    color: #fff;
+    background-color: #007bff;
+    border: 1px solid #007bff;
+    margin-right: 10px;
+}
+
+#dadosCartao,
+#dadosMultibanco {
+    margin-top: 10px;
+}
+
