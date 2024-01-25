@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/navProduto"
+            android:title="@string/txt_menu_produtos" />
+
+        <item
+            android:id="@+id/navReceitaMedica"
+            android:title="@string/txt_menu_receita_medica" />
+
+        <item
+            android:id="@+id/navFatura"
+            android:icon="@drawable/ic_action_fatura"
+            android:title="@string/faturas" />
+
+        <item
+            android:id="@+id/navSettings"
+            android:title="@string/definicoes" />
+
+        <item
+            android:id="@+id/navCarrinho"
+            android:icon="@drawable/ic_action_carrinho"
+            android:title="@string/txt_menu_carrinho"
+            app:showAsAction="always" />
+
+        <item
+            android:id="@+id/navLogout"
+            android:icon="@drawable/ic_action_logout"
+            android:title="@string/logout" />
+    </group>
+
+</menu>

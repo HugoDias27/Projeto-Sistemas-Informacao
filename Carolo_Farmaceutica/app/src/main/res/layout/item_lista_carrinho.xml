@@ -1,0 +1,62 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp">
+
+    <ImageView
+        android:id="@+id/imgProduto"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="5dp"
+        android:src="@drawable/medicamento_stock"
+        android:contentDescription="@string/imagem_produto" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.7"
+        android:layout_marginStart="5dp"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btRemover"
+            android:layout_width="30sp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_action_remove"
+            android:contentDescription="@string/remove_produto_do_carrinho" />
+
+        <TextView
+            android:layout_width="120sp"
+            android:layout_height="match_parent"
+            android:id="@+id/tvProduto" />
+
+        <ImageButton
+            android:id="@+id/btReduzir"
+            android:layout_width="30sp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_action_reduzir"
+            android:contentDescription="@string/reduz_quantidade_do_produto" />
+
+        <EditText
+            android:id="@+id/etQuantidade"
+            android:layout_width="40sp"
+            android:layout_height="match_parent"
+            android:inputType="number"
+            android:text="@string/padraoNumero"
+            android:importantForAutofill="no" />
+
+        <ImageButton
+            android:id="@+id/btAdicionar"
+            android:layout_width="30sp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_action_adicionar"
+            android:contentDescription="@string/adicionar_quantidade_ao_produto" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvPreco"
+        android:layout_width="35sp"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"/>
+
+</LinearLayout>
