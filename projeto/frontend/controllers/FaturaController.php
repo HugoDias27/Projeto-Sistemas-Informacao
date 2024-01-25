@@ -177,7 +177,7 @@ class FaturaController extends Controller
                 'receitas' => $receitas,
                 'linhasCarrinho' => $linhasCarrinho,
                 'produtos' => $produtos,
-                'totallinhas' => $totallinhas,  // Adicione esta linha
+                'totallinhas' => $totallinhas,
             ]);
 
         } else {
@@ -188,7 +188,7 @@ class FaturaController extends Controller
                 'linhasFatura' => $linhasFatura,
                 'servicos' => $servicos,
                 'receitas' => $receitas,
-                'totallinhas' => $totallinhas,  // Adicione esta linha
+                'totallinhas' => $totallinhas,
             ]);
         }
         $content = "<link rel='stylesheet' href='" . Yii::$app->request->baseUrl . "/estilos.css'> <div class='table-container'>" . $content . "</div>";

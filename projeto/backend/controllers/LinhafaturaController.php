@@ -70,7 +70,6 @@ class LinhafaturaController extends Controller
 
         $estabelecimentofind = Estabelecimento::find()->where(['id' => $estabelecimento])->one();
 
-        // Utilizando joins para buscar serviços e receitas médicas diretamente
         $totallinhas = LinhaFatura::find()
             ->joinWith('servico')
             ->joinWith('receitaMedica')
