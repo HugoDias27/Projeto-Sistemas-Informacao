@@ -96,8 +96,6 @@ class FaturaController extends Controller
 
             $linhasFatura = LinhaFatura::find()->where(['fatura_id' => $id])->all();
 
-            $totallinhas = $linhasFatura;
-
             $carrinho = CarrinhoCompra::find()->where(['fatura_id' => $id])->one();
 
             $servicosIds = ArrayHelper::getColumn($linhasFatura, 'servico_id');
@@ -106,34 +104,48 @@ class FaturaController extends Controller
             $receitasIds = ArrayHelper::getColumn($linhasFatura, 'receita_medica_id');
             $receitas = ReceitaMedica::find()->where(['id' => $receitasIds])->all();
 
-            $produtos = [];
+            $totallinhas = $linhasFatura;
 
-            $carrinho = CarrinhoCompra::find()->where(['fatura_id' => $id])->one();
-
-            $linhasCarrinho = [];
             if ($carrinho !== null) {
                 $carrinhoId = $carrinho->id;
                 $linhasCarrinho = LinhaCarrinho::find()->where(['carrinho_compra_id' => $carrinhoId])->all();
+
+                $produtos = [];
+                foreach ($linhasCarrinho as $linhaCarrinho) {
+                    $produto = Produto::find()->where(['id' => $linhaCarrinho->produto_id])->one();
+                    if ($produto) {
+                        $produtos[] = $produto;
+                    }
+                }
+
+                return $this->render('view', [
+                    'fatura' => $fatura,
+                    'cliente' => $cliente,
+                    'estabelecimento' => $estabelecimento,
+                    'perfilCliente' => $perfilCliente,
+                    'totallinhas' => $totallinhas,
+                    'servicos' => $servicos,
+                    'receitas' => $receitas,
+                    'linhasCarrinho' => $linhasCarrinho,
+                    'produtos' => $produtos,
+                ]);
+            } else {
+                return $this->render('view', [
+                    'fatura' => $fatura,
+                    'cliente' => $cliente,
+                    'estabelecimento' => $estabelecimento,
+                    'perfilCliente' => $perfilCliente,
+                    'totallinhas' => $totallinhas,
+                    'servicos' => $servicos,
+                    'receitas' => $receitas,
+                ]);
             }
-
-
-            return $this->render('view', [
-                'fatura' => $fatura,
-                'estabelecimento' => $estabelecimento,
-                'cliente' => $cliente,
-                'perfilCliente' => $perfilCliente,
-                'linhasFatura' => $linhasFatura,
-                'totallinhas' => $totallinhas,
-                'servicos' => $servicos,
-                'receitas' => $receitas,
-                'linhasCarrinho' => $linhasCarrinho,
-                'produtos' => $produtos,
-            ]);
 
         }
 
         throw new NotFoundHttpException('Não tem permissões para aceder a esta página');
     }
+
 
 
     /**
